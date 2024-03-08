@@ -108,6 +108,9 @@ public class SimManager extends SimEntity {
 	public void startSimulation() throws Exception{
 		//Starts the simulation
 		SimLogger.print(super.getName()+" is starting...");
+
+
+
 		
 		//Start Edge Datacenters & Generate VMs
 		edgeServerManager.startDatacenters();
@@ -123,6 +126,9 @@ public class SimManager extends SimEntity {
 		
 		CloudSim.startSimulation();
 	}
+
+
+
 
 	public String getSimulationScenario(){
 		return simScenario;

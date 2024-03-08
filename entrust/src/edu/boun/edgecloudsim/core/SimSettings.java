@@ -96,6 +96,10 @@ public class SimSettings {
 	private double SOUTHERN_BOUND;
 	private double WESTERN_BOUND;
 
+	//variabili energia
+	private int ENERGYCONSUMPTIONTASK;
+	private int ENERGYCONSUMPTIONIDLE;
+
 	// mean waiting time (minute) is stored for each place types
 	private double[] mobilityLookUpTable;
 
@@ -175,6 +179,9 @@ public class SimSettings {
 			CORE_FOR_VM = Integer.parseInt(prop.getProperty("core_for_mobile_vm"));
 			MIPS_FOR_VM = Integer.parseInt(prop.getProperty("mips_for_mobile_vm"));
 			STORAGE_FOR_VM = Integer.parseInt(prop.getProperty("storage_for_mobile_vm"));
+			//energy
+			ENERGYCONSUMPTIONTASK= Integer.parseInt(prop.getProperty("energy_consumption_task"));
+			ENERGYCONSUMPTIONIDLE=Integer.parseInt(prop.getProperty("energy_consumption_idle"));
 
 			ORCHESTRATOR_POLICIES = prop.getProperty("orchestrator_policies").split(",");
 
@@ -521,6 +528,13 @@ public class SimSettings {
 	public double getWesternBound() {
 		return WESTERN_BOUND;
 	}
+
+
+
+	//energy
+	 public int getEnergyConsumpitonTask(){return ENERGYCONSUMPTIONTASK;}
+
+	public int getEnergyConsumptionIdle (){return ENERGYCONSUMPTIONTASK;}
 
 	/**
 	 * returns mobility characteristic within an array
