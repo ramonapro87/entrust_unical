@@ -534,7 +534,7 @@ public class SimSettings {
 	//energy
 	 public int getEnergyConsumpitonTask(){return ENERGYCONSUMPTIONTASK;}
 
-	public int getEnergyConsumptionIdle (){return ENERGYCONSUMPTIONTASK;}
+	public int getEnergyConsumptionIdle (){return ENERGYCONSUMPTIONIDLE;}
 
 	/**
 	 * returns mobility characteristic within an array
