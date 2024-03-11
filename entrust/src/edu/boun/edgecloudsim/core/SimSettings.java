@@ -96,9 +96,22 @@ public class SimSettings {
 	private double SOUTHERN_BOUND;
 	private double WESTERN_BOUND;
 
-	//variabili energia
-	private int ENERGYCONSUMPTIONTASK;
+	//variabili energia device
+	private int ENERGYCONSUMPTIONMAX;
 	private int ENERGYCONSUMPTIONIDLE;
+	
+	//variabili energia trasmissione
+	private double WANWATTHOURPERBIT;
+	private double MANWATTHOURPERBIT;
+	private double WIFIDEVICETRANSMISSIONWATTHOURPERBIT;
+	private double WIFIDEVICERECEPTIONWATTHOURPERBIT;
+	private double WIFIACCESSPOINTTRANSMISSIONWATTHOURPERBIT;
+	private double WIFIACCESSPOINTRECEPTIONWATTHOURPERBIT;
+	private double ETHERNETWATTHOURPERBIT;
+	private double CELLULARDEVICETRANSMISSIONWATTHOURPERBIT;
+	private double CELLULARDEVICERECEPTIONWATTHOURPERBIT;
+	private double CELLULARBASESTATIONWATTHOURPERBITUPLINK;
+	private double CELLULARBASESTATIONWATTHOURPERBITDOWNLINK;
 
 	// mean waiting time (minute) is stored for each place types
 	private double[] mobilityLookUpTable;
@@ -120,6 +133,8 @@ public class SimSettings {
 	private double[][] taskLookUpTable = null;
 
 	private String[] taskNames = null;
+
+
 
 	private SimSettings() {
 		NUM_OF_PLACE_TYPES = 0;
@@ -179,9 +194,43 @@ public class SimSettings {
 			CORE_FOR_VM = Integer.parseInt(prop.getProperty("core_for_mobile_vm"));
 			MIPS_FOR_VM = Integer.parseInt(prop.getProperty("mips_for_mobile_vm"));
 			STORAGE_FOR_VM = Integer.parseInt(prop.getProperty("storage_for_mobile_vm"));
-			//energy
-			ENERGYCONSUMPTIONTASK= Integer.parseInt(prop.getProperty("energy_consumption_task"));
+
+			//energy device
+			ENERGYCONSUMPTIONMAX= Integer.parseInt(prop.getProperty("energy_consumption_max"));
 			ENERGYCONSUMPTIONIDLE=Integer.parseInt(prop.getProperty("energy_consumption_idle"));
+			
+			//energy transmission
+			
+			
+//			// Mbps to bits per second
+//			WANBANDWIDTHBITSPERSECOND=1000000*assertDouble(prop, "wan_bandwidth"));
+//			WANLATENCY =Double.parseDouble(prop.getProperty("wan_latency"));
+//		
+//			// Nanojoules per second (per bit) to Watt Hour (per bit)		
+			WANWATTHOURPERBIT =(double) 2.7777777777778e-13* Double.parseDouble(prop.getProperty("wan_nanojoules_per_bit"));		
+//			MANBANDWIDTHBITSPERSECOND = 1000000*Double.parseDouble(prop.getProperty("man_bandwidth"));
+//			MANLATENCY =Double.parseDouble(prop.getProperty("man_latency"));
+			MANWATTHOURPERBIT = (double) 2.7777777777778e-13* Double.parseDouble(prop.getProperty("man_nanojoules_per_bit"));							
+//			WIFIBANDWIDTHBITSPERSECOND = (double) 1000000* Double.parseDouble(prop.getProperty("wifi_bandwidth"));			
+			
+			WIFIDEVICETRANSMISSIONWATTHOURPERBIT =(double) 2.7777777777778e-13* Double.parseDouble(prop.getProperty("wifi_device_transmission_nanojoules_per_bit"));
+			WIFIDEVICERECEPTIONWATTHOURPERBIT =(double) 2.7777777777778e-13* Double.parseDouble(prop.getProperty("wifi_device_reception_nanojoules_per_bit"));
+			WIFIACCESSPOINTTRANSMISSIONWATTHOURPERBIT =(double) 2.7777777777778e-13 * Double.parseDouble(prop.getProperty("wifi_access_point_transmission_nanojoules_per_bit"));
+			WIFIACCESSPOINTRECEPTIONWATTHOURPERBIT =(double) 2.7777777777778e-13 * Double.parseDouble(prop.getProperty("wifi_access_point_reception_nanojoules_per_bit"));
+//		
+//			WIFILATENCY =Double.parseDouble(prop.getProperty("wifi_latency"));
+//			ETHERNETBANDWIDTHBITSPERSECOND = 1000000*Double.parseDouble(prop.getProperty("ethernet_bandwidth"));
+			ETHERNETWATTHOURPERBIT =(double) 2.7777777777778e-13*Double.parseDouble(prop.getProperty("ethernet_nanojoules_per_bit"));
+//			ETHERNETLATENCY =Double.parseDouble(prop.getProperty("ethernet_latency"));
+//		
+//			CELLULARBANDWIDTHBITSPERSECOND = 1000000*Double.parseDouble(prop.getProperty("cellular_bandwidth"));
+			CELLULARDEVICETRANSMISSIONWATTHOURPERBIT = (double) 2.7777777777778e-13 *Double.parseDouble(prop.getProperty("cellular_device_transmission_nanojoules_per_bit"));
+			CELLULARDEVICERECEPTIONWATTHOURPERBIT =(double) 2.7777777777778e-13*Double.parseDouble(prop.getProperty("cellular_device_reception_nanojoules_per_bit"));
+			CELLULARBASESTATIONWATTHOURPERBITUPLINK =(double) 2.7777777777778e-13 *Double.parseDouble(prop.getProperty("cellular_base_station_nanojoules_per_bit_up_link"));
+			CELLULARBASESTATIONWATTHOURPERBITDOWNLINK =(double) 12.7777777777778e-13 *Double.parseDouble(prop.getProperty("cellular_base_station_nanojoules_per_bit_down_link"));
+//			CELLULARLATENCY =Double.parseDouble(prop.getProperty("cellular_latency"));
+			
+					
 
 			ORCHESTRATOR_POLICIES = prop.getProperty("orchestrator_policies").split(",");
 
@@ -532,7 +581,7 @@ public class SimSettings {
 
 
 	//energy
-	 public int getEnergyConsumpitonTask(){return ENERGYCONSUMPTIONTASK;}
+	public int getEnergyConsumpitonMax(){return ENERGYCONSUMPTIONMAX;}
 
 	public int getEnergyConsumptionIdle (){return ENERGYCONSUMPTIONIDLE;}
 
@@ -748,5 +797,49 @@ public class SimSettings {
 			e.printStackTrace();
 			System.exit(1);
 		}
+	}
+
+	public double getWANWATTHOURPERBIT() {
+		return WANWATTHOURPERBIT;
+	}
+
+	public double getMANWATTHOURPERBIT() {
+		return MANWATTHOURPERBIT;
+	}
+
+	public double getWifiDeviceTransmissionWattHourPerBit() {
+		return WIFIDEVICETRANSMISSIONWATTHOURPERBIT;
+	}
+
+	public double getWifiDeviceReceptionWattHourPerBit() {
+		return WIFIDEVICERECEPTIONWATTHOURPERBIT;
+	}
+
+	public double getWIFIACCESSPOINTTRANSMISSIONWATTHOURPERBIT() {
+		return WIFIACCESSPOINTTRANSMISSIONWATTHOURPERBIT;
+	}
+
+	public double getWIFIACCESSPOINTRECEPTIONWATTHOURPERBIT() {
+		return WIFIACCESSPOINTRECEPTIONWATTHOURPERBIT;
+	}
+
+	public double getEthernetWattHourPerBit() {
+		return ETHERNETWATTHOURPERBIT;
+	}
+
+	public double getCellularDeviceTransmissionWattHourPerBit() {
+		return CELLULARDEVICETRANSMISSIONWATTHOURPERBIT;
+	}
+
+	public double getCellularDeviceReceptionWattHourPerBit() {
+		return CELLULARDEVICERECEPTIONWATTHOURPERBIT;
+	}
+
+	public double getCELLULARBASESTATIONWATTHOURPERBITUPLINK() {
+		return CELLULARBASESTATIONWATTHOURPERBITUPLINK;
+	}
+
+	public double getCELLULARBASESTATIONWATTHOURPERBITDOWNLINK() {
+		return CELLULARBASESTATIONWATTHOURPERBITDOWNLINK;
 	}
 }
