@@ -1,8 +1,8 @@
 package edu.boun.edgecloudsim.applications.sample_app6;
 
-import edu.boun.edgecloudsim.energy.EnergyModel;
+import edu.boun.edgecloudsim.energy.EnergyComputingModel;
 
-public class SampleEnergyModel extends EnergyModel {
+public class SampleEnergyModel extends EnergyComputingModel {
 
 	public SampleEnergyModel(int numberOfMobileDevices, double maxActiveConsumption, double idleConsumption) {
 		super(numberOfMobileDevices, maxActiveConsumption, idleConsumption);

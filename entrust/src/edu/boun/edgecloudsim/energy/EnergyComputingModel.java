@@ -1,10 +1,7 @@
 package edu.boun.edgecloudsim.energy;
 
 
-
-//TODO ENERGY NETWORK LINK
-
-public abstract class EnergyModel {
+public abstract class EnergyComputingModel {
 	protected int numberOfMobileDevices; //*from edgecloudsim model*
 
 	protected double maxActiveConsumption; // Consumed energy when the cpu is operating at 100% in Watt
@@ -26,7 +23,7 @@ public abstract class EnergyModel {
 	protected double transmissionEnergyPerBits;
 	protected double receptionEnergyPerBits;
 
-	public EnergyModel(int numberOfMobileDevices,double maxActiveConsumption, double idleConsumption) {
+	public EnergyComputingModel(int numberOfMobileDevices,double maxActiveConsumption, double idleConsumption) {
 
 		this.numberOfMobileDevices = numberOfMobileDevices;//*from edgecloudsim model*
 

@@ -2,9 +2,9 @@ package edu.boun.edgecloudsim.energy;
 
 import edu.boun.edgecloudsim.core.SimSettings;
 
-public class DefaultEnergyModel extends EnergyModel {
+public class DefaultEnergyComputingModel extends EnergyComputingModel {
 
-	public DefaultEnergyModel(int numberOfMobileDevices, double maxActiveConsumption, double idleConsumption) {
+	public DefaultEnergyComputingModel(int numberOfMobileDevices, double maxActiveConsumption, double idleConsumption) {
 		super(numberOfMobileDevices, maxActiveConsumption, idleConsumption);
 		// TODO Auto-generated constructor stub
 	}
@@ -105,10 +105,12 @@ public class DefaultEnergyModel extends EnergyModel {
 		} else if ("wifi".equals(connectivity)) {
 			transmissionEnergyPerBits = SimSettings.getInstance().getWifiDeviceTransmissionWattHourPerBit();
 			receptionEnergyPerBits = SimSettings.getInstance().getWifiDeviceReceptionWattHourPerBit();
-		} else {
+		} 
+		// TODO ETHERNET ?
+		/*else {
 			transmissionEnergyPerBits = SimSettings.getInstance().getEthernetWattHourPerBit() / 2;
 			receptionEnergyPerBits = SimSettings.getInstance().getEthernetWattHourPerBit() / 2;
-		}
+		}*/
 	}
 
 	@Override

@@ -95,10 +95,20 @@ public class SimSettings {
 	private double EASTERN_BOUND;
 	private double SOUTHERN_BOUND;
 	private double WESTERN_BOUND;
-
-	//variabili energia device
-	private int ENERGYCONSUMPTIONMAX;
-	private int ENERGYCONSUMPTIONIDLE;
+	
+	//variabili energia cloud
+	private double ENERGYCONSUMPTIONMAX_CLOUD;
+	private double ENERGYCONSUMPTIONIDLE_CLOUD;
+	
+	
+	//variabili energia device	
+	private boolean BATTERY;
+	private double PERCENTAGE;
+	private double BATTERYCAPACITY;
+	private double INITIALBATTERYLEVEL;
+	
+	private double ENERGYCONSUMPTIONMAX_MOBILE;
+	private double ENERGYCONSUMPTIONIDLE_MOBILE;
 	
 	//variabili energia trasmissione
 	private double WANWATTHOURPERBIT;
@@ -107,7 +117,7 @@ public class SimSettings {
 	private double WIFIDEVICERECEPTIONWATTHOURPERBIT;
 	private double WIFIACCESSPOINTTRANSMISSIONWATTHOURPERBIT;
 	private double WIFIACCESSPOINTRECEPTIONWATTHOURPERBIT;
-	private double ETHERNETWATTHOURPERBIT;
+	//private double ETHERNETWATTHOURPERBIT;
 	private double CELLULARDEVICETRANSMISSIONWATTHOURPERBIT;
 	private double CELLULARDEVICERECEPTIONWATTHOURPERBIT;
 	private double CELLULARBASESTATIONWATTHOURPERBITUPLINK;
@@ -195,32 +205,54 @@ public class SimSettings {
 			MIPS_FOR_VM = Integer.parseInt(prop.getProperty("mips_for_mobile_vm"));
 			STORAGE_FOR_VM = Integer.parseInt(prop.getProperty("storage_for_mobile_vm"));
 
+			
+			
+			
 			//energy device
-			ENERGYCONSUMPTIONMAX= Integer.parseInt(prop.getProperty("energy_consumption_max"));
-			ENERGYCONSUMPTIONIDLE=Integer.parseInt(prop.getProperty("energy_consumption_idle"));
-			
-			//energy transmission
+			ENERGYCONSUMPTIONMAX_CLOUD= Double.parseDouble(prop.getProperty("energy_consumption_max_for_cloud_vm"));
+			ENERGYCONSUMPTIONIDLE_CLOUD=Double.parseDouble(prop.getProperty("energy_consumption_idle_for_cloud_vm"));
 			
 			
-//			// Mbps to bits per second
+			
+			
+			//energy device						
+			BATTERY = Boolean.parseBoolean(prop.getProperty("battery"));
+			PERCENTAGE = Double.parseDouble(prop.getProperty("percentage"));
+			BATTERYCAPACITY = Double.parseDouble(prop.getProperty("batteryCapacity"));
+			INITIALBATTERYLEVEL = Double.parseDouble(prop.getProperty("initialBatteryLevel"));
+			
+			
+			
+			ENERGYCONSUMPTIONMAX_MOBILE= Double.parseDouble(prop.getProperty("energy_consumption_max_for_mobile_vm"));
+			ENERGYCONSUMPTIONIDLE_MOBILE=Double.parseDouble(prop.getProperty("energy_consumption_idle_for_mobile_vm"));
+			
+			//energy transmission		
+			
+			// Mbps to bits per second
 //			WANBANDWIDTHBITSPERSECOND=1000000*assertDouble(prop, "wan_bandwidth"));
 //			WANLATENCY =Double.parseDouble(prop.getProperty("wan_latency"));
-//		
-//			// Nanojoules per second (per bit) to Watt Hour (per bit)		
-			WANWATTHOURPERBIT =(double) 2.7777777777778e-13* Double.parseDouble(prop.getProperty("wan_nanojoules_per_bit"));		
+		
+			// Nanojoules per second (per bit) to Watt Hour (per bit)		
+			WANWATTHOURPERBIT =(double) 2.7777777777778e-13* Double.parseDouble(prop.getProperty("wan_nanojoules_per_bit"));
+			
+			
+			
 //			MANBANDWIDTHBITSPERSECOND = 1000000*Double.parseDouble(prop.getProperty("man_bandwidth"));
 //			MANLATENCY =Double.parseDouble(prop.getProperty("man_latency"));
 			MANWATTHOURPERBIT = (double) 2.7777777777778e-13* Double.parseDouble(prop.getProperty("man_nanojoules_per_bit"));							
-//			WIFIBANDWIDTHBITSPERSECOND = (double) 1000000* Double.parseDouble(prop.getProperty("wifi_bandwidth"));			
+
+			//			WIFIBANDWIDTHBITSPERSECOND = (double) 1000000* Double.parseDouble(prop.getProperty("wifi_bandwidth"));			
+//			WIFILATENCY =Double.parseDouble(prop.getProperty("wifi_latency"));
 			
 			WIFIDEVICETRANSMISSIONWATTHOURPERBIT =(double) 2.7777777777778e-13* Double.parseDouble(prop.getProperty("wifi_device_transmission_nanojoules_per_bit"));
 			WIFIDEVICERECEPTIONWATTHOURPERBIT =(double) 2.7777777777778e-13* Double.parseDouble(prop.getProperty("wifi_device_reception_nanojoules_per_bit"));
 			WIFIACCESSPOINTTRANSMISSIONWATTHOURPERBIT =(double) 2.7777777777778e-13 * Double.parseDouble(prop.getProperty("wifi_access_point_transmission_nanojoules_per_bit"));
 			WIFIACCESSPOINTRECEPTIONWATTHOURPERBIT =(double) 2.7777777777778e-13 * Double.parseDouble(prop.getProperty("wifi_access_point_reception_nanojoules_per_bit"));
-//		
-//			WIFILATENCY =Double.parseDouble(prop.getProperty("wifi_latency"));
+		
+			
+			// TODO ETHERNET ?
 //			ETHERNETBANDWIDTHBITSPERSECOND = 1000000*Double.parseDouble(prop.getProperty("ethernet_bandwidth"));
-			ETHERNETWATTHOURPERBIT =(double) 2.7777777777778e-13*Double.parseDouble(prop.getProperty("ethernet_nanojoules_per_bit"));
+//			ETHERNETWATTHOURPERBIT =(double) 2.7777777777778e-13*Double.parseDouble(prop.getProperty("ethernet_nanojoules_per_bit"));
 //			ETHERNETLATENCY =Double.parseDouble(prop.getProperty("ethernet_latency"));
 //		
 //			CELLULARBANDWIDTHBITSPERSECOND = 1000000*Double.parseDouble(prop.getProperty("cellular_bandwidth"));
@@ -579,11 +611,32 @@ public class SimSettings {
 	}
 
 
+	//energy
+	public double getEnergyConsumpitonMax_cloud(){return ENERGYCONSUMPTIONMAX_CLOUD;}
+	public double getEnergyConsumptionIdle_cloud(){return ENERGYCONSUMPTIONIDLE_CLOUD;}
 
 	//energy
-	public int getEnergyConsumpitonMax(){return ENERGYCONSUMPTIONMAX;}
+	public boolean isBATTERY() {return BATTERY;	}
+	public double getPERCENTAGE() {return PERCENTAGE;}
+	public double getBATTERYCAPACITY() {return BATTERYCAPACITY;}
+	public double getINITIALBATTERYLEVEL() {return INITIALBATTERYLEVEL;}
 
-	public int getEnergyConsumptionIdle (){return ENERGYCONSUMPTIONIDLE;}
+	public double getEnergyConsumpitonMax_mobile(){return ENERGYCONSUMPTIONMAX_MOBILE;}
+	public double getEnergyConsumptionIdle_mobile(){return ENERGYCONSUMPTIONIDLE_MOBILE;}
+	
+	//energy
+	public double getWANWATTHOURPERBIT() {return WANWATTHOURPERBIT;}
+	public double getMANWATTHOURPERBIT() {return MANWATTHOURPERBIT;}
+	public double getWifiDeviceTransmissionWattHourPerBit() {return WIFIDEVICETRANSMISSIONWATTHOURPERBIT;}
+	public double getWifiDeviceReceptionWattHourPerBit() {return WIFIDEVICERECEPTIONWATTHOURPERBIT;}
+	public double getWIFIACCESSPOINTTRANSMISSIONWATTHOURPERBIT() {return WIFIACCESSPOINTTRANSMISSIONWATTHOURPERBIT;}
+	public double getWIFIACCESSPOINTRECEPTIONWATTHOURPERBIT() {return WIFIACCESSPOINTRECEPTIONWATTHOURPERBIT;}
+	//public double getEthernetWattHourPerBit() {	return ETHERNETWATTHOURPERBIT;}
+	public double getCellularDeviceTransmissionWattHourPerBit() {return CELLULARDEVICETRANSMISSIONWATTHOURPERBIT;}
+	public double getCellularDeviceReceptionWattHourPerBit() {return CELLULARDEVICERECEPTIONWATTHOURPERBIT;}
+	public double getCELLULARBASESTATIONWATTHOURPERBITUPLINK() {return CELLULARBASESTATIONWATTHOURPERBITUPLINK;	}
+	public double getCELLULARBASESTATIONWATTHOURPERBITDOWNLINK() {	return CELLULARBASESTATIONWATTHOURPERBITDOWNLINK;}	
+	
 
 	/**
 	 * returns mobility characteristic within an array
@@ -754,6 +807,11 @@ public class SimSettings {
 				isElementPresent(datacenterElement, "costPerSec");
 				isElementPresent(datacenterElement, "costPerMem");
 				isElementPresent(datacenterElement, "costPerStorage");
+				
+				isElementPresent(datacenterElement, "idleConsumption");
+				isElementPresent(datacenterElement, "maxConsumption");
+				
+				
 
 				Element location = (Element)datacenterElement.getElementsByTagName("location").item(0);
 				isElementPresent(location, "attractiveness");
@@ -799,47 +857,4 @@ public class SimSettings {
 		}
 	}
 
-	public double getWANWATTHOURPERBIT() {
-		return WANWATTHOURPERBIT;
-	}
-
-	public double getMANWATTHOURPERBIT() {
-		return MANWATTHOURPERBIT;
-	}
-
-	public double getWifiDeviceTransmissionWattHourPerBit() {
-		return WIFIDEVICETRANSMISSIONWATTHOURPERBIT;
-	}
-
-	public double getWifiDeviceReceptionWattHourPerBit() {
-		return WIFIDEVICERECEPTIONWATTHOURPERBIT;
-	}
-
-	public double getWIFIACCESSPOINTTRANSMISSIONWATTHOURPERBIT() {
-		return WIFIACCESSPOINTTRANSMISSIONWATTHOURPERBIT;
-	}
-
-	public double getWIFIACCESSPOINTRECEPTIONWATTHOURPERBIT() {
-		return WIFIACCESSPOINTRECEPTIONWATTHOURPERBIT;
-	}
-
-	public double getEthernetWattHourPerBit() {
-		return ETHERNETWATTHOURPERBIT;
-	}
-
-	public double getCellularDeviceTransmissionWattHourPerBit() {
-		return CELLULARDEVICETRANSMISSIONWATTHOURPERBIT;
-	}
-
-	public double getCellularDeviceReceptionWattHourPerBit() {
-		return CELLULARDEVICERECEPTIONWATTHOURPERBIT;
-	}
-
-	public double getCELLULARBASESTATIONWATTHOURPERBITUPLINK() {
-		return CELLULARBASESTATIONWATTHOURPERBITUPLINK;
-	}
-
-	public double getCELLULARBASESTATIONWATTHOURPERBITDOWNLINK() {
-		return CELLULARBASESTATIONWATTHOURPERBITDOWNLINK;
-	}
 }

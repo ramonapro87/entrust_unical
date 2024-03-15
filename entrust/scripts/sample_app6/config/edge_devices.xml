@@ -5,6 +5,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>1</x_pos>
 			<y_pos>1</y_pos>
@@ -75,6 +77,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>2</x_pos>
 			<y_pos>2</y_pos>
@@ -145,6 +149,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>3</x_pos>
 			<y_pos>3</y_pos>
@@ -215,6 +221,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>4</x_pos>
 			<y_pos>4</y_pos>
@@ -285,6 +293,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>5</x_pos>
 			<y_pos>5</y_pos>
@@ -355,6 +365,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>6</x_pos>
 			<y_pos>6</y_pos>
@@ -425,6 +437,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>7</x_pos>
 			<y_pos>7</y_pos>
@@ -495,6 +509,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>8</x_pos>
 			<y_pos>8</y_pos>
@@ -565,6 +581,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>9</x_pos>
 			<y_pos>9</y_pos>
@@ -635,6 +653,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>10</x_pos>
 			<y_pos>10</y_pos>
@@ -705,6 +725,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>11</x_pos>
 			<y_pos>11</y_pos>
@@ -775,6 +797,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>12</x_pos>
 			<y_pos>12</y_pos>
@@ -845,6 +869,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>13</x_pos>
 			<y_pos>13</y_pos>
@@ -915,6 +941,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>14</x_pos>
 			<y_pos>14</y_pos>
