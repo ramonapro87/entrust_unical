@@ -23,6 +23,11 @@ import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.utils.SimLogger;
 import edu.boun.edgecloudsim.utils.SimUtils;
 
+
+//IMPORT PER LEGGERE IL FILE
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 public class MainAppEntrust {
 	
 	/**
@@ -75,10 +80,9 @@ public class MainAppEntrust {
 
 		for(int j=SS.getMinNumOfMobileDev(); j<=SS.getMaxNumOfMobileDev(); j+=SS.getMobileDevCounterSize())
 		{
+			//End of orchestrators loop
 			for(int k=0; k<SS.getSimulationScenarios().length; k++)
-			{
-				for(int i=0; i<SS.getOrchestratorPolicies().length; i++)
-				{
+				for (int i = 0; i < SS.getOrchestratorPolicies().length; i++) {
 					String simScenario = SS.getSimulationScenarios()[k];
 					String orchestratorPolicy = SS.getOrchestratorPolicies()[i];
 					Date ScenarioStartDate = Calendar.getInstance().getTime();
@@ -86,43 +90,71 @@ public class MainAppEntrust {
 
 					SimLogger.printLine("Scenario started at " + now);
 					SimLogger.printLine("Scenario: " + simScenario + " - Policy: " + orchestratorPolicy + " - #iteration: " + iterationNumber);
-					SimLogger.printLine("Duration: " + SS.getSimulationTime()/60 + " min (warm up period: "+ SS.getWarmUpPeriod()/60 +" min) - #devices: " + j);
-					SimLogger.getInstance().simStarted(outputFolder,"SIMRESULT_" + simScenario + "_"  + orchestratorPolicy + "_" + j + "DEVICES");
-					
-					try
-					{
+					SimLogger.printLine("Duration: " + SS.getSimulationTime() / 60 + " min (warm up period: " + SS.getWarmUpPeriod() / 60 + " min) - #devices: " + j);
+					SimLogger.getInstance().simStarted(outputFolder, "SIMRESULT_" + simScenario + "_" + orchestratorPolicy + "_" + j + "DEVICES");
+
+					try {
 						// First step: Initialize the CloudSim package. It should be called
 						// before creating any entities.
 						int num_user = 2;   // number of grid users
 						Calendar calendar = Calendar.getInstance();
 						boolean trace_flag = false;  // mean trace events
-				
+
 						// Initialize the CloudSim library
 						CloudSim.init(num_user, calendar, trace_flag, 0.01);
-						
+
 						// Generate EdgeCloudsim Scenario Factory
-						ScenarioFactory sampleFactory = new SampleScenarioFactory(j,SS.getSimulationTime(), orchestratorPolicy, simScenario);
-						
+						ScenarioFactory sampleFactory = new SampleScenarioFactory(j, SS.getSimulationTime(), orchestratorPolicy, simScenario);
+
 						// Generate EdgeCloudSim Simulation Manager
 						SimManager manager = new SimManager(sampleFactory, j, simScenario, orchestratorPolicy);
-						
+
 						// Start simulation
 						manager.startSimulation();
-					}
-					catch (Exception e)
-					{
+					} catch (Exception e) {
 						SimLogger.printLine("The simulation has been terminated due to an unexpected error");
 						e.printStackTrace();
 						System.exit(0);
 					}
-					
+
 					Date ScenarioEndDate = Calendar.getInstance().getTime();
 					now = df.format(ScenarioEndDate);
-					SimLogger.printLine("Scenario finished at " + now +  ". It took " + SimUtils.getTimeDifference(ScenarioStartDate,ScenarioEndDate));
+
+
+					SimLogger.printLine("Scenario finished at " + now + ". It took " + SimUtils.getTimeDifference(ScenarioStartDate, ScenarioEndDate));
 					SimLogger.printLine("----------------------------------------------------------------------");
-				}//End of orchestrators loop
+
+					//	STAMPA VALORI ENERGIA
+
+
+					String filePath = "/Users/ramonaprocopio/entrust_unical/entrust/scripts/sample_app6/config/default_config.properties";
+					try {
+						BufferedReader reader = new BufferedReader(new FileReader(filePath));
+						String line;
+						while ((line = reader.readLine()) != null) {
+							if (!line.trim().startsWith("#") && !line.trim().isEmpty()) { // Ignora i commenti e le linee vuote
+								String[] parts = line.split("="); // Dividi la linea in due parti usando "=" come separatore
+								if (parts.length == 2) {
+									String key = parts[0].trim();
+									String value = parts[1].trim();
+									if (key.contains("energy") || key.contains("nanojoules_per_bit") || key.contains("battery")) {
+										System.out.println(key + ": " + value);
+									}
+								}
+							}
+						}
+						reader.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
 			}//End of scenarios loop
 		}//End of mobile devices loop
+
+
+
+
+
 
 		Date SimulationEndDate = Calendar.getInstance().getTime();
 		now = df.format(SimulationEndDate);
