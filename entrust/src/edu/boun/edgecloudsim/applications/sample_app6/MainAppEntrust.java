@@ -28,6 +28,9 @@ import edu.boun.edgecloudsim.utils.SimUtils;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 public class MainAppEntrust {
 	
 	/**
@@ -124,29 +127,24 @@ public class MainAppEntrust {
 					SimLogger.printLine("Scenario finished at " + now + ". It took " + SimUtils.getTimeDifference(ScenarioStartDate, ScenarioEndDate));
 					SimLogger.printLine("----------------------------------------------------------------------");
 
-					//	STAMPA VALORI ENERGIA
+					//	Print initial energy values
 
 
-					String filePath = "/Users/ramonaprocopio/entrust_unical/entrust/scripts/sample_app6/config/default_config.properties";
-					try {
-						BufferedReader reader = new BufferedReader(new FileReader(filePath));
-						String line;
-						while ((line = reader.readLine()) != null) {
-							if (!line.trim().startsWith("#") && !line.trim().isEmpty()) { // Ignora i commenti e le linee vuote
-								String[] parts = line.split("="); // Dividi la linea in due parti usando "=" come separatore
-								if (parts.length == 2) {
-									String key = parts[0].trim();
-									String value = parts[1].trim();
-									if (key.contains("energy") || key.contains("nanojoules_per_bit") || key.contains("battery")) {
-										System.out.println(key + ": " + value);
-									}
-								}
-							}
-						}
-						reader.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
+					Map<String,Double> energyValue = new HashMap<>();
+					energyValue.put("ENERGYCONSUMPTIONMAX_CLOUD", SS.getEnergyConsumpitonMax_cloud());
+					energyValue.put("ENERGYCONSUMPTIONIDLE_CLOUD", SS.getEnergyConsumptionIdle_cloud());
+					energyValue.put("BATTERYCAPACITY",SS.getBATTERYCAPACITY());
+					energyValue.put("ENERGYCONSUMPTIONMAX_MOBILE",SS.getEnergyConsumpitonMax_mobile());
+					energyValue.put("ENERGYCONSUMPTIONIDLE_MOBILE",SS.getEnergyConsumptionIdle_mobile());
+
+					energyValue.entrySet().stream()
+							.map(eValue->eValue.getKey() + " : "+eValue.getValue())
+							.forEach(SimLogger::printLine);
+
+
+
+
+
 
 			}//End of scenarios loop
 		}//End of mobile devices loop

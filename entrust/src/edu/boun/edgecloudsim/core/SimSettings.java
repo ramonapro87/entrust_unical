@@ -273,6 +273,8 @@ public class SimSettings {
 			EASTERN_BOUND = Double.parseDouble(prop.getProperty("eastern_bound", "0"));
 			WESTERN_BOUND = Double.parseDouble(prop.getProperty("western_bound", "0"));
 
+
+
 			//avg waiting time in a place (min)
 			double place1_mean_waiting_time = Double.parseDouble(prop.getProperty("attractiveness_L1_mean_waiting_time"));
 			double place2_mean_waiting_time = Double.parseDouble(prop.getProperty("attractiveness_L2_mean_waiting_time"));

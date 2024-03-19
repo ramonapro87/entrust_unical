@@ -176,6 +176,11 @@ public class SimLogger {
 			System.out.println(msg);
 	}
 
+	public static void printLine(Double value) {
+		if (printLogEnabled)
+			System.out.println(value);
+	}
+
 	public static void print(String msg) {
 		if (printLogEnabled)
 			System.out.print(msg);
