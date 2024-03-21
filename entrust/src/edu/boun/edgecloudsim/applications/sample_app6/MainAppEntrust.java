@@ -22,12 +22,11 @@ import edu.boun.edgecloudsim.core.SimManager;
 import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.utils.SimLogger;
 import edu.boun.edgecloudsim.utils.SimUtils;
+import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 
 
-//IMPORT PER LEGGERE IL FILE
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+//import for energy values
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,6 +38,8 @@ public class MainAppEntrust {
 	public static void main(String[] args) {
 		//disable console output of cloudsim library
 		Log.disable();
+
+
 		
 		//enable console output and file output of this application
 		SimLogger.enablePrintLog();
@@ -128,11 +129,9 @@ public class MainAppEntrust {
 					SimLogger.printLine("----------------------------------------------------------------------");
 
 					//	Print initial energy values
-
-
+					SimLogger.printLine("connectivity type " + SS.getCONNECTIVITY());
 					Map<String,Double> energyValue = new HashMap<>();
-					energyValue.put("ENERGYCONSUMPTIONMAX_CLOUD", SS.getEnergyConsumpitonMax_cloud());
-					energyValue.put("ENERGYCONSUMPTIONIDLE_CLOUD", SS.getEnergyConsumptionIdle_cloud());
+
 					energyValue.put("BATTERYCAPACITY",SS.getBATTERYCAPACITY());
 					energyValue.put("ENERGYCONSUMPTIONMAX_MOBILE",SS.getEnergyConsumpitonMax_mobile());
 					energyValue.put("ENERGYCONSUMPTIONIDLE_MOBILE",SS.getEnergyConsumptionIdle_mobile());

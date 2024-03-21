@@ -30,6 +30,7 @@ import org.w3c.dom.NodeList;
 import edu.boun.edgecloudsim.utils.SimLogger;
 
 public class SimSettings {
+
 	private static SimSettings instance = null;
 	private Document edgeDevicesDoc = null;
 
@@ -95,6 +96,10 @@ public class SimSettings {
 	private double EASTERN_BOUND;
 	private double SOUTHERN_BOUND;
 	private double WESTERN_BOUND;
+
+	//variabili connettività
+	private String CONNECTIVITY_TYPE;
+
 	
 	//variabili energia cloud
 	private double ENERGYCONSUMPTIONMAX_CLOUD;
@@ -261,8 +266,8 @@ public class SimSettings {
 			CELLULARBASESTATIONWATTHOURPERBITUPLINK =(double) 2.7777777777778e-13 *Double.parseDouble(prop.getProperty("cellular_base_station_nanojoules_per_bit_up_link"));
 			CELLULARBASESTATIONWATTHOURPERBITDOWNLINK =(double) 12.7777777777778e-13 *Double.parseDouble(prop.getProperty("cellular_base_station_nanojoules_per_bit_down_link"));
 //			CELLULARLATENCY =Double.parseDouble(prop.getProperty("cellular_latency"));
-			
-					
+
+			CONNECTIVITY_TYPE=prop.getProperty("connectivity_type").toString();
 
 			ORCHESTRATOR_POLICIES = prop.getProperty("orchestrator_policies").split(",");
 
@@ -272,6 +277,8 @@ public class SimSettings {
 			SOUTHERN_BOUND = Double.parseDouble(prop.getProperty("southern_bound", "0"));
 			EASTERN_BOUND = Double.parseDouble(prop.getProperty("eastern_bound", "0"));
 			WESTERN_BOUND = Double.parseDouble(prop.getProperty("western_bound", "0"));
+           //Settare la tipologia di connettività
+
 
 
 
@@ -305,6 +312,8 @@ public class SimSettings {
 
 		return result;
 	}
+
+
 
 	/**
 	 * returns the parsed XML document for edge_devices.xml
@@ -345,7 +354,10 @@ public class SimSettings {
 	{
 		return INTERVAL_TO_GET_LOCATION_LOG; 
 	}
+    public String getCONNECTIVITY(){
 
+		return CONNECTIVITY_TYPE;
+	}
 	/**
 	 * returns VM location log collection interval (in seconds unit) from properties file
 	 */

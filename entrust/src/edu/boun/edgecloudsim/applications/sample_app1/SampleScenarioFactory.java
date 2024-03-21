@@ -33,6 +33,9 @@ public class SampleScenarioFactory implements ScenarioFactory {
 	private double simulationTime;
 	private String orchestratorPolicy;
 	private String simScenario;
+
+	//dati energia
+	//private String connettivity;
 	
 	SampleScenarioFactory(int _numOfMobileDevice,
 			double _simulationTime,
