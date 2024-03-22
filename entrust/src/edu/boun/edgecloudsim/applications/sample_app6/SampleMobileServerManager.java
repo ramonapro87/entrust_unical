@@ -80,6 +80,7 @@ public class SampleMobileServerManager extends MobileServerManager{
 			int ram = SimSettings.getInstance().getRamForMobileVM();
 			long storage = SimSettings.getInstance().getStorageForMobileVM();
 			long bandwidth = 0;
+			//TODO inserire qui dati energia?
 			
 			//VM Parameters		
 			MobileVM vm = new MobileVM(vmCounter, brokerId, mips, numOfCores, ram, bandwidth, storage, vmm, new CloudletSchedulerTimeShared());
@@ -151,6 +152,7 @@ public class SampleMobileServerManager extends MobileServerManager{
 			int ram = SimSettings.getInstance().getRamForMobileVM();
 			long storage = SimSettings.getInstance().getStorageForMobileVM();
 			long bandwidth = 0;
+			//TODO inserire qui dati energia?
 			
 			// 2. A Machine contains one or more PEs or CPUs/Cores. Therefore, should
 			//    create a list to store these PEs before creating

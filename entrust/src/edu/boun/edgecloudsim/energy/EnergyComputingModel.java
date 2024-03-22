@@ -38,11 +38,17 @@ public abstract class EnergyComputingModel {
 	public abstract void initialize();
 	
 	
-	
+	/**
+	 * 	Il consumo energetico totale della CPU viene aggiornato tramite il metodo updateStaticEnergyConsumption().
+	 */
 	public abstract void updateStaticEnergyConsumption();
 
 	public abstract double getCpuEnergyConsumption();
 
+	/**
+	 * Energia totale consumata
+	 * @return somma del consumo energetico della CPU e del consumo energetico della rete
+	 */
 	public abstract double getTotalEnergyConsumption();
 
 	public abstract double getMaxActiveConsumption();
@@ -57,6 +63,15 @@ public abstract class EnergyComputingModel {
 
 	public abstract void setBatteryCapacity(double batteryCapacity);
 
+	
+	/**
+	 * 
+	Se il nodo è alimentato da una batteria (isBatteryPowered è true),
+	viene calcolato il livello di carica della batteria in base all'energia consumata dalla CPU e dalla rete. 
+	Il livello di carica della batteria è quindi restituito come percentuale della capacità totale della batteria.
+	
+	 * @return -1 if not battery powered else 0
+	 */
 	public abstract double getBatteryLevelWattHour();
 
 	public abstract double getBatteryLevelPercentage();
@@ -71,8 +86,20 @@ public abstract class EnergyComputingModel {
 
 	public abstract void setConnectivityType(String connectivity);
 
+	
+	/**
+	 * calcolo il consumo energetico wireless
+	 * 
+	 * @param sizeInBits quantità di dati trasmessi
+	 * @param flag tipo di trasmissione (TRANSMISSION o RECEPTION )
+	 */
 	public abstract void updatewirelessEnergyConsumption(double sizeInBits, int flag);
 
+	/**
+	Durante l'uso attivo della CPU, viene consumata una quantità di energia proporzionale al tempo 
+	di utilizzo e alla capacità di elaborazione (MIPS) della CPU.
+	Questo consumo energetico viene calcolato tramite il metodo updateDynamicEnergyConsumption().
+	 */
 	public abstract void updateDynamicEnergyConsumption(double length, double mipsCapacity);
 
 }
