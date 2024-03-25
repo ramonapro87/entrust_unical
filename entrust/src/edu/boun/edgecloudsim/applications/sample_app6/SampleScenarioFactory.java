@@ -19,6 +19,7 @@ import edu.boun.edgecloudsim.edge_server.DefaultEdgeServerManager;
 import edu.boun.edgecloudsim.edge_server.EdgeServerManager;
 import edu.boun.edgecloudsim.edge_client.MobileDeviceManager;
 import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileServerManager;
+import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import edu.boun.edgecloudsim.mobility.MobilityModel;
 import edu.boun.edgecloudsim.mobility.NomadicMobility;
 import edu.boun.edgecloudsim.task_generator.IdleActiveLoadGenerator;
@@ -30,15 +31,32 @@ public class SampleScenarioFactory implements ScenarioFactoryEnergy {
 	private double simulationTime;
 	private String orchestratorPolicy;
 	private String simScenario;
+	private double maxActiveConsumption;
+	private double idleConsumption;
 	
+//	SampleScenarioFactory(int _numOfMobileDevice,
+//			double _simulationTime,
+//			String _orchestratorPolicy,
+//			String _simScenario){
+//		orchestratorPolicy = _orchestratorPolicy;
+//		numOfMobileDevice = _numOfMobileDevice;
+//		simulationTime = _simulationTime;
+//		simScenario = _simScenario;
+//	}
+
 	SampleScenarioFactory(int _numOfMobileDevice,
-			double _simulationTime,
-			String _orchestratorPolicy,
-			String _simScenario){
+						  double _simulationTime,
+						  String _orchestratorPolicy,
+						  String _simScenario,
+						  double _maxActiveConsumption,
+						  double _idleConsumption
+						  ){
 		orchestratorPolicy = _orchestratorPolicy;
 		numOfMobileDevice = _numOfMobileDevice;
 		simulationTime = _simulationTime;
 		simScenario = _simScenario;
+		this.idleConsumption = _idleConsumption;
+		this.maxActiveConsumption = _maxActiveConsumption;
 	}
 	
 	@Override
@@ -84,5 +102,13 @@ public class SampleScenarioFactory implements ScenarioFactoryEnergy {
 	@Override
 	public String getEnergyModel() {
 		return "Energy Model, custom method";
+	}
+
+	@Override
+	public DefaultEnergyComputingModel getDefaultEnergyComputerModel() {
+		//todo ramona, energy in progress
+		DefaultEnergyComputingModel defaultEnergyComputingModel = new DefaultEnergyComputingModel(numOfMobileDevice, maxActiveConsumption,idleConsumption);
+				//	public DefaultEnergyComputingModel(int numberOfMobileDevices, double maxActiveConsumption, double idleConsumption) {
+		return null;
 	}
 }

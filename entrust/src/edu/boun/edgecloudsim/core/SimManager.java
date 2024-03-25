@@ -53,7 +53,7 @@ public class SimManager extends SimEntity {
 	private LoadGeneratorModel loadGeneratorModel;
 	private MobileDeviceManager mobileDeviceManager;
 
-	private DefaultEnergyComputingModel defaultEnergyComputingModel;
+
 	
 	private static SimManager instance = null;
 	
@@ -79,8 +79,7 @@ public class SimManager extends SimEntity {
 		networkModel.initialize();
 
 
-		//Generate energy model
-//		defaultEnergyComputingModel.initialize();
+
 		
 		//Generate edge orchestrator
 		edgeOrchestrator = scenarioFactory.getEdgeOrchestrator();

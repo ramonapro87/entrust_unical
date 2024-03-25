@@ -14,6 +14,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import edu.boun.edgecloudsim.core.ScenarioFactoryEnergy;
 import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.core.CloudSim;
 
@@ -43,6 +44,7 @@ public class MainAppEntrust {
 		
 		//enable console output and file output of this application
 		SimLogger.enablePrintLog();
+		ScenarioFactoryEnergy sampleFactory = null;
 		
 		int iterationNumber = 1;
 		String configFile = "";
@@ -108,7 +110,7 @@ public class MainAppEntrust {
 						CloudSim.init(num_user, calendar, trace_flag, 0.01);
 
 						// Generate EdgeCloudsim Scenario Factory
-						ScenarioFactory sampleFactory = new SampleScenarioFactory(j, SS.getSimulationTime(), orchestratorPolicy, simScenario);
+						sampleFactory = new SampleScenarioFactory(j, SS.getSimulationTime(), orchestratorPolicy, simScenario, SS.getEnergyConsumpitonMax_mobile(), SS.getEnergyConsumptionIdle_mobile());
 
 						// Generate EdgeCloudSim Simulation Manager
 						SimManager manager = new SimManager(sampleFactory, j, simScenario, orchestratorPolicy);
@@ -140,8 +142,11 @@ public class MainAppEntrust {
 							.map(eValue->eValue.getKey() + " : "+eValue.getValue())
 							.forEach(SimLogger::printLine);
 
+					if(sampleFactory == null)
+						sampleFactory = new SampleScenarioFactory(j, SS.getSimulationTime(), orchestratorPolicy, simScenario, SS.getEnergyConsumpitonMax_mobile(), SS.getEnergyConsumptionIdle_mobile());
 
-
+					String resultEnergy = sampleFactory.getEnergyModel();
+					SimLogger.printLine("RESULT_ENERGY:" + resultEnergy);
 
 
 
