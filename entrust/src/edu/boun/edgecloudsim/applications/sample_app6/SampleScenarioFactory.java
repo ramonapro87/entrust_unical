@@ -13,6 +13,7 @@ package edu.boun.edgecloudsim.applications.sample_app6;
 import edu.boun.edgecloudsim.cloud_server.CloudServerManager;
 import edu.boun.edgecloudsim.cloud_server.DefaultCloudServerManager;
 import edu.boun.edgecloudsim.core.ScenarioFactory;
+import edu.boun.edgecloudsim.core.ScenarioFactoryEnergy;
 import edu.boun.edgecloudsim.edge_orchestrator.EdgeOrchestrator;
 import edu.boun.edgecloudsim.edge_server.DefaultEdgeServerManager;
 import edu.boun.edgecloudsim.edge_server.EdgeServerManager;
@@ -24,7 +25,7 @@ import edu.boun.edgecloudsim.task_generator.IdleActiveLoadGenerator;
 import edu.boun.edgecloudsim.task_generator.LoadGeneratorModel;
 import edu.boun.edgecloudsim.network.NetworkModel;
 
-public class SampleScenarioFactory implements ScenarioFactory {
+public class SampleScenarioFactory implements ScenarioFactoryEnergy {
 	private int numOfMobileDevice;
 	private double simulationTime;
 	private String orchestratorPolicy;
@@ -78,5 +79,10 @@ public class SampleScenarioFactory implements ScenarioFactory {
 	@Override
 	public MobileServerManager getMobileServerManager() {
 		return new SampleMobileServerManager(numOfMobileDevice);
+	}
+
+	@Override
+	public String getEnergyModel() {
+		return "Energy Model, custom method";
 	}
 }
