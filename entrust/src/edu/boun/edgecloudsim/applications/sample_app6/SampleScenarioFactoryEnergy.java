@@ -12,7 +12,6 @@ package edu.boun.edgecloudsim.applications.sample_app6;
 
 import edu.boun.edgecloudsim.cloud_server.CloudServerManager;
 import edu.boun.edgecloudsim.cloud_server.DefaultCloudServerManager;
-import edu.boun.edgecloudsim.core.ScenarioFactory;
 import edu.boun.edgecloudsim.core.ScenarioFactoryEnergy;
 import edu.boun.edgecloudsim.edge_orchestrator.EdgeOrchestrator;
 import edu.boun.edgecloudsim.edge_server.DefaultEdgeServerManager;
@@ -26,7 +25,11 @@ import edu.boun.edgecloudsim.task_generator.IdleActiveLoadGenerator;
 import edu.boun.edgecloudsim.task_generator.LoadGeneratorModel;
 import edu.boun.edgecloudsim.network.NetworkModel;
 
-public class SampleScenarioFactory implements ScenarioFactoryEnergy {
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
+public class SampleScenarioFactoryEnergy implements ScenarioFactoryEnergy {
 	private int numOfMobileDevice;
 	private double simulationTime;
 	private String orchestratorPolicy;
@@ -44,12 +47,12 @@ public class SampleScenarioFactory implements ScenarioFactoryEnergy {
 //		simScenario = _simScenario;
 //	}
 
-	SampleScenarioFactory(int _numOfMobileDevice,
-						  double _simulationTime,
-						  String _orchestratorPolicy,
-						  String _simScenario,
-						  double _maxActiveConsumption,
-						  double _idleConsumption
+	SampleScenarioFactoryEnergy(int _numOfMobileDevice,
+								double _simulationTime,
+								String _orchestratorPolicy,
+								String _simScenario,
+								double _maxActiveConsumption,
+								double _idleConsumption
 						  ){
 		orchestratorPolicy = _orchestratorPolicy;
 		numOfMobileDevice = _numOfMobileDevice;
@@ -99,16 +102,24 @@ public class SampleScenarioFactory implements ScenarioFactoryEnergy {
 		return new SampleMobileServerManager(numOfMobileDevice);
 	}
 
-	@Override
-	public String getEnergyModel() {
-		return "Energy Model, custom method";
-	}
+
 
 	@Override
 	public DefaultEnergyComputingModel getDefaultEnergyComputerModel() {
 		//todo ramona, energy in progress
 		DefaultEnergyComputingModel defaultEnergyComputingModel = new DefaultEnergyComputingModel(numOfMobileDevice, maxActiveConsumption,idleConsumption);
 				//	public DefaultEnergyComputingModel(int numberOfMobileDevices, double maxActiveConsumption, double idleConsumption) {
-		return null;
+		return defaultEnergyComputingModel;
 	}
-}
+
+	@Override
+	public String getEnergyModel() {
+
+			Double result = getDefaultEnergyComputerModel().getTotalEnergyConsumption();
+
+
+			String resultMsg = String.format("For idleConsumption %.2f and maxActiveConsumption %.2f, il consumo è %.2f", idleConsumption, maxActiveConsumption, result);
+			return resultMsg;
+
+		}
+	}

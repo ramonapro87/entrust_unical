@@ -14,16 +14,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import edu.boun.edgecloudsim.core.ScenarioFactoryEnergy;
+import edu.boun.edgecloudsim.core.*;
 import org.cloudbus.cloudsim.Log;
 import org.cloudbus.cloudsim.core.CloudSim;
 
-import edu.boun.edgecloudsim.core.ScenarioFactory;
-import edu.boun.edgecloudsim.core.SimManager;
-import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.utils.SimLogger;
 import edu.boun.edgecloudsim.utils.SimUtils;
-import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 
 
 //import for energy values
@@ -110,10 +106,12 @@ public class MainAppEntrust {
 						CloudSim.init(num_user, calendar, trace_flag, 0.01);
 
 						// Generate EdgeCloudsim Scenario Factory
-						sampleFactory = new SampleScenarioFactory(j, SS.getSimulationTime(), orchestratorPolicy, simScenario, SS.getEnergyConsumpitonMax_mobile(), SS.getEnergyConsumptionIdle_mobile());
+						sampleFactory = new SampleScenarioFactoryEnergy(j, SS.getSimulationTime(), orchestratorPolicy, simScenario, SS.getEnergyConsumpitonMax_mobile(), SS.getEnergyConsumptionIdle_mobile());
 
 						// Generate EdgeCloudSim Simulation Manager
-						SimManager manager = new SimManager(sampleFactory, j, simScenario, orchestratorPolicy);
+//						SimManager manager = new SimManager(sampleFactory, j, simScenario, orchestratorPolicy);
+						//todo ramona in progress
+						SimManagerEnergy manager = new SimManagerEnergy(sampleFactory, j, simScenario, orchestratorPolicy);
 
 						// Start simulation
 						manager.startSimulation();
@@ -142,8 +140,9 @@ public class MainAppEntrust {
 							.map(eValue->eValue.getKey() + " : "+eValue.getValue())
 							.forEach(SimLogger::printLine);
 
+					//todo ramona in progress []
 					if(sampleFactory == null)
-						sampleFactory = new SampleScenarioFactory(j, SS.getSimulationTime(), orchestratorPolicy, simScenario, SS.getEnergyConsumpitonMax_mobile(), SS.getEnergyConsumptionIdle_mobile());
+						sampleFactory = new SampleScenarioFactoryEnergy(j, SS.getSimulationTime(), orchestratorPolicy, simScenario, SS.getEnergyConsumpitonMax_mobile(), SS.getEnergyConsumptionIdle_mobile());
 
 					String resultEnergy = sampleFactory.getEnergyModel();
 					SimLogger.printLine("RESULT_ENERGY:" + resultEnergy);

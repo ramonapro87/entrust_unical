@@ -13,7 +13,6 @@ public class SimManagerEnergy  extends SimManager{
         scenarioFactoryEnergy = _scenarioFactory;
         defaultEnergyComputingModel=scenarioFactoryEnergy.getDefaultEnergyComputerModel();
         defaultEnergyComputingModel.initialize();
-
     }
 
 

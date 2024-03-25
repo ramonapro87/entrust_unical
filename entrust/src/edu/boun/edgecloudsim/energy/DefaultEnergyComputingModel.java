@@ -31,7 +31,12 @@ public class DefaultEnergyComputingModel extends EnergyComputingModel {
 
 	@Override
 	public double getTotalEnergyConsumption() {
-		return cpuEnergyConsumption + networkEnergyConsumption;
+		//Il consumo energetico della CPU è calcolato principalmente in due modi:
+		//Quando la CPU è inattiva, viene consumata una quantità fissa di energia specificata dall'attributo idleConsumption.
+            if(isBatteryPowered)
+				return idleConsumption;
+			else
+				return cpuEnergyConsumption + networkEnergyConsumption;
 	}
 
 	@Override
