@@ -4,6 +4,8 @@ import edu.boun.edgecloudsim.core.SimSettings;
 
 public class DefaultEnergyComputingModel extends EnergyComputingModel {
 
+	SimSettings SS = SimSettings.getInstance();
+
 	public DefaultEnergyComputingModel(int numberOfMobileDevices, double maxActiveConsumption, double idleConsumption) {
 		super(numberOfMobileDevices, maxActiveConsumption, idleConsumption);
 		// TODO Auto-generated constructor stub
