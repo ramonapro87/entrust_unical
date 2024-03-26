@@ -141,10 +141,7 @@ public class DefaultEnergyComputingModel extends EnergyComputingModel {
 	
 	Consumo energetico della rete:
 	Il consumo energetico della rete dipende dal tipo di connettività associata al nodo (connectivity).
-	Quando vengono trasmesse o ricevute dati attraverso la rete, viene calcolato il consumo energetico in base alla quantità di dati trasmessi (sizeInBits)
-	 e al tipo di trasmissione (flag, che può essere trasmissione o ricezione). 	
-	Questo consumo energetico viene aggiunto all'attributo networkEnergyConsumption tramite il metodo updatewirelessEnergyConsumption().
-	
+	Quando vengono trasmesse o ricevuti dati attraverso la rete, viene calcolato il consumo energetico in base alla quantità di dati trasmessi (sizeInBits) e al tipo di trasmissione (flag, che può essere trasmissione o ricezione). Questo consumo energetico viene aggiunto all'attributo networkEnergyConsumption tramite il metodo updatewirelessEnergyConsumption().
 	Batteria:
 	Se il nodo è alimentato da una batteria (isBatteryPowered è true),
 	viene calcolato il livello di carica della batteria in base all'energia consumata dalla CPU e dalla rete. 
