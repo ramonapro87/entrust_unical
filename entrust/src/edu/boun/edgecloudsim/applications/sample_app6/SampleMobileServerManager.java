@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.*;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import org.cloudbus.cloudsim.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.Datacenter;
@@ -31,10 +32,6 @@ import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
 
 import edu.boun.edgecloudsim.core.SimManager;
 import edu.boun.edgecloudsim.core.SimSettings;
-import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileHost;
-import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileServerManager;
-import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileVM;
-import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileVmAllocationPolicy_Custom;
 
 public class SampleMobileServerManager extends MobileServerManager{
 	private int numOfMobileDevices=0;
@@ -173,14 +170,15 @@ public class SampleMobileServerManager extends MobileServerManager{
 			}
 			
 			//4. Create Hosts with its id and list of PEs and add them to the list of machines
-			MobileHost host = new MobileHost(
+			MobileHostEnergy host = new MobileHostEnergy(
 					//Hosts should have unique IDs, so create Mobile Hosts after Edge+Cloud Hosts
 					i+SimSettings.getInstance().getNumOfEdgeHosts()+SimSettings.getInstance().getNumOfCloudHost(),
 					new RamProvisionerSimple(ram),
 					new BwProvisionerSimple(bandwidth), //kbps
 					storage,
 					peList,
-					new VmSchedulerSpaceShared(peList)
+					new VmSchedulerSpaceShared(peList),
+					energyModel
 				);
 			
 			host.setMobileDeviceId(i);
