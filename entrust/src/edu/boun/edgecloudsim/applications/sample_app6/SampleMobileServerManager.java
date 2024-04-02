@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import org.cloudbus.cloudsim.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
@@ -41,9 +42,14 @@ public class SampleMobileServerManager extends MobileServerManager{
 	public SampleMobileServerManager(int _numOfMobileDevices) {
 		numOfMobileDevices=_numOfMobileDevices;
 	}
+	private Double maxActiveConsumption; //todo Ramona Valori per calcolo energia
+	private Double idleConsumption; //todo Ramona Valori per calcolo energia
 
 	@Override
 	public void initialize() {
+		//random double value
+		maxActiveConsumption = SimSettings.getInstance().getEnergyConsumpitonMax_mobile();
+		idleConsumption = SimSettings.getInstance().getEnergyConsumptionIdle_mobile();
 	}
 	
 	@Override
@@ -144,6 +150,7 @@ public class SampleMobileServerManager extends MobileServerManager{
 		// Here are the steps needed to create a PowerDatacenter:
 		// 1. We need to create a list to store one or more Machines
 		List<MobileHost> hostList = new ArrayList<MobileHost>();
+		DefaultEnergyComputingModel energyModel = new DefaultEnergyComputingModel(numOfMobileDevices, maxActiveConsumption, idleConsumption);
 		
 		for (int i = 0; i < numOfMobileDevices; i++) {
 
