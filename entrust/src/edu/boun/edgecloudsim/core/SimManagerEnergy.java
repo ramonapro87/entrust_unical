@@ -9,7 +9,7 @@ import org.cloudbus.cloudsim.core.SimEvent;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class SimManagerEnergy  extends SimManager{
+public class SimManagerEnergy extends SimManager {
 
     private static final int CREATE_TASK = 0;
     private static final int CHECK_ALL_VM = 1;
@@ -24,7 +24,7 @@ public class SimManagerEnergy  extends SimManager{
     public SimManagerEnergy(ScenarioFactoryEnergy _scenarioFactory, int _numOfMobileDevice, String _simScenario, String _orchestratorPolicy) throws Exception {
         super(_scenarioFactory, _numOfMobileDevice, _simScenario, _orchestratorPolicy);
         scenarioFactoryEnergy = _scenarioFactory;
-        defaultEnergyComputingModel=scenarioFactoryEnergy.getDefaultEnergyComputerModel();
+        defaultEnergyComputingModel = scenarioFactoryEnergy.getDefaultEnergyComputerModel();
         defaultEnergyComputingModel.initialize();
     }
 
@@ -32,10 +32,10 @@ public class SimManagerEnergy  extends SimManager{
      * ridefiniamo questo metodo per aggiungere
      * il log del consumo energetico, al momento sembra che non ci sia un metodo per ottenere il consumo energetico
      * di un server, quindi per ora lo metto qui
-     * */
+     */
     @Override
     public void processEvent(SimEvent ev) {
-        synchronized(this){
+        synchronized (this) {
             switch (ev.getTag()) {
 
                 case GET_LOAD_LOG:
@@ -47,59 +47,45 @@ public class SimManagerEnergy  extends SimManager{
 
                     getEdgeServerManager().getDatacenterList().forEach(datacenter -> {
                         datacenter.getHostList().forEach(host -> {
-                                if (host instanceof MobileHostEnergy)
-                                    System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
+                            if (host instanceof MobileHostEnergy)
+                                System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
                         });
                     });
 
-                        getCloudServerManager().getDatacenter().getHostList().forEach(host -> {
-                            if(host instanceof MobileHostEnergy)
-                                System.out.println("MobileHostEnergy: "+ ((MobileHostEnergy) host).getBatteryLevel());
-                        });
-
-                        getMobileServerManager().getDatacenter().getHostList().forEach(host -> {
-                            try {
-                                if(host instanceof MobileHostEnergy){
-                                    // only for this we have energy data
-                                    double ec = ((MobileHostEnergy) host).energyConsumption(momentOfInterest);
-                                    ec += energyEdgeConsumed.get();
-                                    energyMobileConsumed.set(ec);
-                                }
-                                else {
-                                    System.out.println("Host : "+ host.getId());
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        });
-
-                        //todo ramona
-
-                    if(! (energyMobileConsumed.get() == 0)){
-                        double totalEnergyMobileConsumed = energyMobileConsumed.get();
-                        SimLogger.getInstance().addVmUtilizationLog(
-                                momentOfInterest,
-                                getEdgeServerManager().getAvgUtilization(),
-                                getCloudServerManager().getAvgUtilization(),
-                                getMobileServerManager().getAvgUtilization(),
-                                0,
-                                0,
-                                totalEnergyMobileConsumed
-
-                        );
-                    }else {
-                        SimLogger.getInstance().addVmUtilizationLog(
-                                momentOfInterest,
-                                getEdgeServerManager().getAvgUtilization(),
-                                getCloudServerManager().getAvgUtilization(),
-                                getMobileServerManager().getAvgUtilization());
-                    }
+                    getCloudServerManager().getDatacenter().getHostList().forEach(host -> {
+                        if (host instanceof MobileHostEnergy)
+                            System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
+                    });
 
 
 
+                    /**
+                     * Calcolo dell'energia:
+                     * - Per ogni host di ogni datacenter
+                     *   - Per ogni VM di ogni host
+                     *     - Calcolo dell'energia consumata dalla CPU
+                     */
+                    getMobileServerManager().getDatacenter().getHostList().forEach(host -> {
+                        if (host instanceof MobileHostEnergy) {
+                            // only for this we have energy data
+                            double ec = ((MobileHostEnergy) host).energyConsumption(momentOfInterest);
+                            ec += energyEdgeConsumed.get();
+                            energyMobileConsumed.set(ec);
+                        }
+                    });
+
+                    SimLogger.getInstance().addVmUtilizationLog(
+                            momentOfInterest,
+                            getEdgeServerManager().getAvgUtilization(),
+                            getCloudServerManager().getAvgUtilization(),
+                            getMobileServerManager().getAvgUtilization(),
+                            energyEdgeConsumed.get(),
+                            energyCloudConsumed.get(),
+                            energyMobileConsumed.get()
+
+                    );
                     schedule(getId(), SimSettings.getInstance().getVmLoadLogInterval(), GET_LOAD_LOG);
                     break;
-
                 default:
                     super.processEvent(ev);
                     break;
