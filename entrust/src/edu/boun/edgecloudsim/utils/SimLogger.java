@@ -339,6 +339,7 @@ public class SimLogger {
 			vmLoadList.add(new VmLoadLogItem(time, loadOnEdge, loadOnCloud, loadOnMobile));
 	}
 
+
 	public void addApDelayLog(double time, double[] apUploadDelays, double[] apDownloadDelays) {
 		if(SimSettings.getInstance().getApDelayLogInterval() != 0)
 			apDelayList.add(new ApDelayLogItem(time, apUploadDelays, apDownloadDelays));
@@ -744,7 +745,7 @@ public class SimLogger {
 				+ String.format("%.6f", gsmDelay[numOfAppTypes] / (double) gsmUsage[numOfAppTypes]) + ")");
 
 		//todo (capire cosa fa)
-		printLine("average server utilization Edge/Cloud/Mobile: " 
+		printLine("average server utilization Edge/Cloud/Mobile: "
 				+ String.format("%.6f", totalVmLoadOnEdge / (double) vmLoadList.size()) + "/"
 				+ String.format("%.6f", totalVmLoadOnCloud / (double) vmLoadList.size()) + "/"
 				+ String.format("%.6f", totalVmLoadOnMobile / (double) vmLoadList.size()));
