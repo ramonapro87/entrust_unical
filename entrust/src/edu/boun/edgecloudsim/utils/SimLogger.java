@@ -743,10 +743,13 @@ public class SimLogger {
 				+ ", " + "GSM delay: "
 				+ String.format("%.6f", gsmDelay[numOfAppTypes] / (double) gsmUsage[numOfAppTypes]) + ")");
 
+		//todo (capire cosa fa)
 		printLine("average server utilization Edge/Cloud/Mobile: " 
 				+ String.format("%.6f", totalVmLoadOnEdge / (double) vmLoadList.size()) + "/"
 				+ String.format("%.6f", totalVmLoadOnCloud / (double) vmLoadList.size()) + "/"
 				+ String.format("%.6f", totalVmLoadOnMobile / (double) vmLoadList.size()));
+
+		printLine("average energy consumption: " + "not implemented yet --------->> ********  --------->> ********  --------->> ********  --------->> ********  --------->> ******** TODO ");
 
 		printLine("average cost: " + cost[numOfAppTypes] / completedTask[numOfAppTypes] + "$");
 		printLine("average overhead: " + orchestratorOverhead[numOfAppTypes] / (failedTask[numOfAppTypes] + completedTask[numOfAppTypes]) + " ns");

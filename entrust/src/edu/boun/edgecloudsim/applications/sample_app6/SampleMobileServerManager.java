@@ -121,7 +121,7 @@ public class SampleMobileServerManager extends MobileServerManager{
 		double costPerMem = 0;
 		double costPerStorage = 0;
 		
-		List<MobileHost> hostList=createHosts();
+		List<MobileHostEnergy> hostList=createHosts();
 		
 		String name = "MobileDatacenter_" + Integer.toString(index);
 		double time_zone = 3.0;         // time zone this resource located
@@ -143,10 +143,11 @@ public class SampleMobileServerManager extends MobileServerManager{
 		return datacenter;
 	}
 	
-	private List<MobileHost> createHosts(){
+//	private List<MobileHost> createHosts(){ todo change in MobileHostEnergy
+	private List<MobileHostEnergy> createHosts(){
 		// Here are the steps needed to create a PowerDatacenter:
 		// 1. We need to create a list to store one or more Machines
-		List<MobileHost> hostList = new ArrayList<MobileHost>();
+		List<MobileHostEnergy> hostList = new ArrayList<>();
 		DefaultEnergyComputingModel energyModel = new DefaultEnergyComputingModel(numOfMobileDevices, maxActiveConsumption, idleConsumption);
 		
 		for (int i = 0; i < numOfMobileDevices; i++) {
