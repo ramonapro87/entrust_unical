@@ -110,7 +110,7 @@ public class MainAppEntrust {
 
 						// Generate EdgeCloudSim Simulation Manager
 //						SimManager manager = new SimManager(sampleFactory, j, simScenario, orchestratorPolicy);
-						//todo ramona in progress
+
 						SimManagerEnergy manager = new SimManagerEnergy(sampleFactory, j, simScenario, orchestratorPolicy);
 
 						// Start simulation
@@ -140,12 +140,8 @@ public class MainAppEntrust {
 							.map(eValue->eValue.getKey() + " : "+eValue.getValue())
 							.forEach(SimLogger::printLine);
 
-					//todo ramona in progress []
-					if(sampleFactory == null)
-						sampleFactory = new SampleScenarioFactoryEnergy(j, SS.getSimulationTime(), orchestratorPolicy, simScenario, SS.getEnergyConsumpitonMax_mobile(), SS.getEnergyConsumptionIdle_mobile());
 
-					String resultEnergy = sampleFactory.getEnergyModel();
-					SimLogger.printLine("RESULT_ENERGY:" + resultEnergy);
+
 
 
 
