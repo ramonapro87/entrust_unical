@@ -1,14 +1,13 @@
 package edu.boun.edgecloudsim.core;
 
 import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileHostEnergy;
-import edu.boun.edgecloudsim.edge_server.EdgeVmAllocationPolicy_Custom;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import edu.boun.edgecloudsim.utils.SimLogger;
-import edu.boun.edgecloudsim.utils.TaskProperty;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.SimEvent;
 
-import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class SimManagerEnergy  extends SimManager{
 
@@ -41,46 +40,30 @@ public class SimManagerEnergy  extends SimManager{
 
                 case GET_LOAD_LOG:
 
-                    SimLogger.getInstance().addVmUtilizationLog(
-                            CloudSim.clock(),
-                            getEdgeServerManager().getAvgUtilization(),
-                            getCloudServerManager().getAvgUtilization(),
-                            getMobileServerManager().getAvgUtilization());
-
+                    double momentOfInterest = CloudSim.clock();
+                    AtomicReference<Double> energyMobileConsumed = new AtomicReference<>((double) 0);
+                    AtomicReference<Double> energyEdgeConsumed = new AtomicReference<>((double) 0);
+                    AtomicReference<Double> energyCloudConsumed = new AtomicReference<>((double) 0);
 
                     getEdgeServerManager().getDatacenterList().forEach(datacenter -> {
                         datacenter.getHostList().forEach(host -> {
-                            try {
-                                if (host instanceof MobileHostEnergy) {
+                                if (host instanceof MobileHostEnergy)
                                     System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
-                                    System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getEnergyModel());
-                                } else {
-                                    System.out.println("Host : " + host.getId());
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
                         });
                     });
 
                         getCloudServerManager().getDatacenter().getHostList().forEach(host -> {
-                            try {
-                                if(host instanceof MobileHostEnergy){
-                                    System.out.println("MobileHostEnergy: "+ ((MobileHostEnergy) host).getBatteryLevel());
-                                }
-                                else {
-                                    System.out.println("Host : "+ host.getId());
-                                }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
+                            if(host instanceof MobileHostEnergy)
+                                System.out.println("MobileHostEnergy: "+ ((MobileHostEnergy) host).getBatteryLevel());
                         });
 
                         getMobileServerManager().getDatacenter().getHostList().forEach(host -> {
                             try {
                                 if(host instanceof MobileHostEnergy){
-                                    System.out.println("MobileHostEnergy: "+ ((MobileHostEnergy) host).getBatteryLevel());
                                     // only for this we have energy data
+                                    double ec = ((MobileHostEnergy) host).energyConsumption(momentOfInterest);
+                                    ec += energyEdgeConsumed.get();
+                                    energyMobileConsumed.set(ec);
                                 }
                                 else {
                                     System.out.println("Host : "+ host.getId());
@@ -90,9 +73,28 @@ public class SimManagerEnergy  extends SimManager{
                             }
                         });
 
-//                    System.out.println("getEdgeServerManager: "+ getEdgeServerManager().getAvgUtilization());
-//                    System.out.println("getCloudServerManager: "+ getCloudServerManager().getAvgUtilization());
-//                    System.out.println("getMobileServerManager: "+ getMobileServerManager().getAvgUtilization());
+                        //todo ramona
+
+                    if(! (energyMobileConsumed.get() == 0)){
+                        double totalEnergyMobileConsumed = energyMobileConsumed.get();
+                        SimLogger.getInstance().addVmUtilizationLog(
+                                momentOfInterest,
+                                getEdgeServerManager().getAvgUtilization(),
+                                getCloudServerManager().getAvgUtilization(),
+                                getMobileServerManager().getAvgUtilization(),
+                                0,
+                                0,
+                                totalEnergyMobileConsumed
+
+                        );
+                    }else {
+                        SimLogger.getInstance().addVmUtilizationLog(
+                                momentOfInterest,
+                                getEdgeServerManager().getAvgUtilization(),
+                                getCloudServerManager().getAvgUtilization(),
+                                getMobileServerManager().getAvgUtilization());
+                    }
+
 
 
                     schedule(getId(), SimSettings.getInstance().getVmLoadLogInterval(), GET_LOAD_LOG);

@@ -339,6 +339,12 @@ public class SimLogger {
 			vmLoadList.add(new VmLoadLogItem(time, loadOnEdge, loadOnCloud, loadOnMobile));
 	}
 
+	public void addVmUtilizationLog(double time, double loadOnEdge, double loadOnCloud, double loadOnMobile,
+									double energyConsumedEdge, double energyConsumedCloud, double energyConsumedMobile) {
+		if(SimSettings.getInstance().getLocationLogInterval() != 0)
+			vmLoadList.add(new VmLoadLogItem(time, loadOnEdge, loadOnCloud, loadOnMobile, energyConsumedEdge, energyConsumedCloud, energyConsumedMobile));
+	}
+
 
 	public void addApDelayLog(double time, double[] apUploadDelays, double[] apDownloadDelays) {
 		if(SimSettings.getInstance().getApDelayLogInterval() != 0)
@@ -469,10 +475,12 @@ public class SimLogger {
 		double totalVmLoadOnEdge = 0;
 		double totalVmLoadOnCloud = 0;
 		double totalVmLoadOnMobile = 0;
+		double totalEnergyConsumedOnMobile = 0;
 		for (VmLoadLogItem entry : vmLoadList) {
 			totalVmLoadOnEdge += entry.getEdgeLoad();
 			totalVmLoadOnCloud += entry.getCloudLoad();
 			totalVmLoadOnMobile += entry.getMobileLoad();
+			totalEnergyConsumedOnMobile += entry.getEnergyConsumedOnMobile();
 			if (fileLogEnabled && SimSettings.getInstance().getVmLoadLogInterval() != 0)
 				appendToFile(vmLoadBW, entry.toString());
 		}
@@ -744,13 +752,19 @@ public class SimLogger {
 				+ ", " + "GSM delay: "
 				+ String.format("%.6f", gsmDelay[numOfAppTypes] / (double) gsmUsage[numOfAppTypes]) + ")");
 
-		//todo (capire cosa fa)
+		//todo
 		printLine("average server utilization Edge/Cloud/Mobile: "
 				+ String.format("%.6f", totalVmLoadOnEdge / (double) vmLoadList.size()) + "/"
 				+ String.format("%.6f", totalVmLoadOnCloud / (double) vmLoadList.size()) + "/"
 				+ String.format("%.6f", totalVmLoadOnMobile / (double) vmLoadList.size()));
 
-		printLine("average energy consumption: " + "not implemented yet --------->> ********  --------->> ********  --------->> ********  --------->> ********  --------->> ******** TODO ");
+		/**
+		 * sample output: average energy consumption on Mobile
+		 * */
+		if(totalEnergyConsumedOnMobile != 0)
+			printLine("average energy consumption on Mobile: "
+					+ String.format("%.6f", totalEnergyConsumedOnMobile / (double) vmLoadList.stream().filter(x-> x.getEnergyConsumedOnMobile() !=0 ).toList().size()) + " [unit of energy]");
+
 
 		printLine("average cost: " + cost[numOfAppTypes] / completedTask[numOfAppTypes] + "$");
 		printLine("average overhead: " + orchestratorOverhead[numOfAppTypes] / (failedTask[numOfAppTypes] + completedTask[numOfAppTypes]) + " ns");
@@ -874,11 +888,29 @@ class VmLoadLogItem {
 	private double vmLoadOnCloud;
 	private double vmLoadOnMobile;
 
+	// i valori sotto servono solo per l energia consumata
+	private double energyConsumptionOnEdge;
+	private double energyConsumptionOnCloud;
+	private double energyConsumptionOnMobile;
+
 	VmLoadLogItem(double _time, double _vmLoadOnEdge, double _vmLoadOnCloud, double _vmLoadOnMobile) {
 		time = _time;
 		vmLoadOnEdge = _vmLoadOnEdge;
 		vmLoadOnCloud = _vmLoadOnCloud;
 		vmLoadOnMobile = _vmLoadOnMobile;
+		energyConsumptionOnCloud = 0;
+		energyConsumptionOnEdge = 0;
+		energyConsumptionOnMobile = 0;
+	}
+
+	VmLoadLogItem(double _time, double _vmLoadOnEdge, double _vmLoadOnCloud, double _vmLoadOnMobile, double _energyConsumptionOnEdge, double _energyConsumptionOnCloud, double _energyConsumptionOnMobile) {
+		time = _time;
+		vmLoadOnEdge = _vmLoadOnEdge;
+		vmLoadOnCloud = _vmLoadOnCloud;
+		vmLoadOnMobile = _vmLoadOnMobile;
+		energyConsumptionOnEdge = _energyConsumptionOnEdge;
+		energyConsumptionOnCloud = _energyConsumptionOnCloud;
+		energyConsumptionOnMobile = _energyConsumptionOnMobile;
 	}
 
 	public double getEdgeLoad() {
@@ -892,6 +924,12 @@ class VmLoadLogItem {
 	public double getMobileLoad() {
 		return vmLoadOnMobile;
 	}
+
+	public double getEnergyConsumedOnMobile() {
+		return energyConsumptionOnMobile;
+	}
+
+
 	
 	public String toString() {
 		return time + 
