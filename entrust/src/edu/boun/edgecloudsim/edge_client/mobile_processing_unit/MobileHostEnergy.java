@@ -13,11 +13,16 @@ public class MobileHostEnergy extends MobileHost{
 
     private DefaultEnergyComputingModel energyModel;
     private Double batteryLevel;
+    private boolean isDead;
     public MobileHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel _energyModel) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
         energyModel = _energyModel;
         batteryLevel = Math.round(Math.random() * 10000) / 100.0;  //todo Livello Batteria random, da valure se cambiarlo
 
+    }
+  //todo  da implementare
+    public boolean isDead() {
+        return isDead;
     }
 
     public DefaultEnergyComputingModel getEnergyModel() {
@@ -29,6 +34,10 @@ public class MobileHostEnergy extends MobileHost{
     }
 
     public Double getBatteryLevel() {
+        return batteryLevel;
+    }
+    //todo da implementare
+    public Double upDateBatteryLevel(){
         return batteryLevel;
     }
 
