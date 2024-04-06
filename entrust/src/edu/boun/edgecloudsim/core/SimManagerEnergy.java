@@ -39,6 +39,8 @@ public class SimManagerEnergy extends SimManager {
             switch (ev.getTag()) {
 
                 case GET_LOAD_LOG:
+                	
+                	
 
                     double momentOfInterest = CloudSim.clock();
                     AtomicReference<Double> energyMobileConsumed = new AtomicReference<>((double) 0);
@@ -53,8 +55,10 @@ public class SimManagerEnergy extends SimManager {
                     });
 
                     getCloudServerManager().getDatacenter().getHostList().forEach(host -> {
-                        if (host instanceof MobileHostEnergy)
+                        if (host instanceof MobileHostEnergy) {
+                        	((MobileHostEnergy) host).updateStatus();
                             System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
+                        }
                     });
 
 

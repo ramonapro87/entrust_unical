@@ -4,6 +4,7 @@ import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmScheduler;
+import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.provisioners.BwProvisioner;
 import org.cloudbus.cloudsim.provisioners.RamProvisioner;
 
@@ -14,12 +15,34 @@ public class MobileHostEnergy extends MobileHost{
     private DefaultEnergyComputingModel energyModel;
     private Double batteryLevel;
     private boolean isDead;
+    protected double deathTime;
     public MobileHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel _energyModel) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
         energyModel = _energyModel;
         batteryLevel = Math.round(Math.random() * 10000) / 100.0;  //todo Livello Batteria random, da valure se cambiarlo
 
     }
+    
+	public void updateStatus() {
+		// Check if the device is dead
+		if (isDead())
+			return;
+		// Update the static energy consumption, the dynamic one is measure separately
+		// in DefaultComputingNode.startExecution() for performance and accuracy reasons
+		getEnergyModel().updateStaticEnergyConsumption();//FIXME su pure edge è usata questa funzione
+
+		if (getEnergyModel().isBatteryPowered() && getEnergyModel().getBatteryLevelWattHour() <= 0) {
+			setDeath(true, CloudSim.clock());//FIXME non so se è corretto il clock
+		}
+	}
+	protected void setDeath(Boolean dead, double time) {
+		isDead = dead;
+		deathTime = time;
+	}
+    
+    
+    
+    
   //todo  da implementare
     public boolean isDead() {
         return isDead;
