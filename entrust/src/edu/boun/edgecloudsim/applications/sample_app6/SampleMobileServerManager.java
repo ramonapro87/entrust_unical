@@ -157,7 +157,7 @@ public class SampleMobileServerManager extends MobileServerManager{
 			int ram = SimSettings.getInstance().getRamForMobileVM();
 			long storage = SimSettings.getInstance().getStorageForMobileVM();
 			long bandwidth = 0;
-			//TODO inserire qui dati energia?
+
 			
 			// 2. A Machine contains one or more PEs or CPUs/Cores. Therefore, should
 			//    create a list to store these PEs before creating
@@ -179,7 +179,8 @@ public class SampleMobileServerManager extends MobileServerManager{
 					storage,
 					peList,
 					new VmSchedulerSpaceShared(peList),
-					energyModel
+					energyModel,
+					SimSettings.getInstance().getBATTERYCAPACITY()
 				);
 			
 			host.setMobileDeviceId(i);

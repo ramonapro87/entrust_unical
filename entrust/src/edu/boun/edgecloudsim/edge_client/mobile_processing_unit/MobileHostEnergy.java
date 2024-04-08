@@ -18,11 +18,14 @@ public class MobileHostEnergy extends MobileHost{
     private Double batteryLevel;
     private boolean isDead;
     protected double deathTime;
-    public MobileHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel _energyModel) {
+    private double batteryCapacity;
+    double energyAllVM = 0;
+
+    public MobileHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel _energyModel, Double _batteryCapacity) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
         energyModel = _energyModel;
-        batteryLevel = Math.round(Math.random() * 10000) / 100.0;  //todo Livello Batteria random, da valure se cambiarlo
-
+        batteryLevel =  Math.round(Math.random() * 10000) / 100.0;
+        batteryCapacity=_batteryCapacity;
     }
     
 	public void updateStatus() {
@@ -47,6 +50,14 @@ public class MobileHostEnergy extends MobileHost{
     
 
     public boolean isDead() {
+
+        if(batteryLevel>0) {
+            isDead = false;
+        }else    {
+            isDead=true;
+        }
+
+
         return isDead;
     }
 
@@ -65,15 +76,21 @@ public class MobileHostEnergy extends MobileHost{
     //todo
     public Double upDateBatteryLevel(){
         // scalare dal livello della batteria il consumo energetico
+        double percentageConsumed = Math.round(energyAllVM / batteryCapacity);
+
+
+        batteryLevel = batteryLevel-percentageConsumed;
+
 
        return batteryLevel;
+
     }
 
     public void setBatteryLevel(Double batteryLevel) {
 
 
         this.batteryLevel = batteryLevel;
-        energyModel.setBatteryCapacity(batteryLevel);
+
     }
 
     /**
@@ -96,7 +113,7 @@ public class MobileHostEnergy extends MobileHost{
      * </p>
      */
     public double energyConsumption(double timePassed) {
-        double energyAllVM = 0;
+
         for (Vm vm : getVmList()) {
 
             double energyCurrentVm = 0;
@@ -123,10 +140,13 @@ public class MobileHostEnergy extends MobileHost{
 //            double consumoBanda = vm.getCurrentRequestedBw() * getConsumoBandaPerUnit(timePassed);
 //            energyCurrentVm += consumoBanda;
 //
-//            // todo .. altri consumi?
+//     
 //
 //            energyAllVM += energyCurrentVm;
             energyAllVM=energyModel.getTotalEnergyConsumption();
+            //aggiorna il livello batteria
+            this.upDateBatteryLevel();
+            System.out.print("livello batteria "+ batteryLevel);
         }
         return energyAllVM;
     }
