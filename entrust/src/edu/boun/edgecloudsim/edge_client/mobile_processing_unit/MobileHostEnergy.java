@@ -80,6 +80,7 @@ public class MobileHostEnergy extends MobileHost{
 
 
         batteryLevel = batteryLevel-percentageConsumed;
+        energyModel.setBatteryCapacity(batteryLevel);
 
 
        return batteryLevel;
@@ -140,13 +141,13 @@ public class MobileHostEnergy extends MobileHost{
 //            double consumoBanda = vm.getCurrentRequestedBw() * getConsumoBandaPerUnit(timePassed);
 //            energyCurrentVm += consumoBanda;
 //
-//     
+//
 //
 //            energyAllVM += energyCurrentVm;
             energyAllVM=energyModel.getTotalEnergyConsumption();
             //aggiorna il livello batteria
             this.upDateBatteryLevel();
-            System.out.print("livello batteria "+ batteryLevel);
+
         }
         return energyAllVM;
     }

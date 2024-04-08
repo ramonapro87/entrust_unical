@@ -764,7 +764,10 @@ public class SimLogger {
 		if(totalEnergyConsumedOnMobile != 0){
 			printLine("average energy consumption on Mobile: "
 					+ String.format("%.6f", totalEnergyConsumedOnMobile /
-					(double) vmLoadList.stream().filter(x-> x.getEnergyConsumedOnMobile() !=0 ).toList().size()) + " [unit of energy ?]"); // consideriamo solo le VM che hanno consumato energia
+					(double) vmLoadList.stream().filter(x-> x.getEnergyConsumedOnMobile() !=0 ).toList().size()) + " [Wh]"); // consideriamo solo le VM che hanno consumato energia
+
+
+
 		}
 
 

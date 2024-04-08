@@ -73,6 +73,7 @@ public class SimManagerEnergy extends SimManager {
                         if (host instanceof MobileHostEnergy) {
                             // only for this we have energy data
                             double ec = ((MobileHostEnergy) host).energyConsumption(momentOfInterest);
+                            System.out.println("energia consumata: "+ ec +" - host ID["+host.getId()+"] momentOfInterest: "+ momentOfInterest);
                             ec += energyEdgeConsumed.get();
                             energyMobileConsumed.set(ec);
                         }
