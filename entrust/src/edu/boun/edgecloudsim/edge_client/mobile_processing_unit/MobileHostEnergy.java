@@ -1,6 +1,7 @@
 package edu.boun.edgecloudsim.edge_client.mobile_processing_unit;
 
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
+import edu.boun.edgecloudsim.energy.DefaultEnergyNetworkModel;
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmScheduler;
@@ -13,6 +14,7 @@ import java.util.List;
 public class MobileHostEnergy extends MobileHost{
 
     private DefaultEnergyComputingModel energyModel;
+    private DefaultEnergyNetworkModel networkModel;
     private Double batteryLevel;
     private boolean isDead;
     protected double deathTime;
@@ -43,7 +45,7 @@ public class MobileHostEnergy extends MobileHost{
     
     
     
-  //todo  da implementare
+
     public boolean isDead() {
         return isDead;
     }
@@ -57,15 +59,21 @@ public class MobileHostEnergy extends MobileHost{
     }
 
     public Double getBatteryLevel() {
-        return batteryLevel;
+
+        return energyModel.getBatteryLevelWattHour();
     }
-    //todo da implementare
+    //todo
     public Double upDateBatteryLevel(){
-        return batteryLevel;
+        // scalare dal livello della batteria il consumo energetico
+
+       return batteryLevel;
     }
 
     public void setBatteryLevel(Double batteryLevel) {
+
+
         this.batteryLevel = batteryLevel;
+        energyModel.setBatteryCapacity(batteryLevel);
     }
 
     /**
@@ -95,26 +103,30 @@ public class MobileHostEnergy extends MobileHost{
             // Ottieni la quantità totale di lavoro eseguito dalla CPU della VM in MIPS
             double mipsTotali = vm.getTotalUtilizationOfCpuMips(timePassed);
 
-            // Esempio di consumo energetico per unità di lavoro (1 MIPS), magari possiamo leggerlo dalle properties
-            double energiaPerMIPS = 0.001;
+            if(mipsTotali > 0)
+           energyModel.updateDynamicEnergyConsumption(vm.getSize(),mipsTotali);
 
-            // Calcola l'energia consumata dalla CPU
-            double energiaConsumataCPU = mipsTotali * energiaPerMIPS;
-
-            // Aggiungi il consumo energetico della CPU
-            energyCurrentVm += energiaConsumataCPU;
-
-            // Calcola e aggiungi il consumo energetico della RAM
-            double consumoRAM = vm.getCurrentRequestedRam() * getConsumoRAMPerUnit(timePassed);
-            energyCurrentVm += consumoRAM;
-
-            // Calcola e aggiungi il consumo energetico della larghezza di banda
-            double consumoBanda = vm.getCurrentRequestedBw() * getConsumoBandaPerUnit(timePassed);
-            energyCurrentVm += consumoBanda;
-
-            // todo .. altri consumi?
-
-            energyAllVM += energyCurrentVm;
+//            // Esempio di consumo energetico per unità di lavoro (1 MIPS), magari possiamo leggerlo dalle properties
+//            double energiaPerMIPS = 0.001;
+//
+//            // Calcola l'energia consumata dalla CPU
+//            double energiaConsumataCPU = mipsTotali * energiaPerMIPS;
+//
+//            // Aggiungi il consumo energetico della CPU
+//            energyCurrentVm += energiaConsumataCPU;
+//
+//            // Calcola e aggiungi il consumo energetico della RAM
+//            double consumoRAM = vm.getCurrentRequestedRam() * getConsumoRAMPerUnit(timePassed);
+//            energyCurrentVm += consumoRAM;
+//
+//            // Calcola e aggiungi il consumo energetico della larghezza di banda
+//            double consumoBanda = vm.getCurrentRequestedBw() * getConsumoBandaPerUnit(timePassed);
+//            energyCurrentVm += consumoBanda;
+//
+//            // todo .. altri consumi?
+//
+//            energyAllVM += energyCurrentVm;
+            energyAllVM=energyModel.getTotalEnergyConsumption();
         }
         return energyAllVM;
     }
