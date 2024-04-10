@@ -14,7 +14,7 @@ import java.util.List;
 public class MobileHostEnergy extends MobileHost{
 
     private DefaultEnergyComputingModel energyModel;
-    private DefaultEnergyNetworkModel networkModel;
+    private DefaultEnergyNetworkModel networkModel; // da valutare come incorporarlo
     private Double batteryLevel;
     private boolean isDead;
     protected double deathTime;
@@ -51,11 +51,6 @@ public class MobileHostEnergy extends MobileHost{
 
     public boolean isDead() {
 
-        if(batteryLevel>0) {
-            isDead = false;
-        }else    {
-            isDead=true;
-        }
 
 
         return isDead;
@@ -138,8 +133,9 @@ public class MobileHostEnergy extends MobileHost{
 //            energyCurrentVm += consumoRAM;
 //
 //            // Calcola e aggiungi il consumo energetico della larghezza di banda
-//            double consumoBanda = vm.getCurrentRequestedBw() * getConsumoBandaPerUnit(timePassed);
-//            energyCurrentVm += consumoBanda;
+            //  double consumoBanda = vm.getCurrentRequestedBw() * getConsumoBandaPerUnit(timePassed);
+            //  System.out.println("consumo banda" + consumoBanda);
+//          energyCurrentVm += consumoBanda;
 //
 //
 //
