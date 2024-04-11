@@ -934,8 +934,10 @@ class VmLoadLogItem {
 		return energyConsumptionOnMobile;
 	}
 
+	public double getEnergyConsumptionOnEdge() {
+		return energyConsumptionOnEdge;
+	}
 
-	
 	public String toString() {
 		return time + 
 				SimSettings.DELIMITER + vmLoadOnEdge +

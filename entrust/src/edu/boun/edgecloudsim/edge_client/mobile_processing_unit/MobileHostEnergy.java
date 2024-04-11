@@ -14,7 +14,7 @@ import java.util.List;
 public class MobileHostEnergy extends MobileHost{
 
     private DefaultEnergyComputingModel energyModel;
-    private DefaultEnergyNetworkModel networkModel; // da valutare come incorporarlo
+
     private Double batteryLevel;
     private boolean isDead;
     protected double deathTime;
