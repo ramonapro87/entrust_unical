@@ -28,6 +28,19 @@ public class SimManagerEnergy extends SimManager {
         defaultEnergyComputingModel.initialize();
     }
 
+    @Override
+    public void startSimulation() throws Exception{
+        //Starts the simulation
+        SimLogger.print(super.getName()+" [energy] is starting...");
+
+
+
+
+        //Start Edge Datacenters & Generate VMs
+        getEdgeServerManager().startDatacentersEnegy();
+        super.startSimulation();
+    }
+
     /**
      * ridefiniamo questo metodo per aggiungere
      * il log del consumo energetico, al momento sembra che non ci sia un metodo per ottenere il consumo energetico

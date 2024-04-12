@@ -54,7 +54,11 @@ public abstract class EdgeServerManager {
 	 * Starts Datacenters
 	 */
 	public abstract void startDatacenters() throws Exception;
-	
+	public void startDatacentersEnegy() throws Exception{
+		//todo questo serve solo per gli esempi energia
+		System.out.println("energia");
+	};
+
 	/*
 	 * Terminates Datacenters
 	 */

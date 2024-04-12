@@ -63,6 +63,12 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 		}
 	}
 
+	@Override
+	public void startDatacentersEnegy() throws Exception{
+		//todo qualcosa da fare
+		System.out.println("qualcosa da fare");
+	}
+
 	public void createVmList(int brokerId){
 		int hostCounter=0;
 		int vmCounter=0;
@@ -199,7 +205,8 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 			}
 			
 			//4. Create Hosts with its id and list of PEs and add them to the list of machines
-			EdgeHost host = new EdgeHost(
+//			EdgeHost host = new EdgeHost(
+			EdgeHost host = new EdgeHostEnergy(
 					hostIdCounter,
 					new RamProvisionerSimple(ram),
 					new BwProvisionerSimple(bandwidth), //kbps
