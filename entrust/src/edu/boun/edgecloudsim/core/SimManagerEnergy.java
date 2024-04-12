@@ -1,6 +1,7 @@
 package edu.boun.edgecloudsim.core;
 
 import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileHostEnergy;
+import edu.boun.edgecloudsim.edge_server.EdgeHostEnergy;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import edu.boun.edgecloudsim.utils.SimLogger;
 import org.cloudbus.cloudsim.core.CloudSim;
@@ -58,8 +59,8 @@ public class SimManagerEnergy extends SimManager {
 
                     getEdgeServerManager().getDatacenterList().forEach(datacenter -> {
                         datacenter.getHostList().forEach(host -> {
-                            if (host instanceof MobileHostEnergy)
-                                System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
+                            if (host instanceof EdgeHostEnergy)
+                                System.out.println("MobileHostEnergy: " + ((EdgeHostEnergy) host).getBatteryCapacity());
                         });
                     });
 

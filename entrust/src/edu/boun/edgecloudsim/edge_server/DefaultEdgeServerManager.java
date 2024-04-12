@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import org.cloudbus.cloudsim.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
@@ -207,17 +208,32 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 			}
 			
 			//4. Create Hosts with its id and list of PEs and add them to the list of machines
-//			EdgeHost host = new EdgeHost(
-			if(this.isEnergySimulation)
-				System.out.println("Energy Simulation");
-			EdgeHost host = new EdgeHostEnergy(
-					hostIdCounter,
-					new RamProvisionerSimple(ram),
-					new BwProvisionerSimple(bandwidth), //kbps
-					storage,
-					peList,
-					new VmSchedulerSpaceShared(peList)
+			EdgeHost host;
+			if(this.isEnergySimulation){
+				//todo per ramona, controllare questi valori
+				DefaultEnergyComputingModel energyModel = new DefaultEnergyComputingModel(SimSettings.getInstance().getMaxNumOfMobileDev(), SimSettings.getInstance().getMaxNumOfMobileDev(), SimSettings.getInstance().getMaxNumOfMobileDev());
+
+				host = new EdgeHostEnergy(
+						hostIdCounter,
+						new RamProvisionerSimple(ram),
+						new BwProvisionerSimple(bandwidth), //kbps
+						storage,
+						peList,
+						new VmSchedulerSpaceShared(peList),
+						energyModel, //todo inserire valori
+						SimSettings.getInstance().getBATTERYCAPACITY()
+					);
+			}else{
+				host = new EdgeHost(
+						hostIdCounter,
+						new RamProvisionerSimple(ram),
+						new BwProvisionerSimple(bandwidth), //kbps
+						storage,
+						peList,
+						new VmSchedulerSpaceShared(peList)
 				);
+			}
+
 			
 			host.setPlace(new Location(placeTypeIndex, wlan_id, x_pos, y_pos));
 			hostList.add(host);

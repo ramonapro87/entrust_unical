@@ -18,11 +18,6 @@ public class EdgeHostEnergy extends EdgeHost{
     private double batteryCapacity;
     private double energyAllVM = 0;
 
-    public EdgeHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler) {
-        super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
-    }
-
-
     public EdgeHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel em, Double bc) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
         energyModel=em;
