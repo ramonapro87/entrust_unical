@@ -39,6 +39,7 @@ import edu.boun.edgecloudsim.utils.Location;
 
 public class DefaultEdgeServerManager extends EdgeServerManager{
 	private int hostIdCounter;
+	private boolean isEnergySimulation = false;
 
 	public DefaultEdgeServerManager() {
 		hostIdCounter = 0;
@@ -66,6 +67,7 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 	@Override
 	public void startDatacentersEnegy() throws Exception{
 		//todo qualcosa da fare
+		this.isEnergySimulation = true;
 		System.out.println("qualcosa da fare");
 	}
 
@@ -206,6 +208,8 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 			
 			//4. Create Hosts with its id and list of PEs and add them to the list of machines
 //			EdgeHost host = new EdgeHost(
+			if(this.isEnergySimulation)
+				System.out.println("Energy Simulation");
 			EdgeHost host = new EdgeHostEnergy(
 					hostIdCounter,
 					new RamProvisionerSimple(ram),

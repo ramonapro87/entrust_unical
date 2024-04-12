@@ -32,10 +32,6 @@ public class SimManagerEnergy extends SimManager {
     public void startSimulation() throws Exception{
         //Starts the simulation
         SimLogger.print(super.getName()+" [energy] is starting...");
-
-
-
-
         //Start Edge Datacenters & Generate VMs
         getEdgeServerManager().startDatacentersEnegy();
         super.startSimulation();
