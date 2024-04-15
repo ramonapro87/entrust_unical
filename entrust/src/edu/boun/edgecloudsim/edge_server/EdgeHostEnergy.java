@@ -37,6 +37,13 @@ public class EdgeHostEnergy extends EdgeHost{
     public double getBatteryCapacity() {
         return batteryCapacity;
     }
+
+    public Double getBatteryLevel() {
+
+        return energyModel.getBatteryLevelWattHour();
+    }
+
+
     protected void setDeath(Boolean dead, double time) {
         isDead = dead;
         deathTime = time;

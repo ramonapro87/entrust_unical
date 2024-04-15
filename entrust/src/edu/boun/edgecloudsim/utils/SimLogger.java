@@ -476,11 +476,13 @@ public class SimLogger {
 		double totalVmLoadOnCloud = 0;
 		double totalVmLoadOnMobile = 0;
 		double totalEnergyConsumedOnMobile = 0;
+		double totalEnergyConsumedOnEDGE= 0;
 		for (VmLoadLogItem entry : vmLoadList) {
 			totalVmLoadOnEdge += entry.getEdgeLoad();
 			totalVmLoadOnCloud += entry.getCloudLoad();
 			totalVmLoadOnMobile += entry.getMobileLoad();
 			totalEnergyConsumedOnMobile += entry.getEnergyConsumedOnMobile();
+			totalEnergyConsumedOnEDGE += entry.getEnergyConsumptionOnEdge();
 			if (fileLogEnabled && SimSettings.getInstance().getVmLoadLogInterval() != 0)
 				appendToFile(vmLoadBW, entry.toString());
 		}
@@ -765,9 +767,12 @@ public class SimLogger {
 			printLine("average energy consumption on Mobile: "
 					+ String.format("%.6f", totalEnergyConsumedOnMobile /
 					(double) vmLoadList.stream().filter(x-> x.getEnergyConsumedOnMobile() !=0 ).toList().size()) + " [Wh]"); // consideriamo solo le VM che hanno consumato energia
+		}
 
-
-
+		if(totalEnergyConsumedOnEDGE!= 0){
+			printLine("average energy consumption on **********EDGE: "
+					+ String.format("%.6f", totalEnergyConsumedOnEDGE /
+					(double) vmLoadList.stream().filter(x-> x.getEnergyConsumptionOnEdge() !=0 ).toList().size()) + " [Wh]"); // consideriamo solo le VM che hanno consumato energia
 		}
 
 

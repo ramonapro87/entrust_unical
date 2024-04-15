@@ -67,9 +67,8 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 
 	@Override
 	public void startDatacentersEnegy() throws Exception{
-		//todo qualcosa da fare
 		this.isEnergySimulation = true;
-		System.out.println("qualcosa da fare");
+		System.out.println("SIMULAZIONE ENERGIA");
 	}
 
 	public void createVmList(int brokerId){
@@ -211,7 +210,7 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 			EdgeHost host;
 			if(this.isEnergySimulation){
 				//todo per ramona, controllare questi valori
-				DefaultEnergyComputingModel energyModel = new DefaultEnergyComputingModel(SimSettings.getInstance().getMaxNumOfMobileDev(), SimSettings.getInstance().getMaxNumOfMobileDev(), SimSettings.getInstance().getMaxNumOfMobileDev());
+				DefaultEnergyComputingModel energyModel = new DefaultEnergyComputingModel(SimSettings.getInstance().getNumOfEdgeHosts(), SimSettings.getInstance().getEnergyConsumpitonMax_cloud(), SimSettings.getInstance().getEnergyConsumptionIdle_cloud());
 
 				host = new EdgeHostEnergy(
 						hostIdCounter,

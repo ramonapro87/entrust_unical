@@ -20,6 +20,7 @@ public class SimManagerEnergy extends SimManager {
 
     private DefaultEnergyComputingModel defaultEnergyComputingModel;
     private ScenarioFactoryEnergy scenarioFactoryEnergy;
+    public boolean detailHostEenergy = false;
 
 
     public SimManagerEnergy(ScenarioFactoryEnergy _scenarioFactory, int _numOfMobileDevice, String _simScenario, String _orchestratorPolicy) throws Exception {
@@ -30,9 +31,9 @@ public class SimManagerEnergy extends SimManager {
     }
 
     @Override
-    public void startSimulation() throws Exception{
+    public void startSimulation() throws Exception {
         //Starts the simulation
-        SimLogger.print(super.getName()+" [energy] is starting...");
+        SimLogger.print(super.getName() + " [energy] is starting...");
         //Start Edge Datacenters & Generate VMs
         getEdgeServerManager().startDatacentersEnegy();
         super.startSimulation();
@@ -49,8 +50,7 @@ public class SimManagerEnergy extends SimManager {
             switch (ev.getTag()) {
 
                 case GET_LOAD_LOG:
-                	
-                	
+
 
                     double momentOfInterest = CloudSim.clock();
                     AtomicReference<Double> energyMobileConsumed = new AtomicReference<>((double) 0);
@@ -59,18 +59,23 @@ public class SimManagerEnergy extends SimManager {
 
                     getEdgeServerManager().getDatacenterList().forEach(datacenter -> {
                         datacenter.getHostList().forEach(host -> {
-                            if (host instanceof EdgeHostEnergy)
-                                System.out.println("MobileHostEnergy: " + ((EdgeHostEnergy) host).getBatteryCapacity());
+
+                            if (host instanceof EdgeHostEnergy) {
+                                double ec = ((EdgeHostEnergy) host).energyConsumption(momentOfInterest);
+                                if (this.detailHostEenergy)
+                                    System.out.println("energia consumata EDGEhost" + ec + "---EDGE host ID[" + host.getId() + "]");
+                                ec += energyEdgeConsumed.get();
+                                energyEdgeConsumed.set(ec);
+                            }
                         });
                     });
 
                     getCloudServerManager().getDatacenter().getHostList().forEach(host -> {
                         if (host instanceof MobileHostEnergy) {
-                        	((MobileHostEnergy) host).updateStatus();
+                            ((MobileHostEnergy) host).updateStatus();
                             System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
                         }
                     });
-
 
 
                     /**
@@ -80,23 +85,18 @@ public class SimManagerEnergy extends SimManager {
                      *     - Calcolo dell'energia consumata dalla CPU
                      */
                     getMobileServerManager().getDatacenter().getHostList().forEach(host -> {
+
                         if (host instanceof MobileHostEnergy) {
                             // only for this we have energy data
                             double ec = ((MobileHostEnergy) host).energyConsumption(momentOfInterest);
-                            System.out.println("energia consumata: "+ ec +" - host ID["+host.getId()+"] momentOfInterest: "+ momentOfInterest);
-                            ec += energyEdgeConsumed.get();
+                            if (this.detailHostEenergy)
+                                System.out.println("energia consumata: " + ec + " - host ID[" + host.getId() + "] momentOfInterest: " + momentOfInterest);
+                            ec += energyMobileConsumed.get();
                             energyMobileConsumed.set(ec);
                         }
                     });
 
-                    SimLogger.getInstance().addVmUtilizationLog(
-                            momentOfInterest,
-                            getEdgeServerManager().getAvgUtilization(),
-                            getCloudServerManager().getAvgUtilization(),
-                            getMobileServerManager().getAvgUtilization(),
-                            energyEdgeConsumed.get(),
-                            energyCloudConsumed.get(),
-                            energyMobileConsumed.get()
+                    SimLogger.getInstance().addVmUtilizationLog(momentOfInterest, getEdgeServerManager().getAvgUtilization(), getCloudServerManager().getAvgUtilization(), getMobileServerManager().getAvgUtilization(), energyEdgeConsumed.get(), energyCloudConsumed.get(), energyMobileConsumed.get()
 
                     );
                     schedule(getId(), SimSettings.getInstance().getVmLoadLogInterval(), GET_LOAD_LOG);
