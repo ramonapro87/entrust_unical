@@ -23,7 +23,7 @@ public class NetworkLink extends SimEntity {
 	
 	private int network_update_interval = 1; //SimulationParameters.networkUpdateInterval
 	
-	protected double latency = 0;
+	protected double delay = 0;
 	protected double bandwidth = 0;
 	protected List<TransferProgress> transferProgressList = new ArrayList<>();
 	protected Host src;
@@ -77,14 +77,13 @@ public class NetworkLink extends SimEntity {
 	
 	
 	
-	
-	// TODO DELAY
-	public double getLatency() {
-		return latency;
+	// renamed from latency
+	public double getDelay() {
+		return delay;
 	}
 
-	public NetworkLink setLatency(double latency) {
-		this.latency = latency;
+	public NetworkLink setDelay(double delay) {
+		this.delay = delay;
 		return this;
 	}
 
@@ -196,11 +195,8 @@ public class NetworkLink extends SimEntity {
 		if (transfer.getVertexList().size() == 1) {
 			// Update logger parameters
 			
-			//SimLogger.getInstance().
-			
-			simulationManager.getSimulationLogger().updateNetworkUsage(transfer);
-
-			schedule(simulationManager.getNetworkModel(), latency, NetworkModel.TRANSFER_FINISHED, transfer);
+			//simulationManager.getSimulationLogger().updateNetworkUsage(transfer); //FIXME forse non serve perché l'utilizzio della rete viene aggiornato al completamento o fallimento di una task
+			//schedule(simulationManager.getNetworkModel(), delay, NetworkModel.TRANSFER_FINISHED, transfer.task); //FIXME come gestire questo evento?
 		} else {
 			// Still did not reach destination, send it to the next hop
 			transfer.setRemainingFileSize(transfer.getFileSize());
