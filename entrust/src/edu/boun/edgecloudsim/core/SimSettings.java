@@ -71,6 +71,8 @@ public class SimSettings {
 
 	private double WAN_PROPAGATION_DELAY; //seconds unit in properties file
 	private double GSM_PROPAGATION_DELAY; //seconds unit in properties file
+	private double MAN_DELAY; //seconds unit in properties file
+
 	private double LAN_INTERNAL_DELAY; //seconds unit in properties file
 	private int BANDWITH_WLAN; //Mbps unit in properties file
 	private int BANDWITH_MAN; //Mbps unit in properties file
@@ -127,6 +129,7 @@ public class SimSettings {
 	private double CELLULARDEVICERECEPTIONWATTHOURPERBIT;
 	private double CELLULARBASESTATIONWATTHOURPERBITUPLINK;
 	private double CELLULARBASESTATIONWATTHOURPERBITDOWNLINK;
+	
 
 	// mean waiting time (minute) is stored for each place types
 	private double[] mobilityLookUpTable;
@@ -192,6 +195,9 @@ public class SimSettings {
 
 			WAN_PROPAGATION_DELAY = Double.parseDouble(prop.getProperty("wan_propagation_delay", "0"));
 			GSM_PROPAGATION_DELAY = Double.parseDouble(prop.getProperty("gsm_propagation_delay", "0"));
+			MAN_DELAY = Double.parseDouble(prop.getProperty("man_delay", "0"));
+		
+			
 			LAN_INTERNAL_DELAY = Double.parseDouble(prop.getProperty("lan_internal_delay", "0"));
 			BANDWITH_WLAN = 1000 * Integer.parseInt(prop.getProperty("wlan_bandwidth"));
 			BANDWITH_MAN = 1000 * Integer.parseInt(prop.getProperty("man_bandwidth", "0"));
@@ -639,17 +645,17 @@ public class SimSettings {
 	public double getEnergyConsumptionIdle_mobile(){return ENERGYCONSUMPTIONIDLE_MOBILE;}
 	
 	//energy
-	public double getWANWATTHOURPERBIT() {return WANWATTHOURPERBIT;}
-	public double getMANWATTHOURPERBIT() {return MANWATTHOURPERBIT;}
+	public double getWanWattHourPerBit() {return WANWATTHOURPERBIT;}
+	public double getManWattHourPerBit() {return MANWATTHOURPERBIT;}
 	public double getWifiDeviceTransmissionWattHourPerBit() {return WIFIDEVICETRANSMISSIONWATTHOURPERBIT;}
 	public double getWifiDeviceReceptionWattHourPerBit() {return WIFIDEVICERECEPTIONWATTHOURPERBIT;}
-	public double getWIFIACCESSPOINTTRANSMISSIONWATTHOURPERBIT() {return WIFIACCESSPOINTTRANSMISSIONWATTHOURPERBIT;}
-	public double getWIFIACCESSPOINTRECEPTIONWATTHOURPERBIT() {return WIFIACCESSPOINTRECEPTIONWATTHOURPERBIT;}
+	public double getWifiAccessPointTransmissionWattHourPerBit() {return WIFIACCESSPOINTTRANSMISSIONWATTHOURPERBIT;}
+	public double getWifiAccessPointReceptionWattHourPerBit() {return WIFIACCESSPOINTRECEPTIONWATTHOURPERBIT;}
 	//public double getEthernetWattHourPerBit() {	return ETHERNETWATTHOURPERBIT;}
 	public double getCellularDeviceTransmissionWattHourPerBit() {return CELLULARDEVICETRANSMISSIONWATTHOURPERBIT;}
 	public double getCellularDeviceReceptionWattHourPerBit() {return CELLULARDEVICERECEPTIONWATTHOURPERBIT;}
-	public double getCELLULARBASESTATIONWATTHOURPERBITUPLINK() {return CELLULARBASESTATIONWATTHOURPERBITUPLINK;	}
-	public double getCELLULARBASESTATIONWATTHOURPERBITDOWNLINK() {	return CELLULARBASESTATIONWATTHOURPERBITDOWNLINK;}	
+	public double getCellularBaseStationWattHourPerBitUpLink() {return CELLULARBASESTATIONWATTHOURPERBITUPLINK;	}
+	public double getCellularBaseStationWattHourPerBitDownLink() {	return CELLULARBASESTATIONWATTHOURPERBITDOWNLINK;}	
 	
 
 	/**
@@ -869,6 +875,10 @@ public class SimSettings {
 			e.printStackTrace();
 			System.exit(1);
 		}
+	}
+
+	public double getManDelay() {
+		return MAN_DELAY;
 	}
 
 }
