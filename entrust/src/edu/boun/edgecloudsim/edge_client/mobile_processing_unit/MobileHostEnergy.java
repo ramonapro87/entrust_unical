@@ -119,27 +119,7 @@ public class MobileHostEnergy extends MobileHost{
             if(mipsTotali > 0)
            energyModel.updateDynamicEnergyConsumption(vm.getSize(),mipsTotali);
 
-//            // Esempio di consumo energetico per unità di lavoro (1 MIPS), magari possiamo leggerlo dalle properties
-//            double energiaPerMIPS = 0.001;
 //
-//            // Calcola l'energia consumata dalla CPU
-//            double energiaConsumataCPU = mipsTotali * energiaPerMIPS;
-//
-//            // Aggiungi il consumo energetico della CPU
-//            energyCurrentVm += energiaConsumataCPU;
-//
-//            // Calcola e aggiungi il consumo energetico della RAM
-//            double consumoRAM = vm.getCurrentRequestedRam() * getConsumoRAMPerUnit(timePassed);
-//            energyCurrentVm += consumoRAM;
-//
-//            // Calcola e aggiungi il consumo energetico della larghezza di banda
-            //  double consumoBanda = vm.getCurrentRequestedBw() * getConsumoBandaPerUnit(timePassed);
-            //  System.out.println("consumo banda" + consumoBanda);
-//          energyCurrentVm += consumoBanda;
-//
-//
-//
-//            energyAllVM += energyCurrentVm;
             energyAllVM=energyModel.getTotalEnergyConsumption();
             //aggiorna il livello batteria
             this.upDateBatteryLevel();
