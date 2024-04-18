@@ -20,15 +20,20 @@ public class MobileHostEnergy extends MobileHost{
     protected double deathTime;
     private double batteryCapacity;
     double energyAllVM = 0;
+    //variabile che mi serve per controllare
+    private Double batteriainziale;
 
     public MobileHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel _energyModel, Double _batteryCapacity) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
         energyModel = _energyModel;
         batteryLevel =  Math.round(Math.random() * 10000) / 100.0;
+        batteriainziale= 0 + batteryLevel;
         batteryCapacity=_batteryCapacity;
+        isDead=false;
     }
     
 	public void updateStatus() {
+
 		// Check if the device is dead
 		if (isDead())
 			return;
@@ -71,12 +76,27 @@ public class MobileHostEnergy extends MobileHost{
     //todo
     public Double upDateBatteryLevel(){
         // scalare dal livello della batteria il consumo energetico
-        double percentageConsumed = Math.round(energyAllVM / batteryCapacity);
+       // double percentageConsumed = Math.round(energyAllVM / batteryCapacity);
+        Double percentageConsumed=0.0;
+        if(energyAllVM>0){
 
+       percentageConsumed= energyAllVM/batteryCapacity;}
 
-        batteryLevel = batteryLevel-percentageConsumed;
+     if( batteryLevel>=percentageConsumed){
+
+        batteryLevel = batteryLevel-percentageConsumed;}
+     else{
+         System.out.println("il device " +this.getId() +" si è scaricato");
+         batteryLevel=0.0;
+         this.isDead=true;
+     }
+
         energyModel.setBatteryCapacity(batteryLevel);
-
+  // una volta scalata la batteria controllo  isDead
+     //   this.updateStatus();
+      //  if(isDead())
+        //    System.out.println("host ID" + this.getId() +" è morto");
+         //  else
 
        return batteryLevel;
 
@@ -123,7 +143,8 @@ public class MobileHostEnergy extends MobileHost{
             energyAllVM=energyModel.getTotalEnergyConsumption();
             //aggiorna il livello batteria
             this.upDateBatteryLevel();
-
+            System.out.println(" livello batteria  host " + "..."+ this.getId()+"..." +batteryLevel +"batteria iniziale"+ batteriainziale);
+            System.out.println("energia consumata"+ energyAllVM);
         }
         return energyAllVM;
     }
