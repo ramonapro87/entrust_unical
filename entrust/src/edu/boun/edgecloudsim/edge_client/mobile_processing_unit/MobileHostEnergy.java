@@ -9,6 +9,7 @@ import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.provisioners.BwProvisioner;
 import org.cloudbus.cloudsim.provisioners.RamProvisioner;
 
+import java.awt.*;
 import java.util.List;
 
 public class MobileHostEnergy extends MobileHost{
@@ -35,14 +36,17 @@ public class MobileHostEnergy extends MobileHost{
 	public void updateStatus() {
 
 		// Check if the device is dead
-		if (isDead())
-			return;
+		if (isDead()){
+            System.out.println("SONO MORTO NON POSSO FARE NULLA....."+ this.getId());
+			return;}
 		// Update the static energy consumption, the dynamic one is measure separately
 		// in DefaultComputingNode.startExecution() for performance and accuracy reasons
 		getEnergyModel().updateStaticEnergyConsumption();//FIXME su pure edge è usata questa funzione
 
+
 		if (getEnergyModel().isBatteryPowered() && getEnergyModel().getBatteryLevelWattHour() <= 0) {
 			setDeath(true, CloudSim.clock());//FIXME non so se è corretto il clock
+          //  System.out.println("SONO MORTO NON POSSO FARE NULLA");
 		}
 	}
 	protected void setDeath(Boolean dead, double time) {
@@ -84,7 +88,11 @@ public class MobileHostEnergy extends MobileHost{
 
      if( batteryLevel>=percentageConsumed){
 
-        batteryLevel = batteryLevel-percentageConsumed;}
+      // batteryLevel = Double.valueOf(Math.floor(batteryLevel-percentageConsumed));
+         // cercare di arrotondare il valore
+         batteryLevel=batteryLevel-percentageConsumed;
+
+     }
      else{
          System.out.println("il device " +this.getId() +" si è scaricato");
          batteryLevel=0.0;
@@ -143,8 +151,8 @@ public class MobileHostEnergy extends MobileHost{
             energyAllVM=energyModel.getTotalEnergyConsumption();
             //aggiorna il livello batteria
             this.upDateBatteryLevel();
-            System.out.println(" livello batteria  host " + "..."+ this.getId()+"..." +batteryLevel +"batteria iniziale"+ batteriainziale);
-            System.out.println("energia consumata"+ energyAllVM);
+         //   System.out.println(" livello batteria  host " + "..."+ this.getId()+"..." +batteryLevel +"batteria iniziale"+ batteriainziale);
+          //  System.out.println("energia consumata"+ energyAllVM);
         }
         return energyAllVM;
     }
