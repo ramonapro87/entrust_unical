@@ -1,7 +1,6 @@
 package edu.boun.edgecloudsim.edge_client.mobile_processing_unit;
 
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
-import edu.boun.edgecloudsim.energy.DefaultEnergyNetworkModel;
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmScheduler;
@@ -9,10 +8,9 @@ import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.provisioners.BwProvisioner;
 import org.cloudbus.cloudsim.provisioners.RamProvisioner;
 
-import java.awt.*;
 import java.util.List;
 
-public class MobileHostEnergy extends MobileHost{
+public class MobileHostEnergy extends MobileHost {
 
     private DefaultEnergyComputingModel energyModel;
 
@@ -27,41 +25,43 @@ public class MobileHostEnergy extends MobileHost{
     public MobileHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel _energyModel, Double _batteryCapacity) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
         energyModel = _energyModel;
-        batteryLevel =  Math.round(Math.random() * 10000) / 100.0;
-        batteriainziale= 0 + batteryLevel;
-        batteryCapacity=_batteryCapacity;
-        isDead=false;
+        batteryLevel = Math.round(Math.random() * 10000) / 100.0;
+        batteriainziale = 0 + batteryLevel;
+        batteryCapacity = _batteryCapacity;
+        isDead = false;
     }
-    
-	public void updateStatus() {
 
-		// Check if the device is dead
-		if (isDead()){
-            System.out.println("SONO MORTO NON POSSO FARE NULLA....."+ this.getId());
-			return;}
-		// Update the static energy consumption, the dynamic one is measure separately
-		// in DefaultComputingNode.startExecution() for performance and accuracy reasons
-		getEnergyModel().updateStaticEnergyConsumption();//FIXME su pure edge è usata questa funzione
+    /**
+     * this method is used to update the status of the device
+     * if the battery level is less than or equal to 0, the device is considered dead
+     * and the death time is set to the current time
+     * the static energy consumption is updated
+     * if the device is dead, it cannot do anything
+     * if the device is battery powered and the battery level is less than or equal to 0, the device is considered dead
+     * and the death time is set to the current time
+     * */
+    public void updateStatus() {
+        if (isDead())
+            return;
+
+        // Update the static energy consumption, the dynamic one is measure separately
+        // in DefaultComputingNode.startExecution() for performance and accuracy reasons
+        getEnergyModel().updateStaticEnergyConsumption();//FIXME su pure edge è usata questa funzione
 
 
-		if (getEnergyModel().isBatteryPowered() && getEnergyModel().getBatteryLevelWattHour() <= 0) {
-			setDeath(true, CloudSim.clock());//FIXME non so se è corretto il clock
-          //  System.out.println("SONO MORTO NON POSSO FARE NULLA");
-		}
-	}
-	protected void setDeath(Boolean dead, double time) {
-		isDead = dead;
-		deathTime = time;
-	}
-    
-    
-    
-    
+        if (getEnergyModel().isBatteryPowered() && getEnergyModel().getBatteryLevelWattHour() <= 0) {
+            setDeath(true, CloudSim.clock());//FIXME non so se è corretto il clock
+            //  System.out.println("SONO MORTO NON POSSO FARE NULLA");
+        }
+    }
+
+    protected void setDeath(Boolean dead, double time) {
+        isDead = dead;
+        deathTime = time;
+    }
+
 
     public boolean isDead() {
-
-
-
         return isDead;
     }
 
@@ -74,47 +74,28 @@ public class MobileHostEnergy extends MobileHost{
     }
 
     public Double getBatteryLevel() {
-
         return energyModel.getBatteryLevelWattHour();
     }
-    //todo
-    public Double upDateBatteryLevel(){
-        // scalare dal livello della batteria il consumo energetico
-       // double percentageConsumed = Math.round(energyAllVM / batteryCapacity);
-        Double percentageConsumed=0.0;
-        if(energyAllVM>0){
 
-       percentageConsumed= energyAllVM/batteryCapacity;}
+    /**
+     * this method is used to update the battery level of the device
+     * the battery level is updated by subtracting the energy consumed by the device
+     * if the battery level is less than the energy consumed by the device, the device is considered dead
+     * and the battery level is set to 0
+     */
+    public Double updateBatteryLevel() {
+        Double percentageConsumed = energyAllVM > 0
+                                                ? energyAllVM / batteryCapacity
+                                                : 0.0;
+        batteryLevel = batteryLevel >= percentageConsumed
+                                    ? batteryLevel - percentageConsumed
+                                    : 0.0;
 
-     if( batteryLevel>=percentageConsumed){
-
-      // batteryLevel = Double.valueOf(Math.floor(batteryLevel-percentageConsumed));
-         // cercare di arrotondare il valore
-         batteryLevel=batteryLevel-percentageConsumed;
-
-     }
-     else{
-         System.out.println("il device " +this.getId() +" si è scaricato");
-         batteryLevel=0.0;
-         this.isDead=true;
-     }
-
+        if(batteryLevel.equals(0.0)){
+            setDeath(true, CloudSim.clock());
+        }
         energyModel.setBatteryCapacity(batteryLevel);
-  // una volta scalata la batteria controllo  isDead
-     //   this.updateStatus();
-      //  if(isDead())
-        //    System.out.println("host ID" + this.getId() +" è morto");
-         //  else
-
-       return batteryLevel;
-
-    }
-
-    public void setBatteryLevel(Double batteryLevel) {
-
-
-        this.batteryLevel = batteryLevel;
-
+        return batteryLevel;
     }
 
     /**
@@ -137,22 +118,13 @@ public class MobileHostEnergy extends MobileHost{
      * </p>
      */
     public double energyConsumption(double timePassed) {
-
         for (Vm vm : getVmList()) {
-
             double energyCurrentVm = 0;
-            // Ottieni la quantità totale di lavoro eseguito dalla CPU della VM in MIPS
             double mipsTotali = vm.getTotalUtilizationOfCpuMips(timePassed);
-
-            if(mipsTotali > 0)
-           energyModel.updateDynamicEnergyConsumption(vm.getSize(),mipsTotali);
-
-//
-            energyAllVM=energyModel.getTotalEnergyConsumption();
-            //aggiorna il livello batteria
-            this.upDateBatteryLevel();
-         //   System.out.println(" livello batteria  host " + "..."+ this.getId()+"..." +batteryLevel +"batteria iniziale"+ batteriainziale);
-          //  System.out.println("energia consumata"+ energyAllVM);
+            if (mipsTotali > 0)
+                energyModel.updateDynamicEnergyConsumption(vm.getSize(), mipsTotali);
+            energyAllVM = energyModel.getTotalEnergyConsumption();
+            this.updateBatteryLevel();
         }
         return energyAllVM;
     }
@@ -163,12 +135,11 @@ public class MobileHostEnergy extends MobileHost{
         return ram_cost * timePassed;
     }
 
-//    metodo per ottenere il consumo energetico della larghezza di banda per unità di tempo
+    //    metodo per ottenere il consumo energetico della larghezza di banda per unità di tempo
     private double getConsumoBandaPerUnit(double timePassed) {
         double banda_cost = 0.00001; //todo  Valore di esempio, possiamo definirlo nei file di properties o definire un algoritmo per calcolarlo
         return banda_cost * timePassed;
     }
-
 
 
 }

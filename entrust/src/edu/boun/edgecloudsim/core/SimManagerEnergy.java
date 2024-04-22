@@ -50,8 +50,6 @@ public class SimManagerEnergy extends SimManager {
             switch (ev.getTag()) {
 
                 case GET_LOAD_LOG:
-
-
                     double momentOfInterest = CloudSim.clock();
                     AtomicReference<Double> energyMobileConsumed = new AtomicReference<>((double) 0);
                     AtomicReference<Double> energyEdgeConsumed = new AtomicReference<>((double) 0);
@@ -59,7 +57,6 @@ public class SimManagerEnergy extends SimManager {
 
                     getEdgeServerManager().getDatacenterList().forEach(datacenter -> {
                         datacenter.getHostList().forEach(host -> {
-
                             if (host instanceof EdgeHostEnergy) {
                                 double ec = ((EdgeHostEnergy) host).energyConsumption(momentOfInterest);
                                 if (this.detailHostEenergy)
@@ -72,7 +69,6 @@ public class SimManagerEnergy extends SimManager {
 
                     getCloudServerManager().getDatacenter().getHostList().forEach(host -> {
                         if (host instanceof MobileHostEnergy) {
-
                             ((MobileHostEnergy) host).updateStatus();
                             System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
                         }
@@ -82,27 +78,36 @@ public class SimManagerEnergy extends SimManager {
                     /**
                      * Calcolo dell'energia:
                      * - Per ogni host di ogni datacenter
-                     *   - Per ogni VM di ogni host
+                     *   - Per ogni VM di ogni host (se non è dead, ovvero se non è scarico)
                      *     - Calcolo dell'energia consumata dalla CPU
                      */
                     getMobileServerManager().getDatacenter().getHostList().forEach(host -> {
-
-                        if (host instanceof MobileHostEnergy ) {
-                           // if (!((MobileHostEnergy) host).isDead()) {
-                                // only for this we have energy data
-                                ((MobileHostEnergy) host).updateStatus();
+                        if (host instanceof MobileHostEnergy) {
+                            ((MobileHostEnergy) host).updateStatus();
+                            if (!((MobileHostEnergy) host).isDead()) {
                                 double ec = ((MobileHostEnergy) host).energyConsumption(momentOfInterest);
                                 if (this.detailHostEenergy)
                                     System.out.println("energia consumata: " + ec + " - host ID[" + host.getId() + "] momentOfInterest: " + momentOfInterest);
                                 ec += energyMobileConsumed.get();
                                 energyMobileConsumed.set(ec);
+                            } else {
+                                if (detailHostEenergy)
+                                    System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
                             }
-                       // }
+                        }
                     });
+                    SimLogger.getInstance().addVmUtilizationLog(momentOfInterest,
+                            // avg utilization
+                            getEdgeServerManager().getAvgUtilization(),
+                            getCloudServerManager().getAvgUtilization(),
+                            getMobileServerManager().getAvgUtilization(),
+                            // energy consumed
+                            energyEdgeConsumed.get(),
+                            energyCloudConsumed.get(),
+                            energyMobileConsumed.get());
+                            // todo possiamo provare a includere il calcolo dell energia direttamente nelle classi EdgeServerManager e MobileServerManager,
+                            // come viene fatto per AVGUtilization, magari estendiamo le classi con *energy seguendo la stesso modello utilizzato per le altre classi
 
-                    SimLogger.getInstance().addVmUtilizationLog(momentOfInterest, getEdgeServerManager().getAvgUtilization(), getCloudServerManager().getAvgUtilization(), getMobileServerManager().getAvgUtilization(), energyEdgeConsumed.get(), energyCloudConsumed.get(), energyMobileConsumed.get()
-
-                    );
                     schedule(getId(), SimSettings.getInstance().getVmLoadLogInterval(), GET_LOAD_LOG);
                     break;
                 default:
