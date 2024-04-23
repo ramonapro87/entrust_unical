@@ -55,17 +55,17 @@ public class SimManagerEnergy extends SimManager {
                     AtomicReference<Double> energyEdgeConsumed = new AtomicReference<>((double) 0);
                     AtomicReference<Double> energyCloudConsumed = new AtomicReference<>((double) 0);
 
-                    getEdgeServerManager().getDatacenterList().forEach(datacenter -> {
-                        datacenter.getHostList().forEach(host -> {
-                            if (host instanceof EdgeHostEnergy) {
-                                double ec = ((EdgeHostEnergy) host).energyConsumption(momentOfInterest);
-                                if (this.detailHostEenergy)
-                                    System.out.println("energia consumata EDGEhost" + ec + "---EDGE host ID[" + host.getId() + "]");
-                                ec += energyEdgeConsumed.get();
-                                energyEdgeConsumed.set(ec);
-                            }
-                        });
-                    });
+//                    getEdgeServerManager().getDatacenterList().forEach(datacenter -> {
+//                        datacenter.getHostList().forEach(host -> {
+//                            if (host instanceof EdgeHostEnergy) {
+//                                double ec = ((EdgeHostEnergy) host).energyConsumption(momentOfInterest);
+//                                if (this.detailHostEenergy)
+//                                    System.out.println("energia consumata EDGEhost" + ec + "---EDGE host ID[" + host.getId() + "]");
+//                                ec += energyEdgeConsumed.get();
+//                                energyEdgeConsumed.set(ec);
+//                            }
+//                        });
+//                    });
 
                     getCloudServerManager().getDatacenter().getHostList().forEach(host -> {
                         if (host instanceof MobileHostEnergy) {
@@ -81,32 +81,34 @@ public class SimManagerEnergy extends SimManager {
                      *   - Per ogni VM di ogni host (se non è dead, ovvero se non è scarico)
                      *     - Calcolo dell'energia consumata dalla CPU
                      */
-                    getMobileServerManager().getDatacenter().getHostList().forEach(host -> {
-                        if (host instanceof MobileHostEnergy) {
-                            ((MobileHostEnergy) host).updateStatus();
-                            if (!((MobileHostEnergy) host).isDead()) {
-                                double ec = ((MobileHostEnergy) host).energyConsumption(momentOfInterest);
-                                if (this.detailHostEenergy)
-                                    System.out.println("energia consumata: " + ec + " - host ID[" + host.getId() + "] momentOfInterest: " + momentOfInterest);
-                                ec += energyMobileConsumed.get();
-                                energyMobileConsumed.set(ec);
-                            } else {
-                                if (detailHostEenergy)
-                                    System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
-                            }
-                        }
-                    });
+//                    getMobileServerManager().getDatacenter().getHostList().forEach(host -> {
+//                        if (host instanceof MobileHostEnergy) {
+//                            ((MobileHostEnergy) host).updateStatus();
+//                            if (!((MobileHostEnergy) host).isDead()) {
+//                                double ec = ((MobileHostEnergy) host).energyConsumption(momentOfInterest);
+//                                if (this.detailHostEenergy)
+//                                    System.out.println("energia consumata: " + ec + " - host ID[" + host.getId() + "] momentOfInterest: " + momentOfInterest);
+//                                ec += energyMobileConsumed.get();
+//                                energyMobileConsumed.set(ec);
+//                            } else {
+//                                if (detailHostEenergy)
+//                                    System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
+//                            }
+//                        }
+//                    });
+
+
                     SimLogger.getInstance().addVmUtilizationLog(momentOfInterest,
                             // avg utilization
                             getEdgeServerManager().getAvgUtilization(),
                             getCloudServerManager().getAvgUtilization(),
                             getMobileServerManager().getAvgUtilization(),
                             // energy consumed
-                            energyEdgeConsumed.get(),
+//                            energyEdgeConsumed.get(),
+                            getEdgeServerManager().getEnergyConsumption(momentOfInterest),
                             energyCloudConsumed.get(),
-                            energyMobileConsumed.get());
-                            // todo possiamo provare a includere il calcolo dell energia direttamente nelle classi EdgeServerManager e MobileServerManager,
-                            // come viene fatto per AVGUtilization, magari estendiamo le classi con *energy seguendo la stesso modello utilizzato per le altre classi
+                            getMobileServerManager().getEnergyConsumed(momentOfInterest));
+//                            energyMobileConsumed.get()); origin
 
                     schedule(getId(), SimSettings.getInstance().getVmLoadLogInterval(), GET_LOAD_LOG);
                     break;

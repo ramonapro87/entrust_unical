@@ -75,4 +75,11 @@ public abstract class MobileServerManager {
 	 * returns average utilization of all VMs
 	 */
 	public abstract double getAvgUtilization();
+
+	/**
+	 * Returns the energy consumed by the mobile processing unit at the given moment.
+	 * @param momentOfInterest The moment of interest.
+	 * @return The energy consumed by the mobile processing unit at the given moment.
+	 */
+	public abstract double getEnergyConsumed(double momentOfInterest);
 }

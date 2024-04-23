@@ -55,4 +55,9 @@ public class DefaultMobileServerManager extends MobileServerManager{
 		//local computation is not supported in default Mobile Device Manager
 		return 0;
 	}
+
+	@Override
+	public double getEnergyConsumed(double momentOfInterest) {
+		return 0;
+	}
 }

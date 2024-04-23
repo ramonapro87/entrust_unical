@@ -71,4 +71,5 @@ public abstract class EdgeServerManager {
 	 * returns average utilization of all VMs
 	 */
 	public abstract double getAvgUtilization();
+	public abstract double getEnergyConsumption(Double momentOfInterest);
 }

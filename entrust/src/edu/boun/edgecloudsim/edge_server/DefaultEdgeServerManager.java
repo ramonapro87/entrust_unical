@@ -15,6 +15,7 @@ package edu.boun.edgecloudsim.edge_server;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import org.cloudbus.cloudsim.CloudletSchedulerTimeShared;
@@ -137,6 +138,22 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 			}
 		}
 		return totalUtilization / vmCounter;
+	}
+
+	@Override
+	public double getEnergyConsumption(Double momentOfInterest) {
+		AtomicReference<Double> energyEdgeConsumed = new AtomicReference<>((double) 0);
+		this.getDatacenterList().forEach(datacenter -> {
+			datacenter.getHostList().forEach(host -> {
+				if (host instanceof EdgeHostEnergy) {
+					double ec = ((EdgeHostEnergy) host).energyConsumption(momentOfInterest);
+//					System.out.println("energia consumata EDGEhost" + ec + "---EDGE host ID[" + host.getId() + "]");
+					ec += energyEdgeConsumed.get();
+					energyEdgeConsumed.set(ec);
+				}
+			});
+		});
+		return energyEdgeConsumed.get();
 	}
 
 	private Datacenter createDatacenter(int index, Element datacenterElement) throws Exception{

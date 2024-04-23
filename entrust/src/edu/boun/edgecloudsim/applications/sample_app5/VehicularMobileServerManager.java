@@ -107,6 +107,11 @@ public class VehicularMobileServerManager extends MobileServerManager{
 		return totalUtilization / vmCounter;
 	}
 
+	@Override
+	public double getEnergyConsumed(double momentOfInterest) {
+		return 0;
+	}
+
 
 	private Datacenter createDatacenter(int index) throws Exception{
 		String arch = "x86";

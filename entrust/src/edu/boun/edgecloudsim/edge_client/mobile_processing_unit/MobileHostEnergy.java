@@ -129,17 +129,5 @@ public class MobileHostEnergy extends MobileHost {
         return energyAllVM;
     }
 
-    //metodo per ottenere il consumo energetico della RAM per unità di tempo
-    private double getConsumoRAMPerUnit(double timePassed) {
-        double ram_cost = 0.00001; // todo Valore di esempio, possiamo definirlo nei file di properties o definire un algoritmo per calcolarlo
-        return ram_cost * timePassed;
-    }
-
-    //    metodo per ottenere il consumo energetico della larghezza di banda per unità di tempo
-    private double getConsumoBandaPerUnit(double timePassed) {
-        double banda_cost = 0.00001; //todo  Valore di esempio, possiamo definirlo nei file di properties o definire un algoritmo per calcolarlo
-        return banda_cost * timePassed;
-    }
-
 
 }

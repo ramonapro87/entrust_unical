@@ -14,6 +14,7 @@ package edu.boun.edgecloudsim.applications.sample_app6;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.*;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
@@ -189,5 +190,24 @@ public class SampleMobileServerManager extends MobileServerManager{
 
 		return hostList;
 	}
-	
+
+
+	@Override
+	public double getEnergyConsumed(double momentOfInterest) {
+		AtomicReference<Double> energyMobileConsumed = new AtomicReference<>((double) 0);
+		this.getDatacenter().getHostList().forEach(host -> {
+			if (host instanceof MobileHostEnergy) {
+				((MobileHostEnergy) host).updateStatus();
+				if (!((MobileHostEnergy) host).isDead()) {
+					double ec = ((MobileHostEnergy) host).energyConsumption(momentOfInterest);
+					//System.out.println("energia consumata: " + ec + " - host ID[" + host.getId() + "] momentOfInterest: " + momentOfInterest);
+					ec += energyMobileConsumed.get();
+					energyMobileConsumed.set(ec);
+				} else {
+//						System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
+				}
+			}
+		});
+		return energyMobileConsumed.get();
+	}
 }

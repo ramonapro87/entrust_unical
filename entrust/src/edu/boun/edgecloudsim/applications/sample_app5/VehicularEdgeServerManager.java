@@ -136,6 +136,11 @@ public class VehicularEdgeServerManager extends EdgeServerManager{
 		return totalUtilization / (double)vmCounter;
 	}
 
+	@Override
+	public double getEnergyConsumption(Double momentOfInterest) {
+		return 0;
+	}
+
 	private Datacenter createDatacenter(int index, Element datacenterElement) throws Exception{
 		String arch = datacenterElement.getAttribute("arch");
 		String os = datacenterElement.getAttribute("os");
