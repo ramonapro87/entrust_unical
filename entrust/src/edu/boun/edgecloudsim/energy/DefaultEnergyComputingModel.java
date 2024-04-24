@@ -108,7 +108,7 @@ public class DefaultEnergyComputingModel extends EnergyComputingModel {
 			receptionEnergyPerBits = SimSettings.getInstance().getWifiDeviceReceptionWattHourPerBit();
 		} 
 		
-		// Ethernet not jet handled
+		// Ethernet not yet handled
 		/*else {
 			transmissionEnergyPerBits = SimSettings.getInstance().getEthernetWattHourPerBit() / 2;
 			receptionEnergyPerBits = SimSettings.getInstance().getEthernetWattHourPerBit() / 2;
