@@ -146,10 +146,16 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 		this.getDatacenterList().forEach(datacenter -> {
 			datacenter.getHostList().forEach(host -> {
 				if (host instanceof EdgeHostEnergy) {
-					double ec = ((EdgeHostEnergy) host).energyConsumption(momentOfInterest);
-//					System.out.println("energia consumata EDGEhost" + ec + "---EDGE host ID[" + host.getId() + "]");
-					ec += energyEdgeConsumed.get();
-					energyEdgeConsumed.set(ec);
+					if (!((EdgeHostEnergy) host).isDead()) {
+						double ec = ((EdgeHostEnergy) host).energyConsumption(momentOfInterest);
+						if(ec > 0)
+							System.out.println("energia consumata EDGEhost" + ec + "---EDGE host ID[" + host.getId() + "]");
+						ec += energyEdgeConsumed.get();
+						energyEdgeConsumed.set(ec);
+					}
+				else{
+//					System.out.println("EDGE HOST MORTO" +host.getId());
+					}
 				}
 			});
 		});

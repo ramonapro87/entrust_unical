@@ -23,6 +23,7 @@ public class EdgeHostEnergy extends EdgeHost{
         energyModel=em;
         batteryLevel =  Math.round(Math.random() * 10000) / 100.0;
         batteryCapacity=bc;
+        isDead=false;
 
     }
 
@@ -42,6 +43,8 @@ public class EdgeHostEnergy extends EdgeHost{
 
         return energyModel.getBatteryLevelWattHour();
     }
+
+
 
 
     protected void setDeath(Boolean dead, double time) {
@@ -87,18 +90,12 @@ public class EdgeHostEnergy extends EdgeHost{
         }
 
 
-
     public void updateStatus() {
-        // Check if the device is dead
-        if (isDead()) {
+        if (isDead()) return;
 
-            return;}
-        // Update the static energy consumption, the dynamic one is measure separately
-        // in DefaultComputingNode.startExecution() for performance and accuracy reasons
-        getEnergyModel().updateStaticEnergyConsumption();//FIXME su pure edge è usata questa funzione
-
+        getEnergyModel().updateStaticEnergyConsumption();
         if (getEnergyModel().isBatteryPowered() && getEnergyModel().getBatteryLevelWattHour() <= 0) {
-            setDeath(true, CloudSim.clock());//FIXME non so se è corretto il clock
+            setDeath(true, CloudSim.clock());
         }
     }
     public Double updateBatteryLevel() {
@@ -108,11 +105,9 @@ public class EdgeHostEnergy extends EdgeHost{
         batteryLevel = batteryLevel >= percentageConsumed
                 ? batteryLevel - percentageConsumed
                 : 0.0;
-
+        //System.out.println("livello batteria HOST"+ batteryLevel +  "...." +this.getId());
         if(batteryLevel.equals(0.0)){
-            System.out.println("EDGE HOST morto"+ this.getId());
             setDeath(true, CloudSim.clock());
-
         }
         energyModel.setBatteryCapacity(batteryLevel);
         return batteryLevel;
