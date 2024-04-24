@@ -13,6 +13,7 @@
 package edu.boun.edgecloudsim.edge_server;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -142,23 +143,29 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 
 	@Override
 	public double getEnergyConsumption(Double momentOfInterest) {
+		HashMap<Integer, String> mapHostEnergyConsumed = new HashMap<>();
+		HashMap<Integer, String> mapHostDied = new HashMap<>();
 		AtomicReference<Double> energyEdgeConsumed = new AtomicReference<>((double) 0);
 		this.getDatacenterList().forEach(datacenter -> {
 			datacenter.getHostList().forEach(host -> {
 				if (host instanceof EdgeHostEnergy) {
 					if (!((EdgeHostEnergy) host).isDead()) {
 						double ec = ((EdgeHostEnergy) host).energyConsumption(momentOfInterest);
-						if(ec > 0)
-							System.out.println("energia consumata EDGEhost" + ec + "---EDGE host ID[" + host.getId() + "]");
 						ec += energyEdgeConsumed.get();
 						energyEdgeConsumed.set(ec);
+						mapHostEnergyConsumed.put(host.getId(), "ENERGY CONSUMED HOST_ID[" + host.getId() + "] "+ " battery: " + ((EdgeHostEnergy) host).getBatteryLevel()+ " energy: " + ec);
 					}
 				else{
-//					System.out.println("EDGE HOST MORTO" +host.getId());
+					mapHostDied.put(host.getId(), "DEAD HOST_ID[" + host.getId() + "]");
 					}
 				}
 			});
 		});
+		System.out.println("------------------------------------------- \n EDGE_HOST , Moment Of Interest: " + momentOfInterest );
+		mapHostEnergyConsumed.forEach((k,v) -> System.out.println("  " + v));
+		mapHostDied.forEach((k,v) -> System.out.println("  " + v));
+		System.out.println("_________________________________________________________");
+		System.out.println(" \n ");
 		return energyEdgeConsumed.get();
 	}
 

@@ -1,4 +1,5 @@
 package edu.boun.edgecloudsim.edge_server;
+
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Vm;
@@ -9,7 +10,7 @@ import org.cloudbus.cloudsim.provisioners.RamProvisioner;
 
 import java.util.List;
 
-public class EdgeHostEnergy extends EdgeHost{
+public class EdgeHostEnergy extends EdgeHost {
 
     private DefaultEnergyComputingModel energyModel;
     private boolean isDead;
@@ -20,10 +21,10 @@ public class EdgeHostEnergy extends EdgeHost{
 
     public EdgeHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel em, Double bc) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
-        energyModel=em;
-        batteryLevel =  Math.round(Math.random() * 10000) / 100.0;
-        batteryCapacity=bc;
-        isDead=false;
+        energyModel = em;
+        batteryLevel = Math.round(Math.random() * 10000) / 100.0;
+        batteryCapacity = bc;
+        isDead = false;
 
     }
 
@@ -40,22 +41,20 @@ public class EdgeHostEnergy extends EdgeHost{
     }
 
     public Double getBatteryLevel() {
-
-        return energyModel.getBatteryLevelWattHour();
+        return batteryLevel;
     }
-
-
-
 
     protected void setDeath(Boolean dead, double time) {
         isDead = dead;
         deathTime = time;
-    } public Double upDateBatteryLevel(){
+    }
+
+    public Double upDateBatteryLevel() {
         // scalare dal livello della batteria il consumo energetico
         double percentageConsumed = Math.round(energyAllVM / batteryCapacity);
 
 
-        batteryLevel = batteryLevel-percentageConsumed;
+        batteryLevel = batteryLevel - percentageConsumed;
         energyModel.setBatteryCapacity(batteryLevel);
 
 
@@ -69,25 +68,26 @@ public class EdgeHostEnergy extends EdgeHost{
         this.batteryLevel = batteryLevel;
 
     }
+
     public double energyConsumption(double timePassed) {
 
         for (Vm vm : getVmList()) {
 
             double energyCurrentVm = 0;
-            // Ottieni la quantità totale di lavoro eseguito dalla CPU della VM in MIPS
+
             double mipsTotali = vm.getTotalUtilizationOfCpuMips(timePassed);
+            // todo (CLAUDIO, ROBERTO) , ho notato che per alcuni istanti di tempo il valore di mipsTotali è 0
+            // e quindi non viene aggiornato il consumo energetico (il metodo chiamato getTotalUtilizationOfCpuMips è della lib cloudsim)
+            // da capire se per il calcolo del consumo energetico si deve considerare anche altro.
 
             if (mipsTotali > 0)
                 energyModel.updateDynamicEnergyConsumption(vm.getSize(), mipsTotali);
-
-            energyAllVM=energyModel.getTotalEnergyConsumption();
+            energyAllVM = energyModel.getTotalEnergyConsumption();
             //aggiorna il livello batteria
             this.updateBatteryLevel();
-
         }
         return energyAllVM;
-
-        }
+    }
 
 
     public void updateStatus() {
@@ -98,6 +98,7 @@ public class EdgeHostEnergy extends EdgeHost{
             setDeath(true, CloudSim.clock());
         }
     }
+
     public Double updateBatteryLevel() {
         Double percentageConsumed = energyAllVM > 0
                 ? energyAllVM / batteryCapacity
@@ -106,7 +107,7 @@ public class EdgeHostEnergy extends EdgeHost{
                 ? batteryLevel - percentageConsumed
                 : 0.0;
         //System.out.println("livello batteria HOST"+ batteryLevel +  "...." +this.getId());
-        if(batteryLevel.equals(0.0)){
+        if (batteryLevel.equals(0.0)) {
             setDeath(true, CloudSim.clock());
         }
         energyModel.setBatteryCapacity(batteryLevel);
@@ -114,6 +115,5 @@ public class EdgeHostEnergy extends EdgeHost{
     }
 
 
-
-        }
+}
 
