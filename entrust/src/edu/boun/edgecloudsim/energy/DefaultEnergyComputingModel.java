@@ -30,8 +30,6 @@ public class DefaultEnergyComputingModel extends EnergyComputingModel {
 
 	@Override
 	public double getTotalEnergyConsumption() {
-		if(networkEnergyConsumption>0)
-			System.out.println("---------------------getTotalEnergyConsumption:"+cpuEnergyConsumption+","+networkEnergyConsumption);
 		return cpuEnergyConsumption + networkEnergyConsumption;	
 	}
 
