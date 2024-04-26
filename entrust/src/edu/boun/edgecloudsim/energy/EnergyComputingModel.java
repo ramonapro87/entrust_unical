@@ -1,5 +1,6 @@
 package edu.boun.edgecloudsim.energy;
 
+import edu.boun.edgecloudsim.core.SimSettings.NETWORK_DELAY_TYPES;
 
 public abstract class EnergyComputingModel {
 	protected int numberOfMobileDevices; //*from edgecloudsim model*
@@ -9,7 +10,7 @@ public abstract class EnergyComputingModel {
 	protected double cpuEnergyConsumption = 0;
 	protected double batteryCapacity;
 	protected double initialBatteryLevel = 1;
-	protected String connectivity;
+	protected NETWORK_DELAY_TYPES connectivity; //FIXME check if it's ok use NETWORK_DELAY_TYPES
 	protected boolean isBatteryPowered = false;
 	public static final int TRANSMISSION = 0; // used to update edge devices batteries
 	public static final int RECEPTION = 1;
@@ -82,9 +83,9 @@ public abstract class EnergyComputingModel {
 
 	public abstract void setIntialBatteryPercentage(double batteryLevel);
 
-	public abstract String getConnectivityType();
+	public abstract NETWORK_DELAY_TYPES getConnectivityType();
 
-	public abstract void setConnectivityType(String connectivity);
+	public abstract void setConnectivityType(NETWORK_DELAY_TYPES connectivity);
 
 	
 	/**

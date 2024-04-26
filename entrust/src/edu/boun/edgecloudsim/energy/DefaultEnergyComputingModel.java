@@ -1,6 +1,7 @@
 package edu.boun.edgecloudsim.energy;
 
 import edu.boun.edgecloudsim.core.SimSettings;
+import edu.boun.edgecloudsim.core.SimSettings.NETWORK_DELAY_TYPES;
 
 public class DefaultEnergyComputingModel extends EnergyComputingModel {
 
@@ -29,7 +30,9 @@ public class DefaultEnergyComputingModel extends EnergyComputingModel {
 
 	@Override
 	public double getTotalEnergyConsumption() {
-		return cpuEnergyConsumption + networkEnergyConsumption;
+		if(networkEnergyConsumption>0)
+			System.out.println("---------------------getTotalEnergyConsumption:"+cpuEnergyConsumption+","+networkEnergyConsumption);
+		return cpuEnergyConsumption + networkEnergyConsumption;	
 	}
 
 	@Override
@@ -92,18 +95,18 @@ public class DefaultEnergyComputingModel extends EnergyComputingModel {
 	}
 
 	@Override
-	public String getConnectivityType() {
+	public NETWORK_DELAY_TYPES getConnectivityType() {
 		return connectivity;
 	}
 
 	@Override
-	public void setConnectivityType(String connectivity) {
+	public void setConnectivityType(NETWORK_DELAY_TYPES connectivity) {
 		this.connectivity = connectivity;
 
-		if ("cellular".equals(connectivity)) {
+		if (connectivity == NETWORK_DELAY_TYPES.GSM_DELAY) {
 			transmissionEnergyPerBits = SimSettings.getInstance().getCellularDeviceTransmissionWattHourPerBit();
 			receptionEnergyPerBits = SimSettings.getInstance().getCellularDeviceReceptionWattHourPerBit();
-		} else if ("wifi".equals(connectivity)) {
+		} else if (connectivity == NETWORK_DELAY_TYPES.WLAN_DELAY) {
 			transmissionEnergyPerBits = SimSettings.getInstance().getWifiDeviceTransmissionWattHourPerBit();
 			receptionEnergyPerBits = SimSettings.getInstance().getWifiDeviceReceptionWattHourPerBit();
 		} 

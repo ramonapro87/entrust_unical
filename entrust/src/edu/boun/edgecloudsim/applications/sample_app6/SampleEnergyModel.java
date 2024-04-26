@@ -1,5 +1,6 @@
 package edu.boun.edgecloudsim.applications.sample_app6;
 
+import edu.boun.edgecloudsim.core.SimSettings.NETWORK_DELAY_TYPES;
 import edu.boun.edgecloudsim.energy.EnergyComputingModel;
 
 public class SampleEnergyModel extends EnergyComputingModel {
@@ -100,13 +101,13 @@ public class SampleEnergyModel extends EnergyComputingModel {
 	}
 
 	@Override
-	public String getConnectivityType() {
+	public NETWORK_DELAY_TYPES getConnectivityType() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public void setConnectivityType(String connectivity) {
+	public void setConnectivityType(NETWORK_DELAY_TYPES connectivity) {
 		// TODO Auto-generated method stub
 		
 	}

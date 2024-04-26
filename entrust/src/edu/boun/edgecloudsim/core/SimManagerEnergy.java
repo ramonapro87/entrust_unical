@@ -1,9 +1,13 @@
 package edu.boun.edgecloudsim.core;
 
+import edu.boun.edgecloudsim.core.SimSettings.NETWORK_DELAY_TYPES;
 import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileHostEnergy;
 import edu.boun.edgecloudsim.edge_server.EdgeHostEnergy;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import edu.boun.edgecloudsim.utils.SimLogger;
+import edu.boun.edgecloudsim.utils.TaskProperty;
+
+import org.cloudbus.cloudsim.Host;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.SimEvent;
 
@@ -112,6 +116,26 @@ public class SimManagerEnergy extends SimManager {
 
                     schedule(getId(), SimSettings.getInstance().getVmLoadLogInterval(), GET_LOAD_LOG);
                     break;
+    			case CREATE_TASK:
+    				try {
+    					TaskProperty edgeTask = (TaskProperty) ev.getData();
+    					super.getMobileDeviceManager().submitTask(edgeTask);
+    					int datacencerId = getMobileServerManager().getDatacenter().getId();
+    					Host host = ((MobileHostEnergy)getMobileServerManager().getDatacenter().getHostList().get(edgeTask.getMobileDeviceId()));    					    					
+    					if (host instanceof MobileHostEnergy)    						
+    						if(datacencerId == SimSettings.CLOUD_DATACENTER_ID)//TODO Type GSM
+    							((MobileHostEnergy)host).getEnergyModel().setConnectivityType(NETWORK_DELAY_TYPES.WAN_DELAY); //FIXME unmanaged
+    						else
+    							((MobileHostEnergy)host).getEnergyModel().setConnectivityType(NETWORK_DELAY_TYPES.WLAN_DELAY);
+    					
+    						((MobileHostEnergy)host).getEnergyModel().updatewirelessEnergyConsumption(1,1);//TODO variare termini di ricezione trasmissione o i bit inviati    						
+
+    				} catch (Exception e) {
+    					e.printStackTrace();
+    					System.exit(1);
+    				}
+    				break;
+                    
                 default:
                     super.processEvent(ev);
                     break;
