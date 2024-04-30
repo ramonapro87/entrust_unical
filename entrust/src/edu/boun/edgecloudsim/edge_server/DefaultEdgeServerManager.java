@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import org.cloudbus.cloudsim.CloudletSchedulerTimeShared;
@@ -127,6 +128,7 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 		// for each datacenter...
 		for(int i= 0; i<localDatacenters.size(); i++) {
 			List<? extends Host> list = localDatacenters.get(i).getHostList();
+			hostsNotDied(list);
 			// for each host...
 			for (int j=0; j < list.size(); j++) {
 				Host host = list.get(j);
@@ -139,6 +141,14 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 			}
 		}
 		return totalUtilization / vmCounter;
+	}
+
+	private void hostsNotDied(List<? extends Host> list){
+		 list.stream().filter(host ->
+						!(host instanceof EdgeHostEnergy) ||
+						(host instanceof EdgeHostEnergy && !((EdgeHostEnergy) host).isDead())
+				)
+				.collect(Collectors.toList());
 	}
 
 	@Override
