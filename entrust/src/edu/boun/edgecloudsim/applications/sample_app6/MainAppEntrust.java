@@ -129,7 +129,7 @@ public class MainAppEntrust {
 					SimLogger.printLine("----------------------------------------------------------------------");
 
 					//	Print initial energy values
-					SimLogger.printLine("connectivity type " + SS.getCONNECTIVITY());
+					//SimLogger.printLine("connectivity type " + SS.getCONNECTIVITY());
 					Map<String,Double> energyValue = new HashMap<>();
 
 					energyValue.put("BATTERYCAPACITY",SS.getBATTERYCAPACITY());
