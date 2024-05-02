@@ -144,11 +144,9 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 	}
 
 	private void hostsNotDied(List<? extends Host> list){
-		 list.stream().filter(host ->
-						!(host instanceof EdgeHostEnergy) ||
-						(host instanceof EdgeHostEnergy && !((EdgeHostEnergy) host).isDead())
-				)
-				.collect(Collectors.toList());
+		list.removeIf(host ->
+				(host instanceof EdgeHostEnergy && ((EdgeHostEnergy) host).isDead())
+		);
 	}
 
 	@Override

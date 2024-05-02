@@ -16,8 +16,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.*;
+import edu.boun.edgecloudsim.edge_server.EdgeHostEnergy;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import org.cloudbus.cloudsim.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.Datacenter;
@@ -101,6 +103,7 @@ public class SampleMobileServerManager extends MobileServerManager {
         double vmCounter = 0;
 
         List<? extends Host> list = localDatacenter.getHostList();
+        hostsNotDied(list);
         // for each host...
         for (int hostIndex = 0; hostIndex < list.size(); hostIndex++) {
             List<MobileVM> vmArray = SimManager.getInstance().getMobileServerManager().getVmList(hostIndex);
@@ -112,6 +115,12 @@ public class SampleMobileServerManager extends MobileServerManager {
         }
 
         return totalUtilization / vmCounter;
+    }
+
+    private void hostsNotDied(List<? extends Host> list){
+        list.removeIf(host ->
+                (host instanceof EdgeHostEnergy && ((EdgeHostEnergy) host).isDead())
+        );
     }
 
 
