@@ -119,7 +119,7 @@ public class SampleMobileServerManager extends MobileServerManager {
 
     private void hostsNotDied(List<? extends Host> list){
         list.removeIf(host ->
-                (host instanceof EdgeHostEnergy && ((EdgeHostEnergy) host).isDead())
+                (host instanceof MobileHostEnergy && ((MobileHostEnergy) host).isDead())
         );
     }
 
