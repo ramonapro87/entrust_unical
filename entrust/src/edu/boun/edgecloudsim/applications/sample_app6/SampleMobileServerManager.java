@@ -103,7 +103,7 @@ public class SampleMobileServerManager extends MobileServerManager {
         double vmCounter = 0;
 
         List<? extends Host> list = localDatacenter.getHostList();
-        hostsNotDied(list);
+        list = hostsNotDied(list);
         // for each host...
         for (int hostIndex = 0; hostIndex < list.size(); hostIndex++) {
             List<MobileVM> vmArray = SimManager.getInstance().getMobileServerManager().getVmList(hostIndex);
@@ -117,10 +117,13 @@ public class SampleMobileServerManager extends MobileServerManager {
         return totalUtilization / vmCounter;
     }
 
-    private void hostsNotDied(List<? extends Host> list){
-        list.removeIf(host ->
-                (host instanceof MobileHostEnergy && ((MobileHostEnergy) host).isDead())
-        );
+    private List<? extends Host> hostsNotDied(List<? extends Host> list){
+        return  list.stream().filter(host -> {
+            if (host instanceof MobileHostEnergy) {
+                return !((MobileHostEnergy) host).isDead();
+            }
+            return true;
+        }).collect(Collectors.toList());
     }
 
 

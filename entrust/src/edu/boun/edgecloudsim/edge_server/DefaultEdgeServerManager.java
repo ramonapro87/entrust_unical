@@ -143,10 +143,10 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 		return totalUtilization / vmCounter;
 	}
 
-	private void hostsNotDied(List<? extends Host> list){
-		list.removeIf(host ->
-				(host instanceof EdgeHostEnergy && ((EdgeHostEnergy) host).isDead())
-		);
+	private List<? extends Host> hostsNotDied(List<? extends Host> list){ 
+		return list.stream()
+				.filter(host -> !(host instanceof EdgeHostEnergy && ((EdgeHostEnergy) host).isDead()))
+				.collect(Collectors.toList());
 	}
 
 	@Override
