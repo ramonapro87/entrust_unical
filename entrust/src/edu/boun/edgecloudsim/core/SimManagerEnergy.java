@@ -2,16 +2,13 @@ package edu.boun.edgecloudsim.core;
 
 import edu.boun.edgecloudsim.core.SimSettings.NETWORK_DELAY_TYPES;
 import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileHostEnergy;
-import edu.boun.edgecloudsim.edge_server.EdgeHostEnergy;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import edu.boun.edgecloudsim.utils.SimLogger;
 import edu.boun.edgecloudsim.utils.TaskProperty;
 
-import org.cloudbus.cloudsim.Host;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.SimEvent;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class SimManagerEnergy extends SimManager {
@@ -61,13 +58,12 @@ public class SimManagerEnergy extends SimManager {
 
 
                     getCloudServerManager().getDatacenter().getHostList().forEach(host -> {
+                    	
                         if (host instanceof MobileHostEnergy) {
                             ((MobileHostEnergy) host).updateStatus();
                             System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
                         }
                     });
-
-
 
                     SimLogger.getInstance().addVmUtilizationLog(momentOfInterest,
                             getEdgeServerManager().getAvgUtilization(),
@@ -83,16 +79,38 @@ public class SimManagerEnergy extends SimManager {
     				try {
     					TaskProperty edgeTask = (TaskProperty) ev.getData();
     					super.getMobileDeviceManager().submitTask(edgeTask);
-    					int datacencerId = getMobileServerManager().getDatacenter().getId();
-    					Host host = ((MobileHostEnergy)getMobileServerManager().getDatacenter().getHostList().get(edgeTask.getMobileDeviceId()));    					    					
-    					if (host instanceof MobileHostEnergy)    						
-    						if(datacencerId == SimSettings.CLOUD_DATACENTER_ID)//TODO Type GSM
-    							((MobileHostEnergy)host).getEnergyModel().setConnectivityType(NETWORK_DELAY_TYPES.WAN_DELAY); //FIXME unmanaged
-    						else
-    							((MobileHostEnergy)host).getEnergyModel().setConnectivityType(NETWORK_DELAY_TYPES.WLAN_DELAY);
     					
-    						((MobileHostEnergy)host).getEnergyModel().updatewirelessEnergyConsumption(1,1);//TODO variare termini di ricezione trasmissione o i bit inviati    						
+    					int mobileid = edgeTask.getMobileDeviceId();    					
+    				
+    					MobileHostEnergy host = ((MobileHostEnergy)getMobileServerManager().getDatacenter().getHostList().get(mobileid));
+						host.getEnergyModel().setConnectivityType(NETWORK_DELAY_TYPES.GSM_DELAY);
 
+//						double prima = host.getEnergyModel().getTotalEnergyConsumption();
+//						System.out.println("energia prima: "+host.getEnergyModel().getTotalEnergyConsumption());
+						host.getEnergyModel().updatewirelessEnergyConsumption(1,1);//TODO variare termini di ricezione trasmissione o i bit inviati
+//						double dopo = host.getEnergyModel().getTotalEnergyConsumption();
+//						System.out.print("energia  dopo: "+dopo+" differenza: "+(prima-dopo));
+//    					System.out.println("_ID: mob: "+mobileid+" HOST: "+host.getId()+" edgetask: "+edgeTask.hashCode());
+
+//    					int datacencerId = getMobileServerManager().getDatacenter().getId();
+//    					System.out.println(host.getDatacenter().getName());
+//    					System.out.println(host.getDatacenter().getId());						    						
+
+//    					if (host instanceof MobileHostEnergy)
+//    					{
+//    						if(datacencerId == SimSettings.CLOUD_DATACENTER_ID)
+//    							((MobileHostEnergy)host).getEnergyModel().setConnectivityType(NETWORK_DELAY_TYPES.WAN_DELAY); //FIXME unmanaged
+//    						else
+//    							((MobileHostEnergy)host).getEnergyModel().setConnectivityType(NETWORK_DELAY_TYPES.WLAN_DELAY);
+//    					
+//    						((MobileHostEnergy)host).getEnergyModel().updatewirelessEnergyConsumption(1,1);
+						    						
+//    					}
+//    					else {
+//    						System.out.println("never been here");
+//    					}
+    					
+    							
     				} catch (Exception e) {
     					e.printStackTrace();
     					System.exit(1);
