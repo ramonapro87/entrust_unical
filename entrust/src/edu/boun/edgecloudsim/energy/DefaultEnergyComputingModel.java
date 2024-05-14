@@ -107,7 +107,10 @@ public class DefaultEnergyComputingModel extends EnergyComputingModel {
 		} else if (connectivity == NETWORK_DELAY_TYPES.WLAN_DELAY) {
 			transmissionEnergyPerBits = SimSettings.getInstance().getWifiDeviceTransmissionWattHourPerBit();
 			receptionEnergyPerBits = SimSettings.getInstance().getWifiDeviceReceptionWattHourPerBit();
-		} 
+		}
+		
+//		usare NETWORK_DELAY_TYPES.WAN
+
 		
 		// Ethernet not yet handled
 		/*else {
