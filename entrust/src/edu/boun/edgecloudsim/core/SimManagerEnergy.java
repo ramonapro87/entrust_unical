@@ -7,12 +7,14 @@ import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileHostEnergy
 import edu.boun.edgecloudsim.edge_server.EdgeHostEnergy;
 import edu.boun.edgecloudsim.edge_server.EdgeServerManager;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
+import edu.boun.edgecloudsim.simulationvisualizer.MapCharts;
 import edu.boun.edgecloudsim.utils.*;
 
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.SimEvent;
 
+import javax.swing.*;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -33,6 +35,9 @@ public class SimManagerEnergy extends SimManager {
     public boolean detailHostEenergy = false;
 
 	private List<Coordinates> coordinates = new LinkedList<>();
+	public List<Coordinates> getCoordinates(){
+		return coordinates;
+	}
 
 
     public SimManagerEnergy(ScenarioFactoryEnergy _scenarioFactory, int _numOfMobileDevice, String _simScenario, String _orchestratorPolicy) throws Exception {
@@ -131,6 +136,12 @@ public class SimManagerEnergy extends SimManager {
 		//for diagrams constructions
 		coordinates.add(new Coordinates(loc_mobile.getXPos(), loc_mobile.getYPos(),host.isDead()));
 
+
+
+		SwingUtilities.invokeLater(() -> {
+			MapCharts objectGraph = new MapCharts(coordinates);
+			objectGraph.setVisible(true);
+		});
 		System.out.println("_ID: mob: "+mobileid+" HOST: "+host.getId()+" edgetask: "+task.hashCode());
 //		EdgeHostEnergy host2 = ((EdgeHostEnergy)esm.getDatacenterList().get(0).getHostList().get(0));
 //		System.out.println("_ID: tas: "+task.getMobileDeviceId()+" HOST: "+host.getId()+" edgetask: "+edgeTask.hashCode());
