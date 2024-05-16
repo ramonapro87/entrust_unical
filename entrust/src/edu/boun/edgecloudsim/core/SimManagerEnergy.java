@@ -7,16 +7,16 @@ import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileHostEnergy
 import edu.boun.edgecloudsim.edge_server.EdgeHostEnergy;
 import edu.boun.edgecloudsim.edge_server.EdgeServerManager;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
-import edu.boun.edgecloudsim.utils.Location;
-import edu.boun.edgecloudsim.utils.SimLogger;
-import edu.boun.edgecloudsim.utils.SimUtils;
-import edu.boun.edgecloudsim.utils.TaskProperty;
+import edu.boun.edgecloudsim.utils.*;
 
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.SimEvent;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+
 
 public class SimManagerEnergy extends SimManager {
 
@@ -31,6 +31,8 @@ public class SimManagerEnergy extends SimManager {
     private DefaultEnergyComputingModel defaultEnergyComputingModel;
     private ScenarioFactoryEnergy scenarioFactoryEnergy;
     public boolean detailHostEenergy = false;
+
+	private List<Coordinates> coordinates = new LinkedList<>();
 
 
     public SimManagerEnergy(ScenarioFactoryEnergy _scenarioFactory, int _numOfMobileDevice, String _simScenario, String _orchestratorPolicy) throws Exception {
@@ -121,9 +123,14 @@ public class SimManagerEnergy extends SimManager {
 		int nexthop = getEdgeOrchestrator().getDeviceToOffload(task);    					    					
 			    					
 		int mobileid = task.getMobileDeviceId();
-		Location loc_mobile = getMobilityModel().getLocation(mobileid, CloudSim.clock());    					
+		Location loc_mobile = getMobilityModel().getLocation(mobileid, CloudSim.clock());
+
 		
-		MobileHostEnergy host = ((MobileHostEnergy)getMobileServerManager().getDatacenter().getHostList().get(mobileid));    
+		MobileHostEnergy host = ((MobileHostEnergy)getMobileServerManager().getDatacenter().getHostList().get(mobileid));
+
+		//for diagrams constructions
+		coordinates.add(new Coordinates(loc_mobile.getXPos(), loc_mobile.getYPos(),host.isDead()));
+
 		System.out.println("_ID: mob: "+mobileid+" HOST: "+host.getId()+" edgetask: "+task.hashCode());
 //		EdgeHostEnergy host2 = ((EdgeHostEnergy)esm.getDatacenterList().get(0).getHostList().get(0));
 //		System.out.println("_ID: tas: "+task.getMobileDeviceId()+" HOST: "+host.getId()+" edgetask: "+edgeTask.hashCode());
