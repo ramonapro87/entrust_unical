@@ -2,6 +2,7 @@ package edu.boun.edgecloudsim.energy;
 
 import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.core.SimSettings.NETWORK_DELAY_TYPES;
+import edu.boun.edgecloudsim.utils.SimUtils;
 
 public class DefaultEnergyComputingModel extends EnergyComputingModel {
 
@@ -121,7 +122,7 @@ public class DefaultEnergyComputingModel extends EnergyComputingModel {
 
 	@Override
 	public void updatewirelessEnergyConsumption(double sizeInBits, int flag) {
-		if (flag == RECEPTION)
+		if (flag == SimUtils.RECEPTION)
 			networkEnergyConsumption += sizeInBits * transmissionEnergyPerBits;
 		else
 			networkEnergyConsumption += sizeInBits * receptionEnergyPerBits;

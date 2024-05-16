@@ -12,8 +12,8 @@ public abstract class EnergyComputingModel {
 	protected double initialBatteryLevel = 1;
 	protected NETWORK_DELAY_TYPES connectivity; //FIXME check if it's ok use NETWORK_DELAY_TYPES
 	protected boolean isBatteryPowered = false;
-	public static final int TRANSMISSION = 0; // used to update edge devices batteries
-	public static final int RECEPTION = 1;
+//	public static final int TRANSMISSION = 0; // used to update edge devices batteries
+//	public static final int RECEPTION = 1;
 //	/**
 //	 * An attribute that implements the Null Object Design Pattern to avoid
 //	 * {@link NullPointerException} when using the NULL object instead of

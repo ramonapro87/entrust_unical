@@ -17,6 +17,10 @@ import java.util.concurrent.TimeUnit;
 public class SimUtils {
 
 	public static final Random RNG = new Random(System.currentTimeMillis());
+	
+	public static final int TRANSMISSION = 0; // used to update edge devices batteries
+	public static final int RECEPTION = 1;
+	
 
 	public static int getRandomNumber(int start, int end) {
 		//return pd.sample();
