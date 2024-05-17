@@ -7,6 +7,8 @@ import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileHostEnergy
 import edu.boun.edgecloudsim.edge_server.EdgeHostEnergy;
 import edu.boun.edgecloudsim.edge_server.EdgeServerManager;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
+import edu.boun.edgecloudsim.simulationvisualizer.GenerateCharts;
+import edu.boun.edgecloudsim.simulationvisualizer.IDiagrams;
 import edu.boun.edgecloudsim.simulationvisualizer.MapCharts;
 import edu.boun.edgecloudsim.utils.*;
 
@@ -33,11 +35,12 @@ public class SimManagerEnergy extends SimManager {
     private DefaultEnergyComputingModel defaultEnergyComputingModel;
     private ScenarioFactoryEnergy scenarioFactoryEnergy;
     public boolean detailHostEenergy = false;
+	private  IDiagrams iDiagrams;
 
 	private List<Coordinates> coordinates = new LinkedList<>();
-	public List<Coordinates> getCoordinates(){
-		return coordinates;
-	}
+	//public List<Coordinates> getCoordinates(){
+	//	return coordinates;
+	//}
 
 
     public SimManagerEnergy(ScenarioFactoryEnergy _scenarioFactory, int _numOfMobileDevice, String _simScenario, String _orchestratorPolicy) throws Exception {
@@ -45,6 +48,7 @@ public class SimManagerEnergy extends SimManager {
         scenarioFactoryEnergy = _scenarioFactory;
         defaultEnergyComputingModel = scenarioFactoryEnergy.getDefaultEnergyComputerModel();
         defaultEnergyComputingModel.initialize();
+		this.iDiagrams = new GenerateCharts();
     }
 
     @Override
@@ -138,10 +142,7 @@ public class SimManagerEnergy extends SimManager {
 
 
 
-		SwingUtilities.invokeLater(() -> {
-			MapCharts objectGraph = new MapCharts(coordinates);
-			objectGraph.setVisible(true);
-		});
+
 		System.out.println("_ID: mob: "+mobileid+" HOST: "+host.getId()+" edgetask: "+task.hashCode());
 //		EdgeHostEnergy host2 = ((EdgeHostEnergy)esm.getDatacenterList().get(0).getHostList().get(0));
 //		System.out.println("_ID: tas: "+task.getMobileDeviceId()+" HOST: "+host.getId()+" edgetask: "+edgeTask.hashCode());
@@ -184,14 +185,16 @@ public class SimManagerEnergy extends SimManager {
 			host.getEnergyModel().setConnectivityType(NETWORK_DELAY_TYPES.WLAN_DELAY);
 			System.err.println("-------TO---????" + nexthop);
 			break;
-		}	
 
+
+		}
+		iDiagrams.generateMapCharts(coordinates);
 		host.getEnergyModel().updatewirelessEnergyConsumption(size,flag);
-		
+
     	
     }
-    
-    
+
+
     
 
 
