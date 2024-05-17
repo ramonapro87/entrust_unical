@@ -79,7 +79,7 @@ public class MainAppEntrust {
 		String now = df.format(SimulationStartDate);
 		SimLogger.printLine("Simulation started at " + now);
 		SimLogger.printLine("----------------------------------------------------------------------");
-
+		SimManagerEnergy manager = null;
 		for(int j=SS.getMinNumOfMobileDev(); j<=SS.getMaxNumOfMobileDev(); j+=SS.getMobileDevCounterSize())
 		{
 			//End of orchestrators loop
@@ -111,7 +111,7 @@ public class MainAppEntrust {
 						// Generate EdgeCloudSim Simulation Manager
 //						SimManager manager = new SimManager(sampleFactory, j, simScenario, orchestratorPolicy);
 
-						SimManagerEnergy manager = new SimManagerEnergy(sampleFactory, j, simScenario, orchestratorPolicy);
+						manager = new SimManagerEnergy(sampleFactory, j, simScenario, orchestratorPolicy);
 
 						// Start simulation
 						manager.startSimulation();
@@ -120,7 +120,8 @@ public class MainAppEntrust {
 						e.printStackTrace();
 						System.exit(0);
 					}
-
+					if(manager != null)
+						manager.createDiagram();
 					Date ScenarioEndDate = Calendar.getInstance().getTime();
 					now = df.format(ScenarioEndDate);
 

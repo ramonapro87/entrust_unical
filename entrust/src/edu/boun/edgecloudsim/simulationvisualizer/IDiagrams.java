@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface IDiagrams {
     public void generateMapCharts(List<Coordinates> coordinates);
+    public void generateMapCharts();
+    public void addDataToMapChart(Coordinates coordinates);
 
 }

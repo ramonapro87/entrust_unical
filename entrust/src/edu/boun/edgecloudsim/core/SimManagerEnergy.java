@@ -37,10 +37,7 @@ public class SimManagerEnergy extends SimManager {
     public boolean detailHostEenergy = false;
 	private  IDiagrams iDiagrams;
 
-	private List<Coordinates> coordinates = new LinkedList<>();
-	//public List<Coordinates> getCoordinates(){
-	//	return coordinates;
-	//}
+
 
 
     public SimManagerEnergy(ScenarioFactoryEnergy _scenarioFactory, int _numOfMobileDevice, String _simScenario, String _orchestratorPolicy) throws Exception {
@@ -138,8 +135,9 @@ public class SimManagerEnergy extends SimManager {
 		MobileHostEnergy host = ((MobileHostEnergy)getMobileServerManager().getDatacenter().getHostList().get(mobileid));
 
 		//for diagrams constructions
-		coordinates.add(new Coordinates(loc_mobile.getXPos(), loc_mobile.getYPos(),host.isDead()));
 
+
+		iDiagrams.addDataToMapChart(new Coordinates(loc_mobile.getXPos(), loc_mobile.getYPos(),host.isDead(),mobileid,Double.toString(CloudSim.clock())));
 
 
 
@@ -188,7 +186,6 @@ public class SimManagerEnergy extends SimManager {
 
 
 		}
-		iDiagrams.generateMapCharts(coordinates);
 		host.getEnergyModel().updatewirelessEnergyConsumption(size,flag);
 
     	
@@ -197,5 +194,8 @@ public class SimManagerEnergy extends SimManager {
 
     
 
+	public void createDiagram() {
+		iDiagrams.generateMapCharts();
+	}
 
 }
