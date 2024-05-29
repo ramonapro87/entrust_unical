@@ -7,17 +7,15 @@ import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileHostEnergy
 import edu.boun.edgecloudsim.edge_server.EdgeHostEnergy;
 import edu.boun.edgecloudsim.edge_server.EdgeServerManager;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
-import edu.boun.edgecloudsim.simulationvisualizer.GenerateCharts;
+import edu.boun.edgecloudsim.simulationvisualizer.ChartGenerator;
 import edu.boun.edgecloudsim.simulationvisualizer.IDiagrams;
-import edu.boun.edgecloudsim.simulationvisualizer.MapCharts;
 import edu.boun.edgecloudsim.utils.*;
 
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.SimEvent;
 
-import javax.swing.*;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -29,13 +27,15 @@ public class SimManagerEnergy extends SimManager {
     private static final int GET_LOAD_LOG = 2;
     private static final int PRINT_PROGRESS = 3;
     private static final int STOP_SIMULATION = 4;
-        
-    
+	List<Coordinates> coordinatesList= null;
+
 
     private DefaultEnergyComputingModel defaultEnergyComputingModel;
     private ScenarioFactoryEnergy scenarioFactoryEnergy;
     public boolean detailHostEenergy = false;
-	private  IDiagrams iDiagrams;
+
+
+	private IDiagrams iDiagrams;
 
 
 
@@ -45,7 +45,7 @@ public class SimManagerEnergy extends SimManager {
         scenarioFactoryEnergy = _scenarioFactory;
         defaultEnergyComputingModel = scenarioFactoryEnergy.getDefaultEnergyComputerModel();
         defaultEnergyComputingModel.initialize();
-		this.iDiagrams = new GenerateCharts();
+		this.iDiagrams = new ChartGenerator();
     }
 
     @Override
@@ -135,16 +135,13 @@ public class SimManagerEnergy extends SimManager {
 		MobileHostEnergy host = ((MobileHostEnergy)getMobileServerManager().getDatacenter().getHostList().get(mobileid));
 
 		//for diagrams constructions
+		double energyConsumed = host.energyConsumption(CloudSim.clock());
 
+		if(coordinatesList == null) {
+			coordinatesList = new ArrayList<>();
+		}
+		coordinatesList.add(new Coordinates(loc_mobile.getXPos(), loc_mobile.getYPos(),host.isDead(),mobileid,CloudSim.clock(),energyConsumed));
 
-		iDiagrams.addDataToMapChart(new Coordinates(loc_mobile.getXPos(), loc_mobile.getYPos(),host.isDead(),mobileid,Double.toString(CloudSim.clock())));
-
-
-
-		System.out.println("_ID: mob: "+mobileid+" HOST: "+host.getId()+" edgetask: "+task.hashCode());
-//		EdgeHostEnergy host2 = ((EdgeHostEnergy)esm.getDatacenterList().get(0).getHostList().get(0));
-//		System.out.println("_ID: tas: "+task.getMobileDeviceId()+" HOST: "+host.getId()+" edgetask: "+edgeTask.hashCode());
-//		System.out.println("--------------"+locm.getXPos()+","+locm.getYPos());
 		
 		EdgeServerManager esm = getEdgeServerManager();    					
 
@@ -194,8 +191,11 @@ public class SimManagerEnergy extends SimManager {
 
     
 
-	public void createDiagram() {
-		iDiagrams.generateMapCharts();
+	public void createDiagram(String scenarioName, String orchestretorPolicy) {
+		iDiagrams.generateEnergyCharts(coordinatesList, scenarioName, orchestretorPolicy);
+		iDiagrams.generateMapChart(coordinatesList, scenarioName, orchestretorPolicy);
 	}
+
+
 
 }

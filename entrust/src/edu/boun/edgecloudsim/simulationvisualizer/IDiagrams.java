@@ -2,11 +2,40 @@ package edu.boun.edgecloudsim.simulationvisualizer;
 
 import edu.boun.edgecloudsim.utils.Coordinates;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public interface IDiagrams {
-    public void generateMapCharts(List<Coordinates> coordinates);
-    public void generateMapCharts();
-    public void addDataToMapChart(Coordinates coordinates);
+
+    default void generateEnergyCharts(List<Coordinates> coordinates, String scenarioName, String orchestretorPolicy) {
+        Map<Integer, List<Coordinates>> coordinatesById = coordinates.stream()
+                .collect(Collectors.groupingBy(Coordinates::getId));
+
+        // todo, filter only for test, remove next line for all data
+        List<Integer> filterId = List.of(1, 2);
+        coordinatesById = coordinatesById.entrySet().stream()
+                .filter(entry -> filterId.contains(entry.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        generateEnergyCharts(coordinatesById, scenarioName, orchestretorPolicy);
+    }
+
+    public void generateEnergyCharts(Map<Integer, List<Coordinates>> coordinatesById, String scenarioName, String orchestretorPolicy);
+
+
+    default void generateMapChart(List<Coordinates> coordinates, String scenarioName, String orchestretorPolicy) {
+        Map<Integer, List<Coordinates>> coordinatesById = coordinates.stream()
+                .collect(Collectors.groupingBy(Coordinates::getId));
+
+        List<Integer> filterId = List.of(1, 2, 3,4, 5,6,7,8,9);
+        coordinatesById = coordinatesById.entrySet().stream()
+                .filter(entry -> filterId.contains(entry.getKey()))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        generateMapChart(coordinatesById, scenarioName, orchestretorPolicy);
+    }
+    public void generateMapChart(Map<Integer, List<Coordinates>> coordinatesById, String scenarioName, String orchestretorPolicy);
+
 
 }

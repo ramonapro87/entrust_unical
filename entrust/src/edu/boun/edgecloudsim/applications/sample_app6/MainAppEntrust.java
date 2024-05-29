@@ -121,7 +121,7 @@ public class MainAppEntrust {
 						System.exit(0);
 					}
 					if(manager != null)
-						manager.createDiagram();
+						manager.createDiagram(simScenario, orchestratorPolicy);
 					Date ScenarioEndDate = Calendar.getInstance().getTime();
 					now = df.format(ScenarioEndDate);
 

@@ -2,13 +2,14 @@ package edu.boun.edgecloudsim.utils;
 
 public class Coordinates {
 
-    //for diagram constructions
     private Integer X;
     private Integer Y;
     private Boolean isDead;
     private Integer id;
 
-    private String time;
+    private Double time;
+
+    private Double energyConsumed;
 
 
     public Integer getX() {
@@ -30,12 +31,16 @@ public class Coordinates {
     public Boolean isDead() {
         return isDead;
     }
-    public Coordinates(int x, int y, boolean isDead, int id, String time){
+    public Coordinates(int x, int y, boolean isDead, int id, Double time, Double energyConsumed){
         this.X=x;
         this.Y=y;
         this.isDead=isDead;
         this.id=id;
         this.time = time;
+        this.energyConsumed = energyConsumed;
+        if(isDead){
+            this.energyConsumed = -1.0;
+        }
     }
 
     @Override
@@ -65,11 +70,19 @@ public class Coordinates {
         this.id = id;
     }
 
-    public String getTime() {
+    public Double getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Double time) {
         this.time = time;
+    }
+
+    public Double getEnergyConsumed() {
+        return energyConsumed;
+    }
+
+    public void setEnergyConsumed(Double energyConsumed) {
+        this.energyConsumed = energyConsumed;
     }
 }
