@@ -8,11 +8,14 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class ChartGenerator implements IDiagrams {
-
 
 
 
@@ -23,12 +26,19 @@ public class ChartGenerator implements IDiagrams {
 
             // Crea una serie di dati per ciascun id
             for (Map.Entry<Integer, List<Coordinates>> entry : coordinatesById.entrySet()) {
-                XYSeries series = new XYSeries("Server " + entry.getKey());
+                XYSeries series = new XYSeries("Host" + entry.getKey());
                 for (Coordinates coord : entry.getValue()) {
-                    if(diagramType == DiagramType.ENERGY_VS_TIME)
+                    if(diagramType == DiagramType.ENERGY_VS_TIME) {
                         series.add(coord.getTime(), coord.getEnergyConsumed());
-                    else if (diagramType == DiagramType.MAPCHART_LOCALIZATION)
-                        series.add(coord.getX(), coord.getY());
+
+
+                    }
+
+                    else if (diagramType == DiagramType.MAPCHART_LOCALIZATION){
+                        double x= (double) (coord.getX()+Math.random() * 0.5);
+                        double y=(double)(coord.getY()+Math.random()*0.5);
+                        series.add(x,y);
+                    }
                 }
                 dataset.addSeries(series);
             }
@@ -47,6 +57,10 @@ public class ChartGenerator implements IDiagrams {
                 frame.setVisible(true);
             });
 
+            String folder = "sim_results/diagram_result";
+            // Save chart as an image
+            saveChartAsImage(chart,folder, 800,600);
+
             System.out.println("Grafico generato con successo.");
         } catch (Exception e) {
             System.out.println("Si è verificato un errore:");
@@ -54,6 +68,20 @@ public class ChartGenerator implements IDiagrams {
         }
 
 
+    }
+
+    private void saveChartAsImage(JFreeChart chart, String filePath, int width, int height) {
+        String uuid = UUID.randomUUID().toString();
+        String fileName = filePath + "/FIle_" + uuid + ".png";
+
+        File outputFile = new File(fileName);
+        outputFile.getParentFile().mkdirs(); // Create directories if they do not exist
+        BufferedImage chartImage = chart.createBufferedImage(width, height);
+        try {
+            ImageIO.write(chartImage, "png", outputFile);
+        } catch (IOException e) {
+            System.err.println("Error saving chart: " + e.getMessage());
+        }
     }
 
     @Override
