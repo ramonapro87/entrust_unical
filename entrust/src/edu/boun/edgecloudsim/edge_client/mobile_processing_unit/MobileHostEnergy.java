@@ -1,6 +1,7 @@
 package edu.boun.edgecloudsim.edge_client.mobile_processing_unit;
 
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
+import edu.boun.edgecloudsim.utils.DeadHost;
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmScheduler;
@@ -8,6 +9,7 @@ import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.provisioners.BwProvisioner;
 import org.cloudbus.cloudsim.provisioners.RamProvisioner;
 
+import javax.management.DescriptorAccess;
 import java.util.List;
 
 public class MobileHostEnergy extends MobileHost {
@@ -19,8 +21,7 @@ public class MobileHostEnergy extends MobileHost {
     protected double deathTime;
     private double batteryCapacity;
     double energyAllVM = 0;
-    //variabile che mi serve per controllare
-    //private Double batteriainziale;
+    private DeadHost deadlisthost;
 
     public MobileHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel _energyModel, Double _batteryCapacity) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
@@ -29,6 +30,7 @@ public class MobileHostEnergy extends MobileHost {
        // batteriainziale = 0 + batteryLevel;
         batteryCapacity = _batteryCapacity;
         isDead = false;
+        deadlisthost= new DeadHost();
     }
 
     /**
@@ -93,6 +95,8 @@ public class MobileHostEnergy extends MobileHost {
 
         if(batteryLevel.equals(0.0)){
             setDeath(true, CloudSim.clock());
+            //aggiungo alla lista di dispositivi morti
+            deadlisthost.add(getId());
         }
         energyModel.setBatteryCapacity(batteryLevel);
         return batteryLevel;

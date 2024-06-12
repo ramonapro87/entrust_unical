@@ -1,6 +1,7 @@
 package edu.boun.edgecloudsim.edge_server;
 
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
+import edu.boun.edgecloudsim.utils.DeadHost;
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmScheduler;
@@ -12,6 +13,7 @@ import java.util.List;
 
 public class EdgeHostEnergy extends EdgeHost {
 
+
     private DefaultEnergyComputingModel energyModel;
     private boolean isDead;
     private Double batteryLevel;
@@ -19,12 +21,14 @@ public class EdgeHostEnergy extends EdgeHost {
     private double batteryCapacity;
     private double energyAllVM = 0;
 
+
     public EdgeHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel em, Double bc) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
         energyModel = em;
         batteryLevel = Math.round(Math.random() * 10000) / 100.0;
         batteryCapacity = bc;
         isDead = false;
+
 
     }
 
