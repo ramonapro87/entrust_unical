@@ -9,7 +9,6 @@ import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.provisioners.BwProvisioner;
 import org.cloudbus.cloudsim.provisioners.RamProvisioner;
 
-import javax.management.DescriptorAccess;
 import java.util.List;
 
 public class MobileHostEnergy extends MobileHost {
@@ -96,7 +95,7 @@ public class MobileHostEnergy extends MobileHost {
         if(batteryLevel.equals(0.0)){
             setDeath(true, CloudSim.clock());
             //aggiungo alla lista di dispositivi morti
-            deadlisthost.add(getId());
+            deadlisthost.addMobileHost(getId());
         }
         energyModel.setBatteryCapacity(batteryLevel);
         return batteryLevel;

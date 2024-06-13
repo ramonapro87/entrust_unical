@@ -21,6 +21,8 @@ public class EdgeHostEnergy extends EdgeHost {
     private double batteryCapacity;
     private double energyAllVM = 0;
 
+    private DeadHost deadlisthost;
+
 
     public EdgeHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel em, Double bc) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
@@ -28,8 +30,7 @@ public class EdgeHostEnergy extends EdgeHost {
         batteryLevel = Math.round(Math.random() * 10000) / 100.0;
         batteryCapacity = bc;
         isDead = false;
-
-
+        deadlisthost = DeadHost.getInstance();
     }
 
     public boolean isDead() {
@@ -51,6 +52,7 @@ public class EdgeHostEnergy extends EdgeHost {
     protected void setDeath(Boolean dead, double time) {
         isDead = dead;
         deathTime = time;
+        deadlisthost.addEdgeHost(this.getId());
     }
 
     public Double upDateBatteryLevel() {
@@ -67,10 +69,7 @@ public class EdgeHostEnergy extends EdgeHost {
     }
 
     public void setBatteryLevel(Double batteryLevel) {
-
-
         this.batteryLevel = batteryLevel;
-
     }
 
     public double energyConsumption(double timePassed) {
