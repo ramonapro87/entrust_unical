@@ -17,6 +17,7 @@ import java.util.*;
 
 public class ChartGenerator implements IDiagrams {
 
+    boolean firstTime = true;
 
 
     public void generateDiagram(Map<Integer, List <Coordinates> >coordinatesById, String scenarioName, String orchestretorPolicy, DiagramType diagramType) {
@@ -58,6 +59,20 @@ public class ChartGenerator implements IDiagrams {
             });
 
             String folder = "sim_results/diagram_result";
+
+            if(firstTime){
+                firstTime = false;
+                //clean folder
+                File directory = new File(folder);
+                if (directory.exists()) {
+                    File[] files = directory.listFiles();
+                    if (files != null) {
+                        for (File file : files) {
+                            file.delete();
+                        }
+                    }
+                }
+            }
             // Save chart as an image
             saveChartAsImage(chart,folder, 800,600);
 
