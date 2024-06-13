@@ -30,7 +30,7 @@ public class MobileHostEnergy extends MobileHost {
        // batteriainziale = 0 + batteryLevel;
         batteryCapacity = _batteryCapacity;
         isDead = false;
-        deadlisthost= new DeadHost();
+         deadlisthost = DeadHost.getInstance();
     }
 
     /**

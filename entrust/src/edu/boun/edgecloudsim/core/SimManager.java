@@ -15,6 +15,7 @@ package edu.boun.edgecloudsim.core;
 import java.io.IOException;
 import java.util.List;
 
+import edu.boun.edgecloudsim.utils.DeadHost;
 import org.cloudbus.cloudsim.Host;
 import org.cloudbus.cloudsim.core.CloudSim;
 import org.cloudbus.cloudsim.core.SimEntity;
@@ -53,7 +54,7 @@ public class SimManager extends SimEntity {
 	private LoadGeneratorModel loadGeneratorModel;
 	private MobileDeviceManager mobileDeviceManager;
 
-
+    private DeadHost listhostdead;
 	
 	private static SimManager instance = null;
 	
@@ -102,6 +103,8 @@ public class SimManager extends SimEntity {
 		mobileDeviceManager.initialize();
 		
 		instance = this;
+
+		listhostdead= DeadHost.getInstance();
 	}
 	
 	public static SimManager getInstance(){
@@ -207,6 +210,7 @@ public class SimManager extends SimEntity {
 		
 		//Creation of tasks are scheduled here!
 		for(int i=0; i< loadGeneratorModel.getTaskList().size(); i++)
+
 			schedule(getId(), loadGeneratorModel.getTaskList().get(i).getStartTime(), CREATE_TASK, loadGeneratorModel.getTaskList().get(i));
 		
 		//Periodic event loops starts from here!
