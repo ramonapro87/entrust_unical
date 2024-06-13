@@ -12,6 +12,7 @@
 
 package edu.boun.edgecloudsim.core;
 
+
 import java.io.IOException;
 import java.util.List;
 
@@ -31,7 +32,6 @@ import edu.boun.edgecloudsim.task_generator.LoadGeneratorModel;
 import edu.boun.edgecloudsim.network.NetworkModel;
 import edu.boun.edgecloudsim.utils.TaskProperty;
 import edu.boun.edgecloudsim.utils.SimLogger;
-import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 
 public class SimManager extends SimEntity {
 	private static final int CREATE_TASK = 0;
@@ -207,6 +207,8 @@ public class SimManager extends SimEntity {
 		
 		//Creation of tasks are scheduled here!
 		for(int i=0; i< loadGeneratorModel.getTaskList().size(); i++)
+			//MobileHostEnergy host = ((MobileHostEnergy)getMobileServerManager().getDatacenter().getHostList().get(i));
+		//TODO NON GENERARE TASK DI PER MORTI
 			schedule(getId(), loadGeneratorModel.getTaskList().get(i).getStartTime(), CREATE_TASK, loadGeneratorModel.getTaskList().get(i));
 		
 		//Periodic event loops starts from here!

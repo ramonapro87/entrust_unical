@@ -118,11 +118,11 @@ public class SimManagerEnergy extends SimManager {
     	long size;
     	if (flag== SimUtils.TRANSMISSION) {
     		
-    		System.out.println("UPLOAD");
+//    		System.out.println("UPLOAD");
     		size = task.getCloudletFileSize();
     	}
     	else {
-    		System.out.println("DOWNLOAD");
+//    		System.out.println("DOWNLOAD");
     		size = task.getCloudletOutputSize();
     	}
     	    	

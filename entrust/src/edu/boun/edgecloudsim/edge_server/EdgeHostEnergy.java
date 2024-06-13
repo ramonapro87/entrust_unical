@@ -22,7 +22,7 @@ public class EdgeHostEnergy extends EdgeHost {
     public EdgeHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel em, Double bc) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
         energyModel = em;
-        batteryLevel = Math.round(Math.random() * 10000) / 100.0;
+        batteryLevel = 99.0;//Math.round(Math.random() * 10000) / 100.0;
         batteryCapacity = bc;
         isDead = false;
 

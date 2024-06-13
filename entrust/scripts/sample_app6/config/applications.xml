@@ -1,21 +1,21 @@
 <?xml version="1.0"?>
 <applications>
 	<application name="AUGMENTED_REALITY">
-		<usage_percentage>30</usage_percentage>
+		<usage_percentage>100</usage_percentage>
 		<prob_cloud_selection>20</prob_cloud_selection>
 		<poisson_interarrival>2</poisson_interarrival>
 		<delay_sensitivity>0</delay_sensitivity>
 		<active_period>40</active_period>
-		<idle_period>20</idle_period>
+		<idle_period>0</idle_period>
 		<data_upload>1500</data_upload>
 		<data_download>250</data_download>
-		<task_length>12000</task_length>
+		<task_length>1000</task_length>
 		<required_core>1</required_core>
 		<vm_utilization_on_edge>8</vm_utilization_on_edge>
 		<vm_utilization_on_cloud>0.8</vm_utilization_on_cloud>
 		<vm_utilization_on_mobile>20</vm_utilization_on_mobile>
 	</application>
-	<application name="HEALTH_APP">
+<!--	<application name="HEALTH_APP">
 		<usage_percentage>20</usage_percentage>
 		<prob_cloud_selection>20</prob_cloud_selection>
 		<poisson_interarrival>3</poisson_interarrival>
@@ -60,4 +60,6 @@
 		<vm_utilization_on_cloud>1</vm_utilization_on_cloud>
 		<vm_utilization_on_mobile>25</vm_utilization_on_mobile>
 	</application>
+	
+	-->
 </applications>
