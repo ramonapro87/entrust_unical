@@ -116,13 +116,12 @@ public class SimManagerEnergy extends SimManager {
     
     public void calculateNetConsume(Task task, int flag) {
     	long size;
-    	if (flag== SimUtils.TRANSMISSION) {
-    		
-    		System.out.println("UPLOAD");
+    	if (flag== SimUtils.TRANSMISSION) {    		
+//    		System.out.println("UPLOAD");
     		size = task.getCloudletFileSize();
     	}
     	else {
-    		System.out.println("DOWNLOAD");
+//    		System.out.println("DOWNLOAD");
     		size = task.getCloudletOutputSize();
     	}
     	    	

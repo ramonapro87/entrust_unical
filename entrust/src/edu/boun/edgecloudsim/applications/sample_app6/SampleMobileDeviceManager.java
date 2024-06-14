@@ -115,6 +115,9 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
 			else
 			{
 				SimLogger.getInstance().failedDueToBandwidth(task.getCloudletId(), CloudSim.clock(), NETWORK_DELAY_TYPES.WLAN_DELAY);
+				
+				System.err.println("fallimento per banda - task:"+task.getCloudletId()+" device:"+task.getMobileDeviceId());
+				
 			}
 		}
 		else if(task.getAssociatedDatacenterId() == SimSettings.MOBILE_DATACENTER_ID) {
@@ -269,6 +272,7 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
 		{
 			//SimLogger.printLine("Task #" + task.getCloudletId() + " cannot assign to any VM");
 			SimLogger.getInstance().rejectedDueToBandwidth(task.getCloudletId(), CloudSim.clock(), vmType.ordinal(), delayType);
+
 		}
 	}
 	
@@ -332,6 +336,7 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
 			SimLogger.printLine("Unknown nextHopId! Terminating simulation...");
 			System.exit(0);
 		}
+
 		
 		if(delay>0 || nextHopId == SimSettings.MOBILE_DATACENTER_ID){
 			
@@ -369,6 +374,8 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
 		{
 			//SimLogger.printLine("Task #" + task.getCloudletId() + " cannot assign to any VM");
 			SimLogger.getInstance().rejectedDueToBandwidth(task.getCloudletId(), CloudSim.clock(), vmType.ordinal(), delayType);
+			System.err.println("RIFIUTO per banda - task:"+task.getCloudletId()+" device:"+task.getMobileDeviceId());
+
 		}
 		
 		return task;

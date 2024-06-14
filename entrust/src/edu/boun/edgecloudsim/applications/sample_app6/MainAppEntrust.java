@@ -81,10 +81,12 @@ public class MainAppEntrust {
 		SimLogger.printLine("----------------------------------------------------------------------");
 		SimManagerEnergy manager = null;
 		for(int j=SS.getMinNumOfMobileDev(); j<=SS.getMaxNumOfMobileDev(); j+=SS.getMobileDevCounterSize())
-		{
+		{			
+			SS.generateMobileConfig(j); //Random setup of mobile devices
 			//End of orchestrators loop
 			for(int k=0; k<SS.getSimulationScenarios().length; k++)
 				for (int i = 0; i < SS.getOrchestratorPolicies().length; i++) {
+					
 					String simScenario = SS.getSimulationScenarios()[k];
 					String orchestratorPolicy = SS.getOrchestratorPolicies()[i];
 					Date ScenarioStartDate = Calendar.getInstance().getTime();
