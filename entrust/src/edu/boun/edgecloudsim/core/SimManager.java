@@ -208,11 +208,13 @@ public class SimManager extends SimEntity {
 
         //Creation of tasks are scheduled here!
         for (int i = 0; i < loadGeneratorModel.getTaskList().size(); i++) {
-
-            if (!listhostdead.edgeHostIsDead(hostCounter))
             schedule(getId(), loadGeneratorModel.getTaskList().get(i).getStartTime(), CREATE_TASK, loadGeneratorModel.getTaskList().get(i));
-            else
-                System.out.println("Host counter    " + hostCounter);
+
+            //if (!listhostdead.mobileHostIsDead(hostCounter)){
+            //                System.out.println("id: " + getId());
+            //            }
+            //            else
+            //                System.out.println("Host counter    " + hostCounter);
         }
         //Periodic event loops starts from here!
         schedule(getId(), 5, CHECK_ALL_VM);

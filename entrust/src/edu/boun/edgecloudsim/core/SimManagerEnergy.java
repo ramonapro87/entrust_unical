@@ -29,6 +29,7 @@ public class SimManagerEnergy extends SimManager {
     private static final int STOP_SIMULATION = 4;
 	List<Coordinates> coordinatesList= null;
 
+	private DeadHost deadHost;
 
     private DefaultEnergyComputingModel defaultEnergyComputingModel;
     private ScenarioFactoryEnergy scenarioFactoryEnergy;
@@ -40,12 +41,14 @@ public class SimManagerEnergy extends SimManager {
 
 
 
+
     public SimManagerEnergy(ScenarioFactoryEnergy _scenarioFactory, int _numOfMobileDevice, String _simScenario, String _orchestratorPolicy) throws Exception {
         super(_scenarioFactory, _numOfMobileDevice, _simScenario, _orchestratorPolicy);
         scenarioFactoryEnergy = _scenarioFactory;
         defaultEnergyComputingModel = scenarioFactoryEnergy.getDefaultEnergyComputerModel();
         defaultEnergyComputingModel.initialize();
 		this.iDiagrams = new ChartGenerator();
+		this.deadHost = DeadHost.getInstance();
     }
 
     @Override
@@ -64,6 +67,15 @@ public class SimManagerEnergy extends SimManager {
      */
     @Override
     public void processEvent(SimEvent ev) {
+
+		if(ev.getData() != null){
+			Integer mobileId = ((TaskProperty) ev.getData()).getMobileDeviceId();
+			if(deadHost.mobileHostIsDead(mobileId)){
+				System.out.println("Mobile host is dead");
+				return;
+			}
+		}
+
         synchronized (this) {
         	double momentOfInterest = CloudSim.clock();
             switch (ev.getTag()) {
