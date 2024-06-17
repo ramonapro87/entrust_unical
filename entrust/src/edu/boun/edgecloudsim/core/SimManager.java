@@ -191,13 +191,8 @@ public class SimManager extends SimEntity {
                  * getVMList accept the host id and return the list of VMs
                  * we control the host id is dead or not
                  * */
-                if (true) {
-                    if (!listhostdead.edgeHostIsDead(hostCounter))
-                        mobileDeviceManager.submitVmList(edgeServerManager.getVmList(hostCounter));
-                    else System.out.println("Host " + hostCounter + " is dead");
-                } else {
+
                     mobileDeviceManager.submitVmList(edgeServerManager.getVmList(hostCounter));
-                }
                 hostCounter++;
             }
         }
@@ -212,10 +207,13 @@ public class SimManager extends SimEntity {
         }
 
         //Creation of tasks are scheduled here!
-        for (int i = 0; i < loadGeneratorModel.getTaskList().size(); i++)
+        for (int i = 0; i < loadGeneratorModel.getTaskList().size(); i++) {
 
+            if (!listhostdead.edgeHostIsDead(hostCounter))
             schedule(getId(), loadGeneratorModel.getTaskList().get(i).getStartTime(), CREATE_TASK, loadGeneratorModel.getTaskList().get(i));
-
+            else
+                System.out.println("Host counter    " + hostCounter);
+        }
         //Periodic event loops starts from here!
         schedule(getId(), 5, CHECK_ALL_VM);
         schedule(getId(), SimSettings.getInstance().getSimulationTime() / 100, PRINT_PROGRESS);
