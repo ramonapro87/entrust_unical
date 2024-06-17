@@ -80,6 +80,8 @@ public class SimSettings {
 	private int BANDWITH_MAN; //Mbps unit in properties file
 	private int BANDWITH_WAN; //Mbps unit in properties file
 	private int BANDWITH_GSM; //Mbps unit in properties file
+	
+	private int NET_STABILITY; // 0-100 chance to have delay 0 and failure due to bandwidth
 
 	private int NUM_OF_HOST_ON_CLOUD_DATACENTER;
 	private int NUM_OF_VM_ON_CLOUD_HOST;
@@ -212,6 +214,9 @@ public class SimSettings {
 			BANDWITH_MAN = 1000 * Integer.parseInt(prop.getProperty("man_bandwidth", "0"));
 			BANDWITH_WAN = 1000 * Integer.parseInt(prop.getProperty("wan_bandwidth", "0"));
 			BANDWITH_GSM =  1000 * Integer.parseInt(prop.getProperty("gsm_bandwidth", "0"));
+			
+			NET_STABILITY =  Integer.parseInt(prop.getProperty("net_stability", "100"));
+
 
 			NUM_OF_HOST_ON_CLOUD_DATACENTER = Integer.parseInt(prop.getProperty("number_of_host_on_cloud_datacenter"));
 			NUM_OF_VM_ON_CLOUD_HOST = Integer.parseInt(prop.getProperty("number_of_vm_on_cloud_host"));
@@ -911,6 +916,12 @@ public class SimSettings {
 	
 	public MobileProperties[] getMp() {
 		return mp;
+	}
+
+	public boolean isNetworkDown() {
+		if (SimUtils.getRandomNumber(1, 100)>NET_STABILITY)
+			return true;
+		return false;					
 	}
 
 }
