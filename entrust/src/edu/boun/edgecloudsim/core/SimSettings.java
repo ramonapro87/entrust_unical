@@ -27,7 +27,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import edu.boun.edgecloudsim.utils.MobileProperties;
 import edu.boun.edgecloudsim.utils.SimLogger;
+import edu.boun.edgecloudsim.utils.SimUtils;
 
 public class SimSettings {
 
@@ -78,6 +80,8 @@ public class SimSettings {
 	private int BANDWITH_MAN; //Mbps unit in properties file
 	private int BANDWITH_WAN; //Mbps unit in properties file
 	private int BANDWITH_GSM; //Mbps unit in properties file
+	
+	private int NET_STABILITY; // 0-100 chance to have delay 0 and failure due to bandwidth
 
 	private int NUM_OF_HOST_ON_CLOUD_DATACENTER;
 	private int NUM_OF_VM_ON_CLOUD_HOST;
@@ -86,10 +90,17 @@ public class SimSettings {
 	private int RAM_FOR_CLOUD_VM; //MB
 	private int STORAGE_FOR_CLOUD_VM; //Byte
 
-	private int CORE_FOR_VM;
-	private int MIPS_FOR_VM; //MIPS
-	private int RAM_FOR_VM; //MB
-	private int STORAGE_FOR_VM; //Byte
+	private int MIN_CORE_FOR_VM;
+	private int MIN_MIPS_FOR_VM; //MIPS
+	private int MIN_RAM_FOR_VM; //MB
+	private int MIN_STORAGE_FOR_VM; //Byte
+	
+    private MobileProperties[] mp;
+	
+	private int MAX_CORE_FOR_VM;
+	private int MAX_MIPS_FOR_VM; //MIPS
+	private int MAX_RAM_FOR_VM; //MB
+	private int MAX_STORAGE_FOR_VM; //Byte
 
 	private String[] SIMULATION_SCENARIOS;
 	private String[] ORCHESTRATOR_POLICIES;
@@ -203,6 +214,9 @@ public class SimSettings {
 			BANDWITH_MAN = 1000 * Integer.parseInt(prop.getProperty("man_bandwidth", "0"));
 			BANDWITH_WAN = 1000 * Integer.parseInt(prop.getProperty("wan_bandwidth", "0"));
 			BANDWITH_GSM =  1000 * Integer.parseInt(prop.getProperty("gsm_bandwidth", "0"));
+			
+			NET_STABILITY =  Integer.parseInt(prop.getProperty("net_stability", "100"));
+
 
 			NUM_OF_HOST_ON_CLOUD_DATACENTER = Integer.parseInt(prop.getProperty("number_of_host_on_cloud_datacenter"));
 			NUM_OF_VM_ON_CLOUD_HOST = Integer.parseInt(prop.getProperty("number_of_vm_on_cloud_host"));
@@ -211,11 +225,16 @@ public class SimSettings {
 			RAM_FOR_CLOUD_VM = Integer.parseInt(prop.getProperty("ram_for_cloud_vm"));
 			STORAGE_FOR_CLOUD_VM = Integer.parseInt(prop.getProperty("storage_for_cloud_vm"));
 
-			RAM_FOR_VM = Integer.parseInt(prop.getProperty("ram_for_mobile_vm"));
-			CORE_FOR_VM = Integer.parseInt(prop.getProperty("core_for_mobile_vm"));
-			MIPS_FOR_VM = Integer.parseInt(prop.getProperty("mips_for_mobile_vm"));
-			STORAGE_FOR_VM = Integer.parseInt(prop.getProperty("storage_for_mobile_vm"));
+			//mobile devices new properties
+			MIN_RAM_FOR_VM = Integer.parseInt(prop.getProperty("min_ram_for_mobile_vm"));
+			MIN_CORE_FOR_VM = Integer.parseInt(prop.getProperty("min_core_for_mobile_vm"));
+			MIN_MIPS_FOR_VM = Integer.parseInt(prop.getProperty("min_mips_for_mobile_vm"));
+			MIN_STORAGE_FOR_VM = Integer.parseInt(prop.getProperty("min_storage_for_mobile_vm"));
 
+			MAX_RAM_FOR_VM = Integer.parseInt(prop.getProperty("max_ram_for_mobile_vm"));
+			MAX_CORE_FOR_VM = Integer.parseInt(prop.getProperty("max_core_for_mobile_vm"));
+			MAX_MIPS_FOR_VM = Integer.parseInt(prop.getProperty("max_mips_for_mobile_vm"));
+			MAX_STORAGE_FOR_VM = Integer.parseInt(prop.getProperty("max_storage_for_mobile_vm"));		
 			
 			
 			
@@ -570,7 +589,7 @@ public class SimSettings {
 	 */
 	public int getRamForMobileVM()
 	{
-		return RAM_FOR_VM;
+		return SimUtils.getRandomNumber(MIN_RAM_FOR_VM, MAX_RAM_FOR_VM);
 	}
 
 	/**
@@ -578,7 +597,7 @@ public class SimSettings {
 	 */
 	public int getCoreForMobileVM()
 	{
-		return CORE_FOR_VM;
+		return SimUtils.getRandomNumber(MIN_CORE_FOR_VM, MAX_CORE_FOR_VM);
 	}
 
 	/**
@@ -586,7 +605,7 @@ public class SimSettings {
 	 */
 	public int getMipsForMobileVM()
 	{
-		return MIPS_FOR_VM;
+		return SimUtils.getRandomNumber(MIN_MIPS_FOR_VM, MAX_MIPS_FOR_VM);
 	}
 
 	/**
@@ -594,7 +613,7 @@ public class SimSettings {
 	 */
 	public int getStorageForMobileVM()
 	{
-		return STORAGE_FOR_VM;
+		return SimUtils.getRandomNumber(MIN_STORAGE_FOR_VM, MAX_STORAGE_FOR_VM);
 	}
 
 	/**
@@ -879,6 +898,30 @@ public class SimSettings {
 
 	public double getManDelay() {
 		return MAN_DELAY;
+	}
+	
+    public void generateMobileConfig(int numOfMobileDevices) {
+    	mp = new MobileProperties[numOfMobileDevices];
+    	for (int i = 0; i < mp.length; i++) {
+    		mp[i] = new MobileProperties(
+    	    		SimSettings.getInstance().getRamForMobileVM(),
+    				SimSettings.getInstance().getCoreForMobileVM(),
+    				SimSettings.getInstance().getStorageForMobileVM(),
+    				SimSettings.getInstance().getMipsForMobileVM()    	    					    		
+    				);
+//    		System.err.println(i+" -------------- "+mp[i]);		
+		}
+	
+    }
+	
+	public MobileProperties[] getMp() {
+		return mp;
+	}
+
+	public boolean isNetworkDown() {
+		if (SimUtils.getRandomNumber(1, 100)>NET_STABILITY)
+			return true;
+		return false;					
 	}
 
 }

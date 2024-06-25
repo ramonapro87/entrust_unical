@@ -19,7 +19,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.*;
-import edu.boun.edgecloudsim.edge_server.EdgeHostEnergy;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import org.cloudbus.cloudsim.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.Datacenter;
@@ -81,12 +80,11 @@ public class SampleMobileServerManager extends MobileServerManager {
         //Note that each mobile device has one host with one VM!
         for (int i = 0; i < numOfMobileDevices; i++) {
             vmList.add(i, new ArrayList<MobileVM>());
-
-            String vmm = "Xen";
-            int numOfCores = SimSettings.getInstance().getCoreForMobileVM();
-            double mips = SimSettings.getInstance().getMipsForMobileVM();
-            int ram = SimSettings.getInstance().getRamForMobileVM();
-            long storage = SimSettings.getInstance().getStorageForMobileVM();
+            String vmm = "Xen";                       
+            int numOfCores =SimSettings.getInstance().getMp()[i].getCores();// SimSettings.getInstance().getCoreForMobileVM();
+            double mips = SimSettings.getInstance().getMp()[i].getMips();// SimSettings.getInstance().getMipsForMobileVM();
+            int ram =SimSettings.getInstance().getMp()[i].getRam();// SimSettings.getInstance().getRamForMobileVM();
+            long storage =SimSettings.getInstance().getMp()[i].getStorage();// SimSettings.getInstance().getStorageForMobileVM();
             long bandwidth = 0;
             //TODO inserire qui dati energia?
 
@@ -166,11 +164,10 @@ public class SampleMobileServerManager extends MobileServerManager {
         DefaultEnergyComputingModel energyModel = new DefaultEnergyComputingModel(numOfMobileDevices, maxActiveConsumption, idleConsumption);
 
         for (int i = 0; i < numOfMobileDevices; i++) {
-
-            int numOfCores = SimSettings.getInstance().getCoreForMobileVM();
-            double mips = SimSettings.getInstance().getMipsForMobileVM();
-            int ram = SimSettings.getInstance().getRamForMobileVM();
-            long storage = SimSettings.getInstance().getStorageForMobileVM();
+            int numOfCores = SimSettings.getInstance().getMp()[i].getCores();//SimSettings.getInstance().getCoreForMobileVM();
+            double mips =SimSettings.getInstance().getMp()[i].getMips();// SimSettings.getInstance().getMipsForMobileVM();
+            int ram =SimSettings.getInstance().getMp()[i].getRam();// SimSettings.getInstance().getRamForMobileVM();
+            long storage =SimSettings.getInstance().getMp()[i].getStorage();// SimSettings.getInstance().getStorageForMobileVM();
             long bandwidth = 0;
 
 
@@ -216,7 +213,7 @@ public class SampleMobileServerManager extends MobileServerManager {
                 ((MobileHostEnergy) host).updateStatus();
                 if (!((MobileHostEnergy) host).isDead()) {
                     double ec = ((MobileHostEnergy) host).energyConsumption(momentOfInterest);
-//					System.out.println("energia consumata: " + ec + " - host ID[" + host.getId() + "] momentOfInterest: " + momentOfInterest);
+					System.out.println("energia consumata: " + ec + " - host ID[" + host.getId() + "] momentOfInterest: " + momentOfInterest);
                     ec += energyMobileConsumed.get();
                     energyMobileConsumed.set(ec);
                     mapHostEnergyConsumed.put(host.getId(), "ENERGY CONSUMED HOST_ID[" + host.getId() + "] energy: " + ec );
@@ -233,4 +230,8 @@ public class SampleMobileServerManager extends MobileServerManager {
         System.out.println(" \n ");
         return energyMobileConsumed.get();
     }
+    
+
+    
+    
 }
