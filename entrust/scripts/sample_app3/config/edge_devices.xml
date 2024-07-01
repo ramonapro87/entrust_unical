@@ -5,6 +5,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>1</x_pos>
 			<y_pos>1</y_pos>
@@ -75,6 +77,8 @@
 		<costPerSec>3.0</costPerSec>
 		<costPerMem>0.05</costPerMem>
 		<costPerStorage>0.1</costPerStorage>
+		<idleConsumption>100</idleConsumption>
+		<maxConsumption>150</maxConsumption>
 		<location>
 			<x_pos>2</x_pos>
 			<y_pos>2</y_pos>
@@ -140,6 +144,8 @@
 			</host>
 		</hosts>
 	</datacenter>
+	<!-- 
+	
 	<datacenter arch="x86" os="Linux" vmm="Xen">
 		<costPerBw>0.1</costPerBw>
 		<costPerSec>3.0</costPerSec>
@@ -980,4 +986,5 @@
 			</host>
 		</hosts>
 	</datacenter>
+	-->
 </edge_devices>

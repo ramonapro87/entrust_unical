@@ -213,7 +213,7 @@ public class SampleMobileServerManager extends MobileServerManager {
                 ((MobileHostEnergy) host).updateStatus();
                 if (!((MobileHostEnergy) host).isDead()) {
                     double ec = ((MobileHostEnergy) host).energyConsumption(momentOfInterest);
-					System.out.println("energia consumata: " + ec + " - host ID[" + host.getId() + "] momentOfInterest: " + momentOfInterest);
+//					System.out.println("energia consumata: " + ec + " - host ID[" + host.getId() + "] momentOfInterest: " + momentOfInterest);
                     ec += energyMobileConsumed.get();
                     energyMobileConsumed.set(ec);
                     mapHostEnergyConsumed.put(host.getId(), "ENERGY CONSUMED HOST_ID[" + host.getId() + "] energy: " + ec );
@@ -223,11 +223,11 @@ public class SampleMobileServerManager extends MobileServerManager {
                 }
             }
         });
-        System.out.println("------------------------------------------- \n MOBILE_HOST , Moment Of Interest: " + momentOfInterest );
-        mapHostEnergyConsumed.forEach((k,v) -> System.out.println("  " + v));
-        mapHostDied.forEach((k,v) -> System.out.println("  " + v));
-        System.out.println("_________________________________________________________");
-        System.out.println(" \n ");
+//        System.out.println("------------------------------------------- \n MOBILE_HOST , Moment Of Interest: " + momentOfInterest );
+//        mapHostEnergyConsumed.forEach((k,v) -> System.out.println("  " + v));
+        mapHostDied.forEach((k,v) -> System.out.println("  " + v +" , Moment Of Interest: " + momentOfInterest));
+//        System.out.println("_________________________________________________________");
+//        System.out.println(" \n ");
         return energyMobileConsumed.get();
     }
     

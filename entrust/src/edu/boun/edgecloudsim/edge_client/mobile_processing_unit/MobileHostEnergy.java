@@ -25,7 +25,7 @@ public class MobileHostEnergy extends MobileHost {
     public MobileHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel _energyModel, Double _batteryCapacity) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
         energyModel = _energyModel;
-        batteryLevel = Math.round(Math.random() * 10000) / 100.0;
+        batteryLevel = 500.0; // Math.round(Math.random() * 10000) / 100.0;
        // batteriainziale = 0 + batteryLevel;
         batteryCapacity = _batteryCapacity;
         isDead = false;
