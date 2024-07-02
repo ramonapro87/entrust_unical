@@ -1,7 +1,10 @@
 package edu.boun.edgecloudsim.edge_server;
 
+import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import edu.boun.edgecloudsim.utils.DeadHost;
+import edu.boun.edgecloudsim.utils.SimUtils;
+
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmScheduler;
@@ -27,7 +30,7 @@ public class EdgeHostEnergy extends EdgeHost {
     public EdgeHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel em, Double bc) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
         energyModel = em;
-        batteryLevel = 5000.0; //Math.round(Math.random() * 10000) / 100.0;
+        batteryLevel = SimUtils.getRandomDoubleNumber(SimSettings.getInstance().getMIN_BATT_PERC(), 100.0);
         batteryCapacity = bc;
         isDead = false;
         deadlisthost = DeadHost.getInstance();
@@ -103,6 +106,9 @@ public class EdgeHostEnergy extends EdgeHost {
     }
 
     public Double updateBatteryLevel() {
+    	
+//    	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel);
+
         Double percentageConsumed = energyAllVM > 0
                 ? energyAllVM / batteryCapacity
                 : 0.0;
@@ -111,8 +117,12 @@ public class EdgeHostEnergy extends EdgeHost {
                 : 0.0;
         //System.out.println("livello batteria HOST"+ batteryLevel +  "...." +this.getId());
         if (batteryLevel.equals(0.0)) {
+        	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel+" energy consumed: "+percentageConsumed);
             setDeath(true, CloudSim.clock());
         }
+        
+//    	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel+" energy consumed: "+percentageConsumed);
+
         energyModel.setBatteryCapacity(batteryLevel);
         return batteryLevel;
     }

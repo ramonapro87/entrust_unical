@@ -1,7 +1,10 @@
 package edu.boun.edgecloudsim.edge_client.mobile_processing_unit;
 
+import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
 import edu.boun.edgecloudsim.utils.DeadHost;
+import edu.boun.edgecloudsim.utils.SimUtils;
+
 import org.cloudbus.cloudsim.Pe;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmScheduler;
@@ -25,8 +28,9 @@ public class MobileHostEnergy extends MobileHost {
     public MobileHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel _energyModel, Double _batteryCapacity) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
         energyModel = _energyModel;
-        batteryLevel = 500.0; // Math.round(Math.random() * 10000) / 100.0;
-       // batteriainziale = 0 + batteryLevel;
+//        batteryLevel = 500.0; // Math.round(Math.random() * 10000) / 100.0;
+        batteryLevel = SimUtils.getRandomDoubleNumber(SimSettings.getInstance().getMIN_BATT_PERC(), 100.0);
+
         batteryCapacity = _batteryCapacity;
         isDead = false;
          deadlisthost = DeadHost.getInstance();
@@ -85,6 +89,8 @@ public class MobileHostEnergy extends MobileHost {
      * and the battery level is set to 0
      */
     public Double updateBatteryLevel() {
+    	
+
         Double percentageConsumed = energyAllVM > 0
                                                 ? energyAllVM / batteryCapacity
                                                 : 0.0;
@@ -93,11 +99,15 @@ public class MobileHostEnergy extends MobileHost {
                                     : 0.0;
 
         if(batteryLevel.equals(0.0)){
+        	System.err.println("mobile host ["+this.getId()+"] battery"+batteryLevel+" energy consumed: "+percentageConsumed);
+
             setDeath(true, CloudSim.clock());
             //aggiungo alla lista di dispositivi morti
             deadlisthost.addMobileHost(getId());
         }
         energyModel.setBatteryCapacity(batteryLevel);
+    	
+
         return batteryLevel;
     }
 

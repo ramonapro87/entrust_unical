@@ -164,14 +164,14 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 						mapHostEnergyConsumed.put(host.getId(), "ENERGY CONSUMED HOST_ID[" + host.getId() + "] "+ " battery: " + ((EdgeHostEnergy) host).getBatteryLevel()+ " energy: " + ec);
 					}
 				else{
-					mapHostDied.put(host.getId(), "DEAD HOST_ID[" + host.getId() + "]");
+					mapHostDied.put(host.getId(), "DEAD HOST_ID EDGE[" + host.getId() + "]");
 					}
 				}
 			});
 		});
 //		System.out.println("------------------------------------------- \n EDGE_HOST , Moment Of Interest: " + momentOfInterest );
 //		mapHostEnergyConsumed.forEach((k,v) -> System.out.println("  " + v));
-		mapHostDied.forEach((k,v) -> System.out.println("  " + v +" , Moment Of Interest: " + momentOfInterest));
+//		mapHostDied.forEach((k,v) -> System.out.println("  " + v +" , Moment Of Interest: " + momentOfInterest));
 //		System.out.println("_________________________________________________________");
 //		System.out.println(" \n ");
 		return energyEdgeConsumed.get();

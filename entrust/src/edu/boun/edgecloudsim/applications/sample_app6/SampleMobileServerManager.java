@@ -219,13 +219,13 @@ public class SampleMobileServerManager extends MobileServerManager {
                     mapHostEnergyConsumed.put(host.getId(), "ENERGY CONSUMED HOST_ID[" + host.getId() + "] energy: " + ec );
                 } else {
                     if (!mapHostDied.containsKey(host.getId()))
-                        mapHostDied.put(host.getId(), "DEAD Host_ID[" + host.getId() + "]");
+                        mapHostDied.put(host.getId(), "DEAD Host_ID MOBILE[" + host.getId() + "]");
                 }
             }
         });
 //        System.out.println("------------------------------------------- \n MOBILE_HOST , Moment Of Interest: " + momentOfInterest );
 //        mapHostEnergyConsumed.forEach((k,v) -> System.out.println("  " + v));
-        mapHostDied.forEach((k,v) -> System.out.println("  " + v +" , Moment Of Interest: " + momentOfInterest));
+//        mapHostDied.forEach((k,v) -> System.out.println("  " + v +" , Moment Of Interest: " + momentOfInterest));
 //        System.out.println("_________________________________________________________");
 //        System.out.println(" \n ");
         return energyMobileConsumed.get();
