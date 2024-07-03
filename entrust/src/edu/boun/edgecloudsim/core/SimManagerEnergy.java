@@ -34,6 +34,7 @@ public class SimManagerEnergy extends SimManager {
     private DefaultEnergyComputingModel defaultEnergyComputingModel;
     private ScenarioFactoryEnergy scenarioFactoryEnergy;
     public boolean detailHostEenergy = false;
+	int failedtask=0;
 
 
 	private IDiagrams iDiagrams;
@@ -72,6 +73,7 @@ public class SimManagerEnergy extends SimManager {
 			Integer mobileId = ((TaskProperty) ev.getData()).getMobileDeviceId();
 			if(deadHost.mobileHostIsDead(mobileId)){
 				System.out.println("Mobile host is dead");
+
 				return;
 			}
 		}
@@ -121,6 +123,7 @@ public class SimManagerEnergy extends SimManager {
                     super.processEvent(ev);
                     break;
             }
+
         }
     }
     
