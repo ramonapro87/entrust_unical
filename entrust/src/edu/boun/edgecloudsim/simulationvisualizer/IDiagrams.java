@@ -44,7 +44,7 @@ public interface IDiagrams {
 
 
     default boolean chartDisable() {
-        return false;
+        return true;
     }
 
 
