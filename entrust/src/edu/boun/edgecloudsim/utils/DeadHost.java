@@ -39,12 +39,24 @@ public class DeadHost {
         }
     }
 
+    public void stampa() {
+        System.out.print(" HOST MOBILE ID DIED :");
+        for (Integer element : mobileHost) {
+            System.out.print(element + "" + ",");
+        }
+        System.out.println("");
+        System.out.print(" HOST EDGE ID DIED :");
+        for (Integer element : edgeHost) {
+            System.out.print(element + "" + ",");
+        }
+    }
 
-    public boolean mobileHostIsDead(int hostId){
+
+    public boolean mobileHostIsDead(int hostId) {
         return mobileHost.contains(hostId);
     }
 
-    public boolean edgeHostIsDead(int hostId){
+    public boolean edgeHostIsDead(int hostId) {
         return edgeHost.contains(hostId);
     }
 
@@ -60,11 +72,11 @@ public class DeadHost {
         this.edgeHost = edgeHost;
     }
 
-    public int getMobileHostSize(){
+    public int getMobileHostSize() {
         return mobileHost.size();
     }
 
-    public int getEdgeHostSize(){
+    public int getEdgeHostSize() {
         return edgeHost.size();
     }
 }

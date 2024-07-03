@@ -56,6 +56,7 @@ public class MobileHostEnergy extends MobileHost {
 
         if (getEnergyModel().isBatteryPowered() && getEnergyModel().getBatteryLevelWattHour() <= 0) {
             setDeath(true, CloudSim.clock());//FIXME non so se è corretto il clock
+
             //  System.out.println("SONO MORTO NON POSSO FARE NULLA");
         }
     }
@@ -63,6 +64,7 @@ public class MobileHostEnergy extends MobileHost {
     protected void setDeath(Boolean dead, double time) {
         isDead = dead;
         deathTime = time;
+
     }
 
 

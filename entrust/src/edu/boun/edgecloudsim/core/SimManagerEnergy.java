@@ -72,8 +72,8 @@ public class SimManagerEnergy extends SimManager {
 		if(ev.getData() != null){
 			Integer mobileId = ((TaskProperty) ev.getData()).getMobileDeviceId();
 			if(deadHost.mobileHostIsDead(mobileId)){
-				System.out.println("Mobile host is dead");
-
+			//	System.out.println("Mobile host " + "" + mobileId + "" + " is dead");
+					failedtask++;
 				return;
 			}
 		}
@@ -125,6 +125,7 @@ public class SimManagerEnergy extends SimManager {
             }
 
         }
+
     }
     
     
@@ -206,6 +207,8 @@ public class SimManagerEnergy extends SimManager {
     
 
 	public void createDiagram(String scenarioName, String orchestretorPolicy) {
+		System.out.println(" TASK FALLITI PER DEVICE MORTI  " +  "" + failedtask);
+         deadHost.stampa();
 		iDiagrams.generateEnergyCharts(coordinatesList, scenarioName, orchestretorPolicy);
 		iDiagrams.generateMapChart(coordinatesList, scenarioName, orchestretorPolicy);
 	}
