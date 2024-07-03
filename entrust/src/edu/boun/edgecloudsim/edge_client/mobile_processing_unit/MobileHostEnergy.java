@@ -30,7 +30,7 @@ public class MobileHostEnergy extends MobileHost {
         energyModel = _energyModel;
 //        batteryLevel = 500.0; // Math.round(Math.random() * 10000) / 100.0;
         batteryLevel = SimUtils.getRandomDoubleNumber(SimSettings.getInstance().getMIN_BATT_PERC(), 100.0);
-
+        System.out.println("BATTERY LEVEL: "+batteryLevel);
         batteryCapacity = _batteryCapacity;
         isDead = false;
          deadlisthost = DeadHost.getInstance();
