@@ -10,7 +10,7 @@ public interface IDiagrams {
 
     default void generateEnergyCharts(List<Coordinates> coordinates, String scenarioName, String orchestretorPolicy) {
 
-        if(chartDisable())
+    if(chartDisable())
             return;
 
         Map<Integer, List<Coordinates>> coordinatesById = coordinates.stream()
@@ -44,7 +44,7 @@ public interface IDiagrams {
 
 
     default boolean chartDisable() {
-        return true;
+        return false;
     }
 
 
