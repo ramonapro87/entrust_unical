@@ -30,7 +30,7 @@ public class EdgeHostEnergy extends EdgeHost {
     public EdgeHostEnergy(int id, RamProvisioner ramProvisioner, BwProvisioner bwProvisioner, long storage, List<? extends Pe> peList, VmScheduler vmScheduler, DefaultEnergyComputingModel em, Double bc) {
         super(id, ramProvisioner, bwProvisioner, storage, peList, vmScheduler);
         energyModel = em;
-        batteryLevel = SimUtils.getRandomDoubleNumber(SimSettings.getInstance().getMIN_BATT_PERC(), 100.0);
+        batteryLevel = SimUtils.getRandomDoubleNumber(SimSettings.getInstance().getMIN_BATT_PERC(), SimSettings.getInstance().getMAX_BATT_PERC());
         batteryCapacity = bc;
         isDead = false;
         deadlisthost = DeadHost.getInstance();
@@ -96,7 +96,7 @@ public class EdgeHostEnergy extends EdgeHost {
     }
 
 
-    public void updateStatus() {
+    public void updateStatus() { //FIXME UNUSED
         if (isDead()) return;
 
         getEnergyModel().updateStaticEnergyConsumption();
@@ -107,7 +107,7 @@ public class EdgeHostEnergy extends EdgeHost {
 
     public Double updateBatteryLevel() {
     	
-//    	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel);
+    	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel);
 
         Double percentageConsumed = energyAllVM > 0
                 ? energyAllVM / batteryCapacity

@@ -122,6 +122,8 @@ public class SimSettings {
 	//variabili energia device	
 	private boolean BATTERY;
 	private double MIN_BATT_PERC;
+	private double MAX_BATT_PERC = 100;
+
 	private double BATTERYCAPACITY;
 	private double INITIALBATTERYLEVEL;
 	
@@ -248,6 +250,8 @@ public class SimSettings {
 			//energy device						
 			BATTERY = Boolean.parseBoolean(prop.getProperty("battery"));
 			MIN_BATT_PERC = Double.parseDouble(prop.getProperty("min_percentage"));
+			MAX_BATT_PERC = Double.parseDouble(prop.getProperty("max_percentage"));
+
 			BATTERYCAPACITY = Double.parseDouble(prop.getProperty("batteryCapacity"));
 			INITIALBATTERYLEVEL = Double.parseDouble(prop.getProperty("initialBatteryLevel"));
 			
@@ -924,4 +928,11 @@ public class SimSettings {
 		return false;					
 	}
 
+	public double getMAX_BATT_PERC() {
+		return MAX_BATT_PERC;
+	}
+
+
 }
+
+

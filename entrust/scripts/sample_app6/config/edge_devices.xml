@@ -146,7 +146,7 @@
 			</host>
 		</hosts>
 	</datacenter>
-			<!--
+	
 	<datacenter arch="x86" os="Linux" vmm="Xen">
 		<costPerBw>0.1</costPerBw>
 		<costPerSec>3.0</costPerSec>
@@ -220,6 +220,7 @@
 		</hosts>
 	</datacenter>
 	
+			<!--
 
 	<datacenter arch="x86" os="Linux" vmm="Xen">
 		<costPerBw>0.1</costPerBw>
