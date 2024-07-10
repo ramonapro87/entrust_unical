@@ -35,6 +35,8 @@ public class SimManagerEnergy extends SimManager {
     private ScenarioFactoryEnergy scenarioFactoryEnergy;
     public boolean detailHostEenergy = false;
 	int failedtask=0;
+	int totalTaskRequest = 0;
+	int totalTaskRequestProcessed = 0;
 
 
 	private IDiagrams iDiagrams;
@@ -68,11 +70,13 @@ public class SimManagerEnergy extends SimManager {
      */
     @Override
     public void processEvent(SimEvent ev) {
-
+        if(true)
 		if(ev.getData() != null){
+			if(ev.getTag() == 0)
+				totalTaskRequest++;
+
 			Integer mobileId = ((TaskProperty) ev.getData()).getMobileDeviceId();
 			if(deadHost.mobileHostIsDead(mobileId)){
-			//	System.out.println("Mobile host " + "" + mobileId + "" + " is dead");
 					failedtask++;
 				return;
 			}
@@ -109,6 +113,7 @@ public class SimManagerEnergy extends SimManager {
                     break;
     			case CREATE_TASK:
     				try {
+						totalTaskRequestProcessed++;
     					TaskProperty edgeTask = (TaskProperty) ev.getData();
     					Task task = ((SampleMobileDeviceManager)super.getMobileDeviceManager()).submitTaskEnergy(edgeTask);
     					calculateNetConsume(task,SimUtils.TRANSMISSION);
@@ -207,7 +212,9 @@ public class SimManagerEnergy extends SimManager {
     
 
 	public void createDiagram(String scenarioName, String orchestretorPolicy) {
-		System.out.println(" TASK FALLITI PER DEVICE MORTI  " +  "" + failedtask);
+		System.out.println(" ------------------------------------------------------------> request task total  "+ totalTaskRequest);
+		System.out.println(" ------------------------------------------------------------> request task blocked 4 host death  "+ failedtask);
+		System.out.println(" ------------------------------------------------------------> request task processed 4   "+ totalTaskRequestProcessed);
          deadHost.stampa();
 		iDiagrams.generateEnergyCharts(coordinatesList, scenarioName, orchestretorPolicy);
 		iDiagrams.generateMapChart(coordinatesList, scenarioName, orchestretorPolicy);
