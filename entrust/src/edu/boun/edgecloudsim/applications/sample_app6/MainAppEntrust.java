@@ -145,15 +145,8 @@ public class MainAppEntrust {
 
 
 
-
-
-
 			}//End of scenarios loop
 		}//End of mobile devices loop
-
-
-
-
 
 
 		Date SimulationEndDate = Calendar.getInstance().getTime();

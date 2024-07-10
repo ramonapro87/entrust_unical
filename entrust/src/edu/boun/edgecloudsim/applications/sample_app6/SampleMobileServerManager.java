@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.*;
 import edu.boun.edgecloudsim.energy.DefaultEnergyComputingModel;
+import edu.boun.edgecloudsim.utils.SimLogger;
 import org.cloudbus.cloudsim.CloudletSchedulerTimeShared;
 import org.cloudbus.cloudsim.Datacenter;
 import org.cloudbus.cloudsim.DatacenterCharacteristics;
@@ -212,6 +213,7 @@ public class SampleMobileServerManager extends MobileServerManager {
             if (host instanceof MobileHostEnergy) {
                 ((MobileHostEnergy) host).updateStatus();
                 if (!((MobileHostEnergy) host).isDead()) {
+                    //SimLogger.getInstance().failedDueToDeviceDeath(host.getId(), momentOfInterest); //todo Ramona Logger Death Host
                     double ec = ((MobileHostEnergy) host).energyConsumption(momentOfInterest);
 //					System.out.println("energia consumata: " + ec + " - host ID[" + host.getId() + "] momentOfInterest: " + momentOfInterest);
                     ec += energyMobileConsumed.get();

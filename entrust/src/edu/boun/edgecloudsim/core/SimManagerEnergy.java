@@ -34,7 +34,7 @@ public class SimManagerEnergy extends SimManager {
     private DefaultEnergyComputingModel defaultEnergyComputingModel;
     private ScenarioFactoryEnergy scenarioFactoryEnergy;
     public boolean detailHostEenergy = false;
-	int failedtask=0;
+
 
 
 	private IDiagrams iDiagrams;
@@ -70,10 +70,11 @@ public class SimManagerEnergy extends SimManager {
     public void processEvent(SimEvent ev) {
 
 		if(ev.getData() != null){
+			//Task task = (Task) ev.getData();
 			Integer mobileId = ((TaskProperty) ev.getData()).getMobileDeviceId();
 			if(deadHost.mobileHostIsDead(mobileId)){
 			//	System.out.println("Mobile host " + "" + mobileId + "" + " is dead");
-					failedtask++;
+				SimLogger.getInstance().failedDueToDeviceDeath(mobileId, CloudSim.clock());
 				return;
 			}
 		}
@@ -207,7 +208,7 @@ public class SimManagerEnergy extends SimManager {
     
 
 	public void createDiagram(String scenarioName, String orchestretorPolicy) {
-		System.out.println(" TASK FALLITI PER DEVICE MORTI  " +  "" + failedtask);
+
          deadHost.stampa();
 		iDiagrams.generateEnergyCharts(coordinatesList, scenarioName, orchestretorPolicy);
 		iDiagrams.generateMapChart(coordinatesList, scenarioName, orchestretorPolicy);

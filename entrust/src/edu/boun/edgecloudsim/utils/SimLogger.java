@@ -49,7 +49,9 @@ public class SimLogger {
 		CREATED, UPLOADING, PROCESSING, DOWNLOADING, COMLETED,
 		REJECTED_DUE_TO_VM_CAPACITY, REJECTED_DUE_TO_BANDWIDTH,
 		UNFINISHED_DUE_TO_BANDWIDTH, UNFINISHED_DUE_TO_MOBILITY,
-		REJECTED_DUE_TO_WLAN_COVERAGE
+		REJECTED_DUE_TO_WLAN_COVERAGE,
+
+		FAILED_DUE_TO_DEVICE_DEATH //TODO RAMONA: added for the case when the device dies
 	}
 	
 	public static enum NETWORK_ERRORS {
@@ -126,7 +128,8 @@ public class SimLogger {
 	private int[] failedTaskDuetoGsmBw = null;
 	private int[] failedTaskDuetoMobility = null;
 	private int[] refectedTaskDuetoWlanRange = null;
-	
+	private int[] failedTaskDuetoDeviceDeath = null; // todo ramona: added for the case when the device dies
+
 	private double[] orchestratorOverhead = null;
 
 	/*
@@ -266,6 +269,7 @@ public class SimLogger {
 		failedTaskDuetoGsmBw = new int[numOfAppTypes + 1];
 		failedTaskDuetoMobility = new int[numOfAppTypes + 1];
 		refectedTaskDuetoWlanRange = new int[numOfAppTypes + 1];
+		failedTaskDuetoDeviceDeath = new int[numOfAppTypes + 1]; // todo ramona: added for the case when the device dies
 
 		orchestratorOverhead = new double[numOfAppTypes + 1];
 	}
@@ -323,6 +327,12 @@ public class SimLogger {
 
 	public void failedDueToMobility(int taskId, double time) {
 		taskMap.get(taskId).taskFailedDueToMobility(time);
+		recordLog(taskId);
+	}
+
+	public void failedDueToDeviceDeath(int taskId, double time) {
+		// todo ramona: added for the case when the device dies
+		taskMap.get(taskId).taskFailedDueToDeviceDeath(time);
 		recordLog(taskId);
 	}
 
@@ -468,6 +478,7 @@ public class SimLogger {
 		failedTaskDuetoLanBw[numOfAppTypes] = IntStream.of(failedTaskDuetoLanBw).sum();
 		failedTaskDuetoMobility[numOfAppTypes] = IntStream.of(failedTaskDuetoMobility).sum();
 		refectedTaskDuetoWlanRange[numOfAppTypes] = IntStream.of(refectedTaskDuetoWlanRange).sum();
+		failedTaskDuetoDeviceDeath[numOfAppTypes] = IntStream.of(failedTaskDuetoDeviceDeath).sum(); // todo ramona: added for the case when the device dies
 
 		orchestratorOverhead[numOfAppTypes] = DoubleStream.of(orchestratorOverhead).sum();
 		
@@ -563,7 +574,9 @@ public class SimLogger {
 						+ Integer.toString(failedTaskDuetoMobility[i]) + SimSettings.DELIMITER 
 						+ Double.toString(_QoE1) + SimSettings.DELIMITER 
 						+ Double.toString(_QoE2) + SimSettings.DELIMITER
-						+ Integer.toString(refectedTaskDuetoWlanRange[i]);
+						+ Integer.toString(refectedTaskDuetoWlanRange[i])
+						+ SimSettings.DELIMITER
+						+ Integer.toString(failedTaskDuetoDeviceDeath[i]); // todo ramona: added for the case when the device dies
 
 				// check if the divisor is zero in order to avoid division by zero problem
 				double _serviceTimeOnEdge = (completedTaskOnEdge[i] == 0) ? 0.0
@@ -716,7 +729,14 @@ public class SimLogger {
 				+ "(" + failedTaskDuetoLanBw[numOfAppTypes] 
 				+ "/" + failedTaskDuetoManBw[numOfAppTypes] 
 				+ "/" + failedTaskDuetoWanBw[numOfAppTypes] 
-				+ "/" + failedTaskDuetoGsmBw[numOfAppTypes] + ")");
+				+ "/" + failedTaskDuetoGsmBw[numOfAppTypes]
+				//+ "/" + refectedTaskDuetoDeviceDeath[numOfAppTypes] // todo ramona: added for the case when the device dies
+				+ ")");
+
+
+		printLine("# of failed tasks due to Device Death: "
+				+ "" + failedTaskDuetoDeviceDeath[numOfAppTypes] // todo ramona: added for the case when the device dies
+				+ ")");
 		
 		printLine("percentage of failed tasks: "
 				+ String.format("%.6f", ((double) failedTask[numOfAppTypes] * (double) 100)
@@ -875,7 +895,9 @@ public class SimLogger {
 			failedTaskDuetoMobility[value.getTaskType()]++;
 		} else if (value.getStatus() == SimLogger.TASK_STATUS.REJECTED_DUE_TO_WLAN_COVERAGE) {
 			refectedTaskDuetoWlanRange[value.getTaskType()]++;;
-        }
+        }else if (value.getStatus() == TASK_STATUS.FAILED_DUE_TO_DEVICE_DEATH) {
+			failedTaskDuetoDeviceDeath[value.getTaskType()]++; // todo ramona
+		}
 		
 		//if deep file logging is enabled, record every task result
 		if (SimSettings.getInstance().getDeepFileLoggingEnabled()){
@@ -1108,6 +1130,12 @@ class LogItem {
 			networkError = NETWORK_ERRORS.GSM_ERROR;
 	}
 
+	//todo Ramona
+	public void taskFailedDueToDeviceDeath(double time) {
+		taskEndTime = time;
+		status = SimLogger.TASK_STATUS.FAILED_DUE_TO_DEVICE_DEATH;
+	}
+
 	public void taskFailedDueToMobility(double time) {
 		taskEndTime = time;
 		status = SimLogger.TASK_STATUS.UNFINISHED_DUE_TO_MOBILITY;
@@ -1239,6 +1267,8 @@ class LogItem {
 			result += "4"; // failure reason 4
         else if (status == SimLogger.TASK_STATUS.REJECTED_DUE_TO_WLAN_COVERAGE)
             result += "5"; // failure reason 5
+		else if (status == SimLogger.TASK_STATUS.FAILED_DUE_TO_DEVICE_DEATH)
+			result += "6"; // failure reason 6
 		else
 			result += "0"; // default failure reason
 		return result;
