@@ -331,6 +331,8 @@ public class SimLogger {
 	}
 
 	public void failedDueToDeviceDeath(int taskId, double time) {
+		if(taskMap.get(taskId) == null)
+			System.out.println("Task is null");
 		// todo ramona: added for the case when the device dies
 		taskMap.get(taskId).taskFailedDueToDeviceDeath(time);
 		recordLog(taskId);
@@ -809,108 +811,120 @@ public class SimLogger {
 	
 	private void recordLog(int taskId){
 		LogItem value = taskMap.remove(taskId);
-		
-		if (value.isInWarmUpPeriod())
-			return;
+		try{
+			if (value.isInWarmUpPeriod())
+				return;
 
-		if (value.getStatus() == SimLogger.TASK_STATUS.COMLETED) {
-			completedTask[value.getTaskType()]++;
+			if (value.getStatus() == SimLogger.TASK_STATUS.COMLETED) {
+				completedTask[value.getTaskType()]++;
 
-			if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal())
-				completedTaskOnCloud[value.getTaskType()]++;
-			else if (value.getVmType() == SimSettings.VM_TYPES.MOBILE_VM.ordinal())
-				completedTaskOnMobile[value.getTaskType()]++;
-			else
-				completedTaskOnEdge[value.getTaskType()]++;
-		}
-		else {
-			failedTask[value.getTaskType()]++;
-
-			if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal())
-				failedTaskOnCloud[value.getTaskType()]++;
-			else if (value.getVmType() == SimSettings.VM_TYPES.MOBILE_VM.ordinal())
-				failedTaskOnMobile[value.getTaskType()]++;
-			else
-				failedTaskOnEdge[value.getTaskType()]++;
-		}
-
-		if (value.getStatus() == SimLogger.TASK_STATUS.COMLETED) {
-			cost[value.getTaskType()] += value.getCost();
-			QoE[value.getTaskType()] += value.getQoE();
-			serviceTime[value.getTaskType()] += value.getServiceTime();
-			networkDelay[value.getTaskType()] += value.getNetworkDelay();
-			processingTime[value.getTaskType()] += (value.getServiceTime() - value.getNetworkDelay());
-			orchestratorOverhead[value.getTaskType()] += value.getOrchestratorOverhead();
-			
-			if(value.getNetworkDelay(NETWORK_DELAY_TYPES.WLAN_DELAY) != 0) {
-				lanUsage[value.getTaskType()]++;
-				lanDelay[value.getTaskType()] += value.getNetworkDelay(NETWORK_DELAY_TYPES.WLAN_DELAY);
-			}
-			if(value.getNetworkDelay(NETWORK_DELAY_TYPES.MAN_DELAY) != 0) {
-				manUsage[value.getTaskType()]++;
-				manDelay[value.getTaskType()] += value.getNetworkDelay(NETWORK_DELAY_TYPES.MAN_DELAY);
-			}
-			if(value.getNetworkDelay(NETWORK_DELAY_TYPES.WAN_DELAY) != 0) {
-				wanUsage[value.getTaskType()]++;
-				wanDelay[value.getTaskType()] += value.getNetworkDelay(NETWORK_DELAY_TYPES.WAN_DELAY);
-			}
-			if(value.getNetworkDelay(NETWORK_DELAY_TYPES.GSM_DELAY) != 0) {
-				gsmUsage[value.getTaskType()]++;
-				gsmDelay[value.getTaskType()] += value.getNetworkDelay(NETWORK_DELAY_TYPES.GSM_DELAY);
-			}
-			
-			if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal()) {
-				serviceTimeOnCloud[value.getTaskType()] += value.getServiceTime();
-				processingTimeOnCloud[value.getTaskType()] += (value.getServiceTime() - value.getNetworkDelay());
-			}
-			else if (value.getVmType() == SimSettings.VM_TYPES.MOBILE_VM.ordinal()) {
-				serviceTimeOnMobile[value.getTaskType()] += value.getServiceTime();
-				processingTimeOnMobile[value.getTaskType()] += value.getServiceTime();
+				if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal())
+					completedTaskOnCloud[value.getTaskType()]++;
+				else if (value.getVmType() == SimSettings.VM_TYPES.MOBILE_VM.ordinal())
+					completedTaskOnMobile[value.getTaskType()]++;
+				else
+					completedTaskOnEdge[value.getTaskType()]++;
 			}
 			else {
-				serviceTimeOnEdge[value.getTaskType()] += value.getServiceTime();
-				processingTimeOnEdge[value.getTaskType()] += (value.getServiceTime() - value.getNetworkDelay());
-			}
-		} else if (value.getStatus() == SimLogger.TASK_STATUS.REJECTED_DUE_TO_VM_CAPACITY) {
-			failedTaskDueToVmCapacity[value.getTaskType()]++;
-			
-			if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal())
-				failedTaskDueToVmCapacityOnCloud[value.getTaskType()]++;
-			else if (value.getVmType() == SimSettings.VM_TYPES.MOBILE_VM.ordinal())
-				failedTaskDueToVmCapacityOnMobile[value.getTaskType()]++;
-			else
-				failedTaskDueToVmCapacityOnEdge[value.getTaskType()]++;
-		} else if (value.getStatus() == SimLogger.TASK_STATUS.REJECTED_DUE_TO_BANDWIDTH
-				|| value.getStatus() == SimLogger.TASK_STATUS.UNFINISHED_DUE_TO_BANDWIDTH) {
-			failedTaskDuetoBw[value.getTaskType()]++;
-			if (value.getNetworkError() == NETWORK_ERRORS.LAN_ERROR)
-				failedTaskDuetoLanBw[value.getTaskType()]++;
-			else if (value.getNetworkError() == NETWORK_ERRORS.MAN_ERROR)
-				failedTaskDuetoManBw[value.getTaskType()]++;
-			else if (value.getNetworkError() == NETWORK_ERRORS.WAN_ERROR)
-				failedTaskDuetoWanBw[value.getTaskType()]++;
-			else if (value.getNetworkError() == NETWORK_ERRORS.GSM_ERROR)
-				failedTaskDuetoGsmBw[value.getTaskType()]++;
-		} else if (value.getStatus() == SimLogger.TASK_STATUS.UNFINISHED_DUE_TO_MOBILITY) {
-			failedTaskDuetoMobility[value.getTaskType()]++;
-		} else if (value.getStatus() == SimLogger.TASK_STATUS.REJECTED_DUE_TO_WLAN_COVERAGE) {
-			refectedTaskDuetoWlanRange[value.getTaskType()]++;;
-        }else if (value.getStatus() == TASK_STATUS.FAILED_DUE_TO_DEVICE_DEATH) {
-			failedTaskDuetoDeviceDeath[value.getTaskType()]++; // todo ramona
-		}
-		
-		//if deep file logging is enabled, record every task result
-		if (SimSettings.getInstance().getDeepFileLoggingEnabled()){
-			try {
-				if (value.getStatus() == SimLogger.TASK_STATUS.COMLETED)
-					appendToFile(successBW, value.toString(taskId));
+				failedTask[value.getTaskType()]++;
+
+				if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal())
+					failedTaskOnCloud[value.getTaskType()]++;
+				else if (value.getVmType() == SimSettings.VM_TYPES.MOBILE_VM.ordinal())
+					failedTaskOnMobile[value.getTaskType()]++;
 				else
-					appendToFile(failBW, value.toString(taskId));
-			} catch (IOException e) {
-				e.printStackTrace();
-				System.exit(1);
+					failedTaskOnEdge[value.getTaskType()]++;
 			}
+		}catch (Exception e){
+			e.printStackTrace();
 		}
+
+		try{
+			if (value.getStatus() == SimLogger.TASK_STATUS.COMLETED) {
+				cost[value.getTaskType()] += value.getCost();
+				QoE[value.getTaskType()] += value.getQoE();
+				serviceTime[value.getTaskType()] += value.getServiceTime();
+				networkDelay[value.getTaskType()] += value.getNetworkDelay();
+				processingTime[value.getTaskType()] += (value.getServiceTime() - value.getNetworkDelay());
+				orchestratorOverhead[value.getTaskType()] += value.getOrchestratorOverhead();
+
+				if(value.getNetworkDelay(NETWORK_DELAY_TYPES.WLAN_DELAY) != 0) {
+					lanUsage[value.getTaskType()]++;
+					lanDelay[value.getTaskType()] += value.getNetworkDelay(NETWORK_DELAY_TYPES.WLAN_DELAY);
+				}
+				if(value.getNetworkDelay(NETWORK_DELAY_TYPES.MAN_DELAY) != 0) {
+					manUsage[value.getTaskType()]++;
+					manDelay[value.getTaskType()] += value.getNetworkDelay(NETWORK_DELAY_TYPES.MAN_DELAY);
+				}
+				if(value.getNetworkDelay(NETWORK_DELAY_TYPES.WAN_DELAY) != 0) {
+					wanUsage[value.getTaskType()]++;
+					wanDelay[value.getTaskType()] += value.getNetworkDelay(NETWORK_DELAY_TYPES.WAN_DELAY);
+				}
+				if(value.getNetworkDelay(NETWORK_DELAY_TYPES.GSM_DELAY) != 0) {
+					gsmUsage[value.getTaskType()]++;
+					gsmDelay[value.getTaskType()] += value.getNetworkDelay(NETWORK_DELAY_TYPES.GSM_DELAY);
+				}
+
+				if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal()) {
+					serviceTimeOnCloud[value.getTaskType()] += value.getServiceTime();
+					processingTimeOnCloud[value.getTaskType()] += (value.getServiceTime() - value.getNetworkDelay());
+				}
+				else if (value.getVmType() == SimSettings.VM_TYPES.MOBILE_VM.ordinal()) {
+					serviceTimeOnMobile[value.getTaskType()] += value.getServiceTime();
+					processingTimeOnMobile[value.getTaskType()] += value.getServiceTime();
+				}
+				else {
+					serviceTimeOnEdge[value.getTaskType()] += value.getServiceTime();
+					processingTimeOnEdge[value.getTaskType()] += (value.getServiceTime() - value.getNetworkDelay());
+				}
+			} else if (value.getStatus() == SimLogger.TASK_STATUS.REJECTED_DUE_TO_VM_CAPACITY) {
+				failedTaskDueToVmCapacity[value.getTaskType()]++;
+
+				if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal())
+					failedTaskDueToVmCapacityOnCloud[value.getTaskType()]++;
+				else if (value.getVmType() == SimSettings.VM_TYPES.MOBILE_VM.ordinal())
+					failedTaskDueToVmCapacityOnMobile[value.getTaskType()]++;
+				else
+					failedTaskDueToVmCapacityOnEdge[value.getTaskType()]++;
+			} else if (value.getStatus() == SimLogger.TASK_STATUS.REJECTED_DUE_TO_BANDWIDTH
+					|| value.getStatus() == SimLogger.TASK_STATUS.UNFINISHED_DUE_TO_BANDWIDTH) {
+				failedTaskDuetoBw[value.getTaskType()]++;
+				if (value.getNetworkError() == NETWORK_ERRORS.LAN_ERROR)
+					failedTaskDuetoLanBw[value.getTaskType()]++;
+				else if (value.getNetworkError() == NETWORK_ERRORS.MAN_ERROR)
+					failedTaskDuetoManBw[value.getTaskType()]++;
+				else if (value.getNetworkError() == NETWORK_ERRORS.WAN_ERROR)
+					failedTaskDuetoWanBw[value.getTaskType()]++;
+				else if (value.getNetworkError() == NETWORK_ERRORS.GSM_ERROR)
+					failedTaskDuetoGsmBw[value.getTaskType()]++;
+			} else if (value.getStatus() == SimLogger.TASK_STATUS.UNFINISHED_DUE_TO_MOBILITY) {
+				failedTaskDuetoMobility[value.getTaskType()]++;
+			} else if (value.getStatus() == SimLogger.TASK_STATUS.REJECTED_DUE_TO_WLAN_COVERAGE) {
+				refectedTaskDuetoWlanRange[value.getTaskType()]++;;
+			}else if (value.getStatus() == TASK_STATUS.FAILED_DUE_TO_DEVICE_DEATH) {
+				failedTaskDuetoDeviceDeath[value.getTaskType()]++; // todo ramona
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
+		try{
+			//if deep file logging is enabled, record every task result
+			if (SimSettings.getInstance().getDeepFileLoggingEnabled()){
+				try {
+					if (value.getStatus() == SimLogger.TASK_STATUS.COMLETED)
+						appendToFile(successBW, value.toString(taskId));
+					else
+						appendToFile(failBW, value.toString(taskId));
+				} catch (IOException e) {
+					e.printStackTrace();
+					System.exit(1);
+				}
+			}
+		}catch (Exception e){
+			e.printStackTrace();
+		}
+
 	}
 }
 

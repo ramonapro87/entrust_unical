@@ -38,8 +38,7 @@ public class SimManagerEnergy extends SimManager {
 
 
 	private IDiagrams iDiagrams;
-
-
+	private int task_blocked_death = 0;
 
 
 
@@ -74,8 +73,7 @@ public class SimManagerEnergy extends SimManager {
 			Integer mobileId = ((TaskProperty) ev.getData()).getMobileDeviceId();
 			if(deadHost.mobileHostIsDead(mobileId)){
 			//	System.out.println("Mobile host " + "" + mobileId + "" + " is dead");
-				SimLogger.getInstance().failedDueToDeviceDeath(mobileId, CloudSim.clock());
-				return;
+				task_blocked_death++;
 			}
 		}
 
@@ -112,6 +110,8 @@ public class SimManagerEnergy extends SimManager {
     				try {
     					TaskProperty edgeTask = (TaskProperty) ev.getData();
     					Task task = ((SampleMobileDeviceManager)super.getMobileDeviceManager()).submitTaskEnergy(edgeTask);
+						if(task == null)
+							return;
     					calculateNetConsume(task,SimUtils.TRANSMISSION);
 						
     				} catch (Exception e) {
@@ -208,7 +208,7 @@ public class SimManagerEnergy extends SimManager {
     
 
 	public void createDiagram(String scenarioName, String orchestretorPolicy) {
-
+		System.out.println("-------------------------------------------------------------------------s>" + task_blocked_death);
          deadHost.stampa();
 		iDiagrams.generateEnergyCharts(coordinatesList, scenarioName, orchestretorPolicy);
 		iDiagrams.generateMapChart(coordinatesList, scenarioName, orchestretorPolicy);

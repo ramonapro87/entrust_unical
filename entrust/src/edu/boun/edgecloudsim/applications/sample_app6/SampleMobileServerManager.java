@@ -213,7 +213,6 @@ public class SampleMobileServerManager extends MobileServerManager {
             if (host instanceof MobileHostEnergy) {
                 ((MobileHostEnergy) host).updateStatus();
                 if (!((MobileHostEnergy) host).isDead()) {
-                    //SimLogger.getInstance().failedDueToDeviceDeath(host.getId(), momentOfInterest); //todo Ramona Logger Death Host
                     double ec = ((MobileHostEnergy) host).energyConsumption(momentOfInterest);
 //					System.out.println("energia consumata: " + ec + " - host ID[" + host.getId() + "] momentOfInterest: " + momentOfInterest);
                     ec += energyMobileConsumed.get();

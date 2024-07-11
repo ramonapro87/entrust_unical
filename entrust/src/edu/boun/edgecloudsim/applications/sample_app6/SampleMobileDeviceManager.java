@@ -21,6 +21,7 @@
 
 package edu.boun.edgecloudsim.applications.sample_app6;
 
+import edu.boun.edgecloudsim.utils.*;
 import org.cloudbus.cloudsim.UtilizationModel;
 import org.cloudbus.cloudsim.UtilizationModelFull;
 import org.cloudbus.cloudsim.Vm;
@@ -37,10 +38,6 @@ import edu.boun.edgecloudsim.edge_client.CpuUtilizationModel_Custom;
 import edu.boun.edgecloudsim.edge_client.MobileDeviceManager;
 import edu.boun.edgecloudsim.edge_client.Task;
 import edu.boun.edgecloudsim.network.NetworkModel;
-import edu.boun.edgecloudsim.utils.TaskProperty;
-import edu.boun.edgecloudsim.utils.Location;
-import edu.boun.edgecloudsim.utils.SimLogger;
-import edu.boun.edgecloudsim.utils.SimUtils;
 
 public class SampleMobileDeviceManager extends MobileDeviceManager {
 	private static final int BASE = 100000; //start from base in order not to conflict cloudsim tag!
@@ -49,9 +46,12 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
 	private static final int REQUEST_RECEIVED_BY_MOBILE_DEVICE = BASE + 2;
 	private static final int RESPONSE_RECEIVED_BY_MOBILE_DEVICE = BASE + 3;
 
+	private DeadHost deadHost;
+
 	private int taskIdCounter=0;
 	
 	public SampleMobileDeviceManager() throws Exception{
+		deadHost = DeadHost.getInstance();
 	}
 
 	@Override
@@ -307,6 +307,10 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
 				(int)task.getCloudletFileSize(),
 				(int)task.getCloudletOutputSize());
 
+		//SimLogger.getInstance().failedDueToDeviceDeath(host.getId(), momentOfInterest); //todo Ramona Logger Death Host
+
+
+
 		int nextHopId = SimManager.getInstance().getEdgeOrchestrator().getDeviceToOffload(task);
 		
 		if(nextHopId == SimSettings.GENERIC_EDGE_DEVICE_ID){
@@ -355,9 +359,20 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
 				//bind task to related VM
 				getCloudletList().add(task);
 				bindCloudletToVm(task.getCloudletId(), selectedVM.getId());
+				try{
+					SimLogger.getInstance().taskStarted(task.getCloudletId(), CloudSim.clock());
 
-				SimLogger.getInstance().taskStarted(task.getCloudletId(), CloudSim.clock());
-				
+				}catch (Exception e){
+					e.printStackTrace();
+				}
+
+
+				if(deadHost.mobileHostIsDead(task.getMobileDeviceId())){
+					//	System.out.println("Mobile host " + "" + mobileId + "" + " is dead");
+					SimLogger.getInstance().failedDueToDeviceDeath(task.getCloudletId(), CloudSim.clock());
+					return null;
+				}
+
 				if(nextHopId != SimSettings.MOBILE_DATACENTER_ID) {
 					networkModel.uploadStarted(task.getSubmittedLocation(), nextDeviceForNetworkModel);
 					SimLogger.getInstance().setUploadDelay(task.getCloudletId(), delay, delayType);
