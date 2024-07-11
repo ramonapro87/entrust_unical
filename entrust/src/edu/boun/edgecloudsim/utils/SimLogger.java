@@ -129,7 +129,6 @@ public class SimLogger {
 	private int[] failedTaskDuetoMobility = null;
 	private int[] refectedTaskDuetoWlanRange = null;
 	private int[] failedTaskDuetoDeviceDeath = null; // todo ramona: added for the case when the device dies
-
 	private double[] orchestratorOverhead = null;
 
 	/*
@@ -732,13 +731,12 @@ public class SimLogger {
 				+ "/" + failedTaskDuetoManBw[numOfAppTypes] 
 				+ "/" + failedTaskDuetoWanBw[numOfAppTypes] 
 				+ "/" + failedTaskDuetoGsmBw[numOfAppTypes]
-				//+ "/" + refectedTaskDuetoDeviceDeath[numOfAppTypes] // todo ramona: added for the case when the device dies
 				+ ")");
 
 
 		printLine("# of failed tasks due to Device Death: "
 				+ "" + failedTaskDuetoDeviceDeath[numOfAppTypes] // todo ramona: added for the case when the device dies
-				+ ")");
+				 );
 		
 		printLine("percentage of failed tasks: "
 				+ String.format("%.6f", ((double) failedTask[numOfAppTypes] * (double) 100)

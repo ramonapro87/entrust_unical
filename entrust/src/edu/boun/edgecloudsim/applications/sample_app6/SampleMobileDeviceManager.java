@@ -340,17 +340,18 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
                 SimLogger.getInstance().taskStarted(task.getCloudletId(), CloudSim.clock());
 
                 /**
+                 *
                 * le prossime istruzioni ri-simulano l'energia consumata
                 * questo perchè gli eventi di tipo CREATE_TASK sono gli ultimi ad essere eseguiti
                 * e se ci basavamo sull energia consumata negli eventi di tipo GET_LOAD_LOG
                 * i mobile host energy erano già morti
                 * quindi per ogni task creato viene simulata l'energia consumata fino a quel momento
                 * */
-//                SimManager.getInstance().getMobileServerManager().getEnergyConsumed(CloudSim.clock());
-//                if (deadHost.mobileHostIsDead(task.getMobileDeviceId())) {
-//                    SimLogger.getInstance().failedDueToDeviceDeath(task.getCloudletId(), CloudSim.clock());
-//                    return null;
-//                }
+                SimManager.getInstance().getMobileServerManager().getEnergyConsumed(CloudSim.clock());
+                if (deadHost.mobileHostIsDead(task.getMobileDeviceId())) {
+                    SimLogger.getInstance().failedDueToDeviceDeath(task.getCloudletId(), CloudSim.clock());
+                    return null;
+                }
 
                 if (nextHopId != SimSettings.MOBILE_DATACENTER_ID) {
                     networkModel.uploadStarted(task.getSubmittedLocation(), nextDeviceForNetworkModel);
