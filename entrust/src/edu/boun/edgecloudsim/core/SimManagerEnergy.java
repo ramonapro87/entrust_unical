@@ -208,7 +208,7 @@ public class SimManagerEnergy extends SimManager {
     
 
 	public void createDiagram(String scenarioName, String orchestretorPolicy) {
-		System.out.println("-------------------------------------------------------------------------s>" + task_blocked_death);
+		System.out.println("------------------------------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + task_blocked_death);
          deadHost.stampa();
 		iDiagrams.generateEnergyCharts(coordinatesList, scenarioName, orchestretorPolicy);
 		iDiagrams.generateMapChart(coordinatesList, scenarioName, orchestretorPolicy);
