@@ -107,7 +107,7 @@ public class EdgeHostEnergy extends EdgeHost {
 
     public Double updateBatteryLevel() {
     	
-    	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel);
+//    	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel);
 
         Double percentageConsumed = energyAllVM > 0
                 ? energyAllVM / batteryCapacity
@@ -117,7 +117,7 @@ public class EdgeHostEnergy extends EdgeHost {
                 : 0.0;
         //System.out.println("livello batteria HOST"+ batteryLevel +  "...." +this.getId());
         if (batteryLevel.equals(0.0)) {
-        	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel+" energy consumed: "+percentageConsumed);
+//        	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel+" energy consumed: "+percentageConsumed);
             setDeath(true, CloudSim.clock());
         }
         

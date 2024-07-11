@@ -110,8 +110,7 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
                 }
             } else {
                 SimLogger.getInstance().failedDueToBandwidth(task.getCloudletId(), CloudSim.clock(), NETWORK_DELAY_TYPES.WLAN_DELAY);
-
-                System.err.println("fallimento per banda - task:" + task.getCloudletId() + " device:" + task.getMobileDeviceId());
+//                System.err.println("fallimento per banda - task:" + task.getCloudletId() + " device:" + task.getMobileDeviceId());
 
             }
         } else if (task.getAssociatedDatacenterId() == SimSettings.MOBILE_DATACENTER_ID) {
@@ -340,12 +339,18 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
 
                 SimLogger.getInstance().taskStarted(task.getCloudletId(), CloudSim.clock());
 
-                SimManager.getInstance().getMobileServerManager().getEnergyConsumed(CloudSim.clock());
-                if (deadHost.mobileHostIsDead(task.getMobileDeviceId())) {
-                    System.out.println("getMobileDeviceId: " + task.getMobileDeviceId() );
-                    SimLogger.getInstance().failedDueToDeviceDeath(task.getCloudletId(), CloudSim.clock());
-                    return null;
-                }
+                /**
+                * le prossime istruzioni ri-simulano l'energia consumata
+                * questo perchè gli eventi di tipo CREATE_TASK sono gli ultimi ad essere eseguiti
+                * e se ci basavamo sull energia consumata negli eventi di tipo GET_LOAD_LOG
+                * i mobile host energy erano già morti
+                * quindi per ogni task creato viene simulata l'energia consumata fino a quel momento
+                * */
+//                SimManager.getInstance().getMobileServerManager().getEnergyConsumed(CloudSim.clock());
+//                if (deadHost.mobileHostIsDead(task.getMobileDeviceId())) {
+//                    SimLogger.getInstance().failedDueToDeviceDeath(task.getCloudletId(), CloudSim.clock());
+//                    return null;
+//                }
 
                 if (nextHopId != SimSettings.MOBILE_DATACENTER_ID) {
                     networkModel.uploadStarted(task.getSubmittedLocation(), nextDeviceForNetworkModel);
@@ -360,7 +365,7 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
         } else {
             //SimLogger.printLine("Task #" + task.getCloudletId() + " cannot assign to any VM");
             SimLogger.getInstance().rejectedDueToBandwidth(task.getCloudletId(), CloudSim.clock(), vmType.ordinal(), delayType);
-            System.err.println("RIFIUTO per banda - task:" + task.getCloudletId() + " device:" + task.getMobileDeviceId());
+//            System.err.println("RIFIUTO per banda - task:" + task.getCloudletId() + " device:" + task.getMobileDeviceId());
 
         }
 

@@ -30,7 +30,7 @@ public class MobileHostEnergy extends MobileHost {
         energyModel = _energyModel;
 //        batteryLevel = 500.0; // Math.round(Math.random() * 10000) / 100.0;
         batteryLevel = SimUtils.getRandomDoubleNumber(SimSettings.getInstance().getMIN_BATT_PERC(), SimSettings.getInstance().getMAX_BATT_PERC());
-        System.out.println("BATTERY LEVEL: "+batteryLevel);
+//        System.out.println("BATTERY LEVEL: "+batteryLevel);
         batteryCapacity = _batteryCapacity;
         isDead = false;
          deadlisthost = DeadHost.getInstance();
@@ -102,7 +102,7 @@ public class MobileHostEnergy extends MobileHost {
                                     : 0.0;
 
         if(batteryLevel.equals(0.0)){
-        	System.err.println("mobile host ["+this.getId()+"] battery"+batteryLevel+" energy consumed: "+percentageConsumed);
+//        	System.err.println("mobile host ["+this.getId()+"] battery"+batteryLevel+" energy consumed: "+percentageConsumed);
 
             setDeath(true, CloudSim.clock());
             //aggiungo alla lista di dispositivi morti

@@ -15,8 +15,7 @@
 		<vm_utilization_on_cloud>0.8</vm_utilization_on_cloud>
 		<vm_utilization_on_mobile>20</vm_utilization_on_mobile>
 	</application>
-	<!-- 
-	
+
 	<application name="HEALTH_APP">
 		<usage_percentage>20</usage_percentage>
 		<prob_cloud_selection>20</prob_cloud_selection>
@@ -62,5 +61,4 @@
 		<vm_utilization_on_cloud>1</vm_utilization_on_cloud>
 		<vm_utilization_on_mobile>25</vm_utilization_on_mobile>
 	</application>
-	-->
 </applications>
