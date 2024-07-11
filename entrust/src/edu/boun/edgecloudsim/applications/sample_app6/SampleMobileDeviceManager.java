@@ -52,6 +52,7 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
 
     public SampleMobileDeviceManager() throws Exception {
         deadHost = DeadHost.getInstance();
+        deadHost.reset();
     }
 
     @Override
@@ -339,7 +340,9 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
 
                 SimLogger.getInstance().taskStarted(task.getCloudletId(), CloudSim.clock());
 
+                SimManager.getInstance().getMobileServerManager().getEnergyConsumed(CloudSim.clock());
                 if (deadHost.mobileHostIsDead(task.getMobileDeviceId())) {
+                    System.out.println("getMobileDeviceId: " + task.getMobileDeviceId() );
                     SimLogger.getInstance().failedDueToDeviceDeath(task.getCloudletId(), CloudSim.clock());
                     return null;
                 }

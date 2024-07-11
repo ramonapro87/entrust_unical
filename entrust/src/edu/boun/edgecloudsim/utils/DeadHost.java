@@ -14,6 +14,11 @@ public class DeadHost {
         edgeHost = new LinkedList<>();
     }
 
+    public void reset(){
+        mobileHost.clear();
+        edgeHost.clear();
+    }
+
     public static synchronized DeadHost getInstance() {
         if (instance == null) {
             instance = new DeadHost();
@@ -40,6 +45,7 @@ public class DeadHost {
     }
 
     public void stampa() {
+        System.out.println("");
         System.out.print(" HOST MOBILE ID DIED :");
         for (Integer element : mobileHost) {
             System.out.print(element + "" + ",");
@@ -49,6 +55,7 @@ public class DeadHost {
         for (Integer element : edgeHost) {
             System.out.print(element + "" + ",");
         }
+        System.out.println("");
     }
 
 

@@ -29,8 +29,6 @@ public class SimManagerEnergy extends SimManager {
     private static final int STOP_SIMULATION = 4;
 	List<Coordinates> coordinatesList= null;
 
-	private DeadHost deadHost;
-
     private DefaultEnergyComputingModel defaultEnergyComputingModel;
     private ScenarioFactoryEnergy scenarioFactoryEnergy;
     public boolean detailHostEenergy = false;
@@ -48,7 +46,6 @@ public class SimManagerEnergy extends SimManager {
         defaultEnergyComputingModel = scenarioFactoryEnergy.getDefaultEnergyComputerModel();
         defaultEnergyComputingModel.initialize();
 		this.iDiagrams = new ChartGenerator();
-		this.deadHost = DeadHost.getInstance();
     }
 
     @Override
@@ -68,40 +65,17 @@ public class SimManagerEnergy extends SimManager {
     @Override
     public void processEvent(SimEvent ev) {
 
-		if(ev.getData() != null){
-			//Task task = (Task) ev.getData();
-			Integer mobileId = ((TaskProperty) ev.getData()).getMobileDeviceId();
-			if(deadHost.mobileHostIsDead(mobileId)){
-			//	System.out.println("Mobile host " + "" + mobileId + "" + " is dead");
-				task_blocked_death++;
-			}
-		}
-
         synchronized (this) {
         	double momentOfInterest = CloudSim.clock();
             switch (ev.getTag()) {
 
                 case GET_LOAD_LOG:
-                    
-                    AtomicReference<Double> energyMobileConsumed = new AtomicReference<>((double) 0);
-                    AtomicReference<Double> energyEdgeConsumed = new AtomicReference<>((double) 0);
-                    AtomicReference<Double> energyCloudConsumed = new AtomicReference<>((double) 0);
-
-
-                    getCloudServerManager().getDatacenter().getHostList().forEach(host -> {
-                    	
-                        if (host instanceof MobileHostEnergy) {
-                            ((MobileHostEnergy) host).updateStatus();
-                            System.out.println("MobileHostEnergy: " + ((MobileHostEnergy) host).getBatteryLevel());
-                        }
-                    });
-
                     SimLogger.getInstance().addVmUtilizationLog(momentOfInterest,
                             getEdgeServerManager().getAvgUtilization(),
                             getCloudServerManager().getAvgUtilization(),
                             getMobileServerManager().getAvgUtilization(),
                             getEdgeServerManager().getEnergyConsumption(momentOfInterest),
-                            energyCloudConsumed.get(),
+                            0,
                             getMobileServerManager().getEnergyConsumed(momentOfInterest));
 
                     schedule(getId(), SimSettings.getInstance().getVmLoadLogInterval(), GET_LOAD_LOG);
@@ -208,8 +182,6 @@ public class SimManagerEnergy extends SimManager {
     
 
 	public void createDiagram(String scenarioName, String orchestretorPolicy) {
-		System.out.println("------------------------------------------------------------------------->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + task_blocked_death);
-         deadHost.stampa();
 		iDiagrams.generateEnergyCharts(coordinatesList, scenarioName, orchestretorPolicy);
 		iDiagrams.generateMapChart(coordinatesList, scenarioName, orchestretorPolicy);
 	}

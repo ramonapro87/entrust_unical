@@ -69,6 +69,7 @@ public class MobileHostEnergy extends MobileHost {
 
 
     public boolean isDead() {
+//        return false;
         return isDead;
     }
 
