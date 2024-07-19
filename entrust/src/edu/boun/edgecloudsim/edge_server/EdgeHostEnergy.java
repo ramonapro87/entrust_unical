@@ -118,7 +118,7 @@ public class EdgeHostEnergy extends EdgeHost {
      */
     public Double updateBatteryLevel() {
     	
-//    	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel);
+    	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel);
 
         Double percentageConsumed = energyAllVM > 0
                 ? energyAllVM / batteryCapacity

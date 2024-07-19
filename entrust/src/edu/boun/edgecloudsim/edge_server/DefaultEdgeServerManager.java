@@ -154,6 +154,29 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 		HashMap<Integer, String> mapHostEnergyConsumed = new HashMap<>();
 		HashMap<Integer, String> mapHostDied = new HashMap<>();
 		AtomicReference<Double> energyEdgeConsumed = new AtomicReference<>((double) 0);
+		
+		
+		
+		for (Datacenter datacenter : this.getDatacenterList()) {
+		    for (Host host : datacenter.getHostList()) {
+		        if (host instanceof EdgeHostEnergy) {
+		            EdgeHostEnergy edgeHost = (EdgeHostEnergy) host;
+		            if (!edgeHost.isDead()) {
+		                double ec = edgeHost.energyConsumption(momentOfInterest);
+		                ec += energyEdgeConsumed.get();
+		                energyEdgeConsumed.set(ec);
+		                mapHostEnergyConsumed.put(datacenter.getId(), 
+		                    "ENERGY CONSUMED HOST_ID EDGE[" + datacenter.getId() + "] " + 
+		                    "battery: " + edgeHost.getBatteryLevel() + " energy: " + ec);
+		            } else {
+		                mapHostDied.put(datacenter.getId(), 
+		                    "DEAD HOST_ID EDGE[" + datacenter.getId() + "]");
+		            }
+		        }
+		    }
+		}		
+		
+/*
 		this.getDatacenterList().forEach(datacenter -> {
 			datacenter.getHostList().forEach(host -> {
 				if (host instanceof EdgeHostEnergy) {
@@ -169,11 +192,13 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 				}
 			});
 		});
-//		System.out.println("------------------------------------------- \n EDGE_HOST , Moment Of Interest: " + momentOfInterest );
-//		mapHostEnergyConsumed.forEach((k,v) -> System.out.println("  " + v));
-//		mapHostDied.forEach((k,v) -> System.out.println("  " + v +" , Moment Of Interest: " + momentOfInterest));
-//		System.out.println("_________________________________________________________");
-//		System.out.println(" \n ");
+		
+*/		
+		System.out.println("------------------------------------------- \n EDGE_HOST , Moment Of Interest: " + momentOfInterest );
+		mapHostEnergyConsumed.forEach((k,v) -> System.out.println("  " + v));
+		mapHostDied.forEach((k,v) -> System.out.println("  " + v +" , Moment Of Interest: " + momentOfInterest));
+		System.out.println("_________________________________________________________");
+		System.out.println(" \n ");
 		return energyEdgeConsumed.get();
 	}
 
