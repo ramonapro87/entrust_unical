@@ -93,6 +93,7 @@ public class MobileHostEnergy extends MobileHost {
      */
     public Double updateBatteryLevel() {
     	
+    	System.err.println("mobile host ["+this.getId()+"] battery"+batteryLevel);
 
         Double percentageConsumed = energyAllVM > 0
                                                 ? energyAllVM / batteryCapacity

@@ -58,6 +58,10 @@ public class EdgeHostEnergy extends EdgeHost {
         deadlisthost.addEdgeHost(this.getId());
     }
 
+    /** FIXME unused
+     * 
+     * @return
+     */
     public Double upDateBatteryLevel() {
         // scalare dal livello della batteria il consumo energetico
         double percentageConsumed = Math.round(energyAllVM / batteryCapacity);
@@ -71,6 +75,9 @@ public class EdgeHostEnergy extends EdgeHost {
 
     }
 
+    /** FIXME unused
+     * 
+     */
     public void setBatteryLevel(Double batteryLevel) {
         this.batteryLevel = batteryLevel;
     }
@@ -105,6 +112,10 @@ public class EdgeHostEnergy extends EdgeHost {
         }
     }
 
+    /**
+     * FIXME non tutti gli EDGE vengono aggiornati
+     * @return
+     */
     public Double updateBatteryLevel() {
     	
 //    	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel);
@@ -123,7 +134,7 @@ public class EdgeHostEnergy extends EdgeHost {
         
 //    	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel+" energy consumed: "+percentageConsumed);
 
-        energyModel.setBatteryCapacity(batteryLevel);
+        energyModel.setBatteryCapacity(batteryLevel);        
         return batteryLevel;
     }
 

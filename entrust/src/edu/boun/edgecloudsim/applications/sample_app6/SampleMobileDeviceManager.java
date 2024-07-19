@@ -348,7 +348,14 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
                 * quindi per ogni task creato viene simulata l'energia consumata fino a quel momento
                 * */
                 SimManager.getInstance().getMobileServerManager().getEnergyConsumed(CloudSim.clock());
-                if (deadHost.mobileHostIsDead(task.getMobileDeviceId())) {
+                
+//                System.err.println("submitTaskEnergy: task.getmobileID: "+task.getMobileDeviceId());
+                //TODO is this the only way?
+                //TODO is this the only way?
+                int idtomanage = task.getMobileDeviceId() + SimSettings.getInstance().getNumOfEdgeHosts() + 1 ;
+
+                                
+                if (deadHost.mobileHostIsDead(idtomanage)) {
                     SimLogger.getInstance().failedDueToDeviceDeath(task.getCloudletId(), CloudSim.clock());
                     return null;
                 }
