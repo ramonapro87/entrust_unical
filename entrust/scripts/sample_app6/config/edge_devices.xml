@@ -155,8 +155,8 @@
 		<idleConsumption>100</idleConsumption>
 		<maxConsumption>150</maxConsumption>
 		<location>
-			<x_pos>3</x_pos>
-			<y_pos>3</y_pos>
+			<x_pos>90</x_pos>
+			<y_pos>90</y_pos>
 			<wlan_id>2</wlan_id>
 			<attractiveness>1</attractiveness>
 		</location>
