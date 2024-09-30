@@ -825,7 +825,9 @@ public class SimLogger {
 			}
 			else {
 				failedTask[value.getTaskType()]++;
-
+				
+//				System.err.println("FALLITA UNA TASTK del tipo: "+ String.valueOf(value.getTaskType())+value.getVmType());
+				
 				if (value.getVmType() == SimSettings.VM_TYPES.CLOUD_VM.ordinal())
 					failedTaskOnCloud[value.getTaskType()]++;
 				else if (value.getVmType() == SimSettings.VM_TYPES.MOBILE_VM.ordinal())

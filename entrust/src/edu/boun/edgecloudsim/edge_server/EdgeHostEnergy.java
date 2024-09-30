@@ -126,7 +126,7 @@ public class EdgeHostEnergy extends EdgeHost {
         batteryLevel = batteryLevel >= percentageConsumed
                 ? batteryLevel - percentageConsumed
                 : 0.0;
-        //System.out.println("livello batteria HOST"+ batteryLevel +  "...." +this.getId());
+//        System.out.println("livello batteria HOST"+ batteryLevel +  "...." +this.getId());
         if (batteryLevel.equals(0.0)) {
 //        	System.err.println("edge["+this.getId()+"] _battery"+batteryLevel+" energy consumed: "+percentageConsumed);
             setDeath(true, CloudSim.clock());
