@@ -5,8 +5,8 @@
 		<prob_cloud_selection>20</prob_cloud_selection>
 		<poisson_interarrival>2</poisson_interarrival>
 		<delay_sensitivity>0</delay_sensitivity>
-		<active_period>40</active_period>
-		<idle_period>20</idle_period>
+		<active_period>59</active_period>
+		<idle_period>1</idle_period>
 		<data_upload>1500</data_upload>
 		<data_download>250</data_download>
 		<task_length>12000</task_length>

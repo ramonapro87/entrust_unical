@@ -4,7 +4,7 @@
 %--------------------------------------------------------------
 function [ret_val] = getConfiguration(argType)
     if(argType == 1)
-        ret_val = 'D:\sim_results';
+        ret_val = 'S:\workspace\entrust_unical\entrust\sim_results';
     elseif(argType == 2)
         ret_val = 10; %Number of iterations
     elseif(argType == 3)
