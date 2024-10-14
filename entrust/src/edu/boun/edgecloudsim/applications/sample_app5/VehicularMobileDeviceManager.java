@@ -481,7 +481,7 @@ public class VehicularMobileDeviceManager extends MobileDeviceManager {
 			//set related host id
 			schedule(getId(), delay, READY_TO_SELECT_VM, task);
 
-			SimLogger.getInstance().taskStarted(task.getCloudletId(), CloudSim.clock());
+			SimLogger.getInstance().taskStarted(task.getCloudletId(),0, CloudSim.clock());
 			SimLogger.getInstance().setUploadDelay(task.getCloudletId(), delay, delayType);
 		}
 		else

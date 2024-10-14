@@ -246,7 +246,7 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
 				getCloudletList().add(task);
 				bindCloudletToVm(task.getCloudletId(), selectedVM.getId());
 
-				SimLogger.getInstance().taskStarted(task.getCloudletId(), CloudSim.clock());
+				SimLogger.getInstance().taskStarted(task.getCloudletId(),0, CloudSim.clock());
 				
 				if(nextHopId != SimSettings.MOBILE_DATACENTER_ID) {
 					networkModel.uploadStarted(task.getSubmittedLocation(), nextDeviceForNetworkModel);

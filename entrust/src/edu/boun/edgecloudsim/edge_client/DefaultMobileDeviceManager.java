@@ -194,7 +194,7 @@ public class DefaultMobileDeviceManager extends MobileDeviceManager {
 			
 			if(WanDelay>0){
 				networkModel.uploadStarted(currentLocation, nextHopId);
-				SimLogger.getInstance().taskStarted(task.getCloudletId(), CloudSim.clock());
+				SimLogger.getInstance().taskStarted(task.getCloudletId(),0, CloudSim.clock());
 				SimLogger.getInstance().setUploadDelay(task.getCloudletId(), WanDelay, NETWORK_DELAY_TYPES.WAN_DELAY);
 				schedule(getId(), WanDelay, REQUEST_RECEIVED_BY_CLOUD, task);
 			}
@@ -214,7 +214,7 @@ public class DefaultMobileDeviceManager extends MobileDeviceManager {
 			if(WlanDelay > 0){
 				networkModel.uploadStarted(currentLocation, nextHopId);
 				schedule(getId(), WlanDelay, REQUEST_RECEIVED_BY_EDGE_DEVICE, task);
-				SimLogger.getInstance().taskStarted(task.getCloudletId(), CloudSim.clock());
+				SimLogger.getInstance().taskStarted(task.getCloudletId(),0, CloudSim.clock());
 				SimLogger.getInstance().setUploadDelay(task.getCloudletId(), WlanDelay, NETWORK_DELAY_TYPES.WLAN_DELAY);
 			}
 			else {

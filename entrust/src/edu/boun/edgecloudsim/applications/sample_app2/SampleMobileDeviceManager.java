@@ -350,7 +350,7 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
 				}
 				networkModel.uploadStarted(currentLocation, nextDeviceForNetworkModel);
 				
-				SimLogger.getInstance().taskStarted(task.getCloudletId(), CloudSim.clock());
+				SimLogger.getInstance().taskStarted(task.getCloudletId(),0, CloudSim.clock());
 				SimLogger.getInstance().setUploadDelay(task.getCloudletId(), delay, delayType);
 
 				schedule(getId(), delay, nextEvent, task);

@@ -95,12 +95,17 @@ public class MobileHostEnergy extends MobileHost {
     	
     	System.err.println("mobile host ["+this.getId()+"] battery"+batteryLevel);
 
-        Double percentageConsumed = energyAllVM > 0
-                                                ? energyAllVM / batteryCapacity
-                                                : 0.0;
-        batteryLevel = batteryLevel >= percentageConsumed
-                                    ? batteryLevel - percentageConsumed
-                                    : 0.0;
+    	Double percentageConsumed;
+    	if (energyAllVM > 0) 
+    	    percentageConsumed = energyAllVM / batteryCapacity;
+    	else 
+    	    percentageConsumed = 0.0;
+
+    	if (batteryLevel >= percentageConsumed) 
+    	    batteryLevel -= percentageConsumed;
+    	else 
+    	    batteryLevel = 0.0;
+
 
         if(batteryLevel.equals(0.0)){
 //        	System.err.println("mobile host ["+this.getId()+"] battery"+batteryLevel+" energy consumed: "+percentageConsumed);

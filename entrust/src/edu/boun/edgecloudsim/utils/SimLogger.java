@@ -42,6 +42,7 @@ import java.util.stream.IntStream;
 import edu.boun.edgecloudsim.core.SimManager;
 import edu.boun.edgecloudsim.core.SimSettings;
 import edu.boun.edgecloudsim.core.SimSettings.NETWORK_DELAY_TYPES;
+import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileHostEnergy;
 import edu.boun.edgecloudsim.utils.SimLogger.NETWORK_ERRORS;
 
 public class SimLogger {
@@ -187,7 +188,30 @@ public class SimLogger {
 		if (printLogEnabled)
 			System.out.print(msg);
 	}
+	
+	private String toStringLabel(Boolean success) {
+		String result = "taskId" + SimSettings.DELIMITER + "deviceId" + SimSettings.DELIMITER + "datacenterId" + SimSettings.DELIMITER + "hostId"
+				+ SimSettings.DELIMITER + "vmId" + SimSettings.DELIMITER + "vmType" + SimSettings.DELIMITER + "taskType"
+				+ SimSettings.DELIMITER + "taskLenght" + SimSettings.DELIMITER + "taskInputSize" + SimSettings.DELIMITER
+				+ "taskOutputSize" + SimSettings.DELIMITER
+				+ "taskStartTime" + SimSettings.DELIMITER 
+				+ "taskEndTime"+ SimSettings.DELIMITER				
+				+ "taskStartDeviceEnergy" + SimSettings.DELIMITER 
+				+ "taskEndDeviceEnergy"+ SimSettings.DELIMITER;
 
+		if (success){
+			result += "getNetworkDelay" + SimSettings.DELIMITER;
+			result += "WLAN_DELAY" + SimSettings.DELIMITER;
+			result += "MAN_DELAY" + SimSettings.DELIMITER;
+			result += "WAN_DELAY" + SimSettings.DELIMITER;
+			result += "GSM_DELAY";
+		}
+		else 
+			result += "TASK_STATUS";
+		return result;
+	}
+	
+	
 	public void simStarted(String outFolder, String fileName) {
 		startTime = System.currentTimeMillis();
 		filePrefix = fileName;
@@ -200,16 +224,21 @@ public class SimLogger {
 		
 		if (SimSettings.getInstance().getDeepFileLoggingEnabled()) {
 			try {
-				successFile = new File(outputFolder, filePrefix + "_SUCCESS.log");
+				successFile = new File(outputFolder, filePrefix + "_SUCCESS.csv");
 				successFW = new FileWriter(successFile, true);
 				successBW = new BufferedWriter(successFW);
 
-				failFile = new File(outputFolder, filePrefix + "_FAIL.log");
+				failFile = new File(outputFolder, filePrefix + "_FAIL.csv");
 				failFW = new FileWriter(failFile, true);
 				failBW = new BufferedWriter(failFW);
 				
 				appendToFile(successBW, "#auto generated file!");
 				appendToFile(failBW, "#auto generated file!");
+				
+				appendToFile(successBW, toStringLabel(true));				
+				appendToFile(failBW, toStringLabel(false));	
+				
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.exit(1);
@@ -274,13 +303,13 @@ public class SimLogger {
 	}
 
 	public void addLog(int deviceId, int taskId, int taskType,
-			int taskLenght, int taskInputType, int taskOutputSize) {
+			int taskLenght, int taskInputSize, int taskOutputSize) {
 		// printLine(taskId+"->"+taskStartTime);
-		taskMap.put(taskId, new LogItem(deviceId, taskType, taskLenght, taskInputType, taskOutputSize));
+		taskMap.put(taskId, new LogItem(deviceId, taskType, taskLenght, taskInputSize, taskOutputSize));
 	}
 
-	public void taskStarted(int taskId, double time) {
-		taskMap.get(taskId).taskStarted(time);
+	public void taskStarted(int taskId,int  deviceId,  double time) {		
+		taskMap.get(taskId).taskStarted(time,deviceId);
 	}
 
 	public void setUploadDelay(int taskId, double delay, NETWORK_DELAY_TYPES delayType) {
@@ -376,31 +405,31 @@ public class SimLogger {
 
 		// open all files and prepare them for write
 		if (fileLogEnabled) {
-			vmLoadFile = new File(outputFolder, filePrefix + "_VM_LOAD.log");
+			vmLoadFile = new File(outputFolder, filePrefix + "_VM_LOAD.csv");
 			vmLoadFW = new FileWriter(vmLoadFile, true);
 			vmLoadBW = new BufferedWriter(vmLoadFW);
 
-			locationFile = new File(outputFolder, filePrefix + "_LOCATION.log");
+			locationFile = new File(outputFolder, filePrefix + "_LOCATION.csv");
 			locationFW = new FileWriter(locationFile, true);
 			locationBW = new BufferedWriter(locationFW);
 
-			apUploadDelayFile = new File(outputFolder, filePrefix + "_AP_UPLOAD_DELAY.log");
+			apUploadDelayFile = new File(outputFolder, filePrefix + "_AP_UPLOAD_DELAY.csv");
 			apUploadDelayFW = new FileWriter(apUploadDelayFile, true);
 			apUploadDelayBW = new BufferedWriter(apUploadDelayFW);
 
-			apDownloadDelayFile = new File(outputFolder, filePrefix + "_AP_DOWNLOAD_DELAY.log");
+			apDownloadDelayFile = new File(outputFolder, filePrefix + "_AP_DOWNLOAD_DELAY.csv");
 			apDownloadDelayFW = new FileWriter(apDownloadDelayFile, true);
 			apDownloadDelayBW = new BufferedWriter(apDownloadDelayFW);
 
 			for (int i = 0; i < numOfAppTypes + 1; i++) {
-				String fileName = "ALL_APPS_GENERIC.log";
+				String fileName = "ALL_APPS_GENERIC.csv";
 
 				if (i < numOfAppTypes) {
 					// if related app is not used in this simulation, just discard it
 					if (SimSettings.getInstance().getTaskLookUpTable()[i][0] == 0)
 						continue;
 
-					fileName = SimSettings.getInstance().getTaskName(i) + "_GENERIC.log";
+					fileName = SimSettings.getInstance().getTaskName(i) + "_GENERIC.csv";
 				}
 
 				genericFiles[i] = new File(outputFolder, filePrefix + "_" + fileName);
@@ -983,7 +1012,10 @@ class VmLoadLogItem {
 		return time + 
 				SimSettings.DELIMITER + vmLoadOnEdge +
 				SimSettings.DELIMITER + vmLoadOnCloud +
-				SimSettings.DELIMITER + vmLoadOnMobile;
+				SimSettings.DELIMITER + vmLoadOnMobile +
+				SimSettings.DELIMITER + energyConsumptionOnEdge +
+				SimSettings.DELIMITER + energyConsumptionOnCloud +
+				SimSettings.DELIMITER + energyConsumptionOnMobile;
 	}
 }
 
@@ -1025,8 +1057,12 @@ class LogItem {
 	private int vmType;
 	private int taskType;
 	private int taskLenght;
-	private int taskInputType;
+	private int taskInputSize;
 	private int taskOutputSize;
+	
+	private double taskStartDeviceEnergy;
+	private double taskEndDeviceEnergy=0;	
+	
 	private double taskStartTime;
 	private double taskEndTime;
 	private double lanUploadDelay;
@@ -1043,19 +1079,26 @@ class LogItem {
 	private double orchestratorOverhead;
 	private boolean isInWarmUpPeriod;
 
-	LogItem(int _deviceId, int _taskType, int _taskLenght, int _taskInputType, int _taskOutputSize) {
+	LogItem(int _deviceId, int _taskType, int _taskLenght, int _taskInputSize, int _taskOutputSize) {
 		deviceId = _deviceId;
 		taskType = _taskType;
 		taskLenght = _taskLenght;
-		taskInputType = _taskInputType;
+		taskInputSize = _taskInputSize;
 		taskOutputSize = _taskOutputSize;
 		networkError = NETWORK_ERRORS.NONE;
 		status = SimLogger.TASK_STATUS.CREATED;
 		taskEndTime = 0;
 	}
 	
-	public void taskStarted(double time) {
+	public void taskStarted(double time, int deviceId) {
 		taskStartTime = time;
+		
+		MobileHostEnergy host = ((MobileHostEnergy)SimManager.getInstance().getMobileServerManager().getDatacenter().getHostList().get(deviceId));        	
+		double energyLevel= host.getEnergyModel().getBatteryLevelWattHour();
+		double energyLevelperc= host.getEnergyModel().getBatteryLevelPercentage();
+		double energyMax = host.getEnergyModel().getBatteryCapacity();
+		
+		taskStartDeviceEnergy = energyLevelperc;
 		status = SimLogger.TASK_STATUS.UPLOADING;
 		
 		if (time < SimSettings.getInstance().getWarmUpPeriod())
@@ -1099,25 +1142,29 @@ class LogItem {
 	}
 
 	public void taskEnded(double time) {
-		taskEndTime = time;
+//		taskEndTime = time;
+		setEndTimeAndEnergy(time, deviceId);
 		status = SimLogger.TASK_STATUS.COMLETED;
 	}
 
 	public void taskRejectedDueToVMCapacity(double time, int _vmType) {
 		vmType = _vmType;
-		taskEndTime = time;
+//		taskEndTime = time;
+		setEndTimeAndEnergy(time, deviceId);
 		status = SimLogger.TASK_STATUS.REJECTED_DUE_TO_VM_CAPACITY;
 	}
 	
 	public void taskRejectedDueToWlanCoverage(double time, int _vmType) {
 		vmType = _vmType;
-		taskEndTime = time;
+//		taskEndTime = time;
+		setEndTimeAndEnergy(time, deviceId);
 		status = SimLogger.TASK_STATUS.REJECTED_DUE_TO_WLAN_COVERAGE;
 	}
 
 	public void taskRejectedDueToBandwidth(double time, int _vmType, NETWORK_DELAY_TYPES delayType) {
 		vmType = _vmType;
-		taskEndTime = time;
+//		taskEndTime = time;
+		setEndTimeAndEnergy(time, deviceId);
 		status = SimLogger.TASK_STATUS.REJECTED_DUE_TO_BANDWIDTH;
 		
 		if(delayType == NETWORK_DELAY_TYPES.WLAN_DELAY)
@@ -1131,7 +1178,8 @@ class LogItem {
 	}
 
 	public void taskFailedDueToBandwidth(double time, NETWORK_DELAY_TYPES delayType) {
-		taskEndTime = time;
+//		taskEndTime = time;
+		setEndTimeAndEnergy(time, deviceId);
 		status = SimLogger.TASK_STATUS.UNFINISHED_DUE_TO_BANDWIDTH;
 		
 		if(delayType == NETWORK_DELAY_TYPES.WLAN_DELAY)
@@ -1146,14 +1194,32 @@ class LogItem {
 
 	//todo Ramona
 	public void taskFailedDueToDeviceDeath(double time) {
-		taskEndTime = time;
+//		taskEndTime = time;
+		setEndTimeAndEnergy(time, deviceId);
 		status = SimLogger.TASK_STATUS.FAILED_DUE_TO_DEVICE_DEATH;
 	}
 
 	public void taskFailedDueToMobility(double time) {
-		taskEndTime = time;
+//		taskEndTime = time;
+		setEndTimeAndEnergy(time, deviceId);
 		status = SimLogger.TASK_STATUS.UNFINISHED_DUE_TO_MOBILITY;
 	}
+	
+	
+	private void setEndTimeAndEnergy(double time, int deviceid) {
+		taskEndTime = time;
+		MobileHostEnergy host = ((MobileHostEnergy)SimManager.getInstance().getMobileServerManager().getDatacenter().getHostList().get(deviceId));        	
+		double energyLevel= host.getEnergyModel().getBatteryLevelWattHour();
+		double energyLevelperc= host.getEnergyModel().getBatteryLevelPercentage();
+		double energyMax = host.getEnergyModel().getBatteryCapacity();
+		
+		taskEndDeviceEnergy = energyLevelperc;
+	}
+	
+	
+	
+	
+	
 
 	public void setCost(double _bwCost, double _cpuCos) {
 		bwCost = _bwCost;
@@ -1260,9 +1326,12 @@ class LogItem {
 	public String toString(int taskId) {
 		String result = taskId + SimSettings.DELIMITER + deviceId + SimSettings.DELIMITER + datacenterId + SimSettings.DELIMITER + hostId
 				+ SimSettings.DELIMITER + vmId + SimSettings.DELIMITER + vmType + SimSettings.DELIMITER + taskType
-				+ SimSettings.DELIMITER + taskLenght + SimSettings.DELIMITER + taskInputType + SimSettings.DELIMITER
-				+ taskOutputSize + SimSettings.DELIMITER + taskStartTime + SimSettings.DELIMITER + taskEndTime
-				+ SimSettings.DELIMITER;
+				+ SimSettings.DELIMITER + taskLenght + SimSettings.DELIMITER + taskInputSize + SimSettings.DELIMITER
+				+ taskOutputSize + SimSettings.DELIMITER
+				+ taskStartTime + SimSettings.DELIMITER 
+				+ taskEndTime+ SimSettings.DELIMITER				
+				+ taskStartDeviceEnergy + SimSettings.DELIMITER 
+				+ taskEndDeviceEnergy+ SimSettings.DELIMITER;
 
 		if (status == SimLogger.TASK_STATUS.COMLETED){
 			result += getNetworkDelay() + SimSettings.DELIMITER;
@@ -1285,6 +1354,7 @@ class LogItem {
 			result += "6"; // failure reason 6
 		else
 			result += "0"; // default failure reason
-		return result;
+		return result;		
+		
 	}
 }

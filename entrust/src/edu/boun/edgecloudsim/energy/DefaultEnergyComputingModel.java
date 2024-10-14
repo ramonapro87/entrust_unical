@@ -13,8 +13,7 @@ public class DefaultEnergyComputingModel extends EnergyComputingModel {
 
 	@Override
 	public void initialize() {
-		// TODO Auto-generated method stub
-
+		//setBattery(true); not called?
 	}
 
 

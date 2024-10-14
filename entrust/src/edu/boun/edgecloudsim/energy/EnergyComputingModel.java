@@ -11,7 +11,7 @@ public abstract class EnergyComputingModel {
 	protected double batteryCapacity;
 	protected double initialBatteryLevel = 1;
 	protected NETWORK_DELAY_TYPES connectivity; //FIXME check if it's ok use NETWORK_DELAY_TYPES
-	protected boolean isBatteryPowered = false;
+	protected boolean isBatteryPowered = true;
 //	public static final int TRANSMISSION = 0; // used to update edge devices batteries
 //	public static final int RECEPTION = 1;
 //	/**

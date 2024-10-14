@@ -37,6 +37,7 @@ import edu.boun.edgecloudsim.core.SimSettings.VM_TYPES;
 import edu.boun.edgecloudsim.edge_client.CpuUtilizationModel_Custom;
 import edu.boun.edgecloudsim.edge_client.MobileDeviceManager;
 import edu.boun.edgecloudsim.edge_client.Task;
+import edu.boun.edgecloudsim.edge_client.mobile_processing_unit.MobileHostEnergy;
 import edu.boun.edgecloudsim.network.NetworkModel;
 
 public class SampleMobileDeviceManager extends MobileDeviceManager {
@@ -158,6 +159,8 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
                 Task task = (Task) ev.getData();
 
                 networkModel.downloadFinished(task.getSubmittedLocation(), SimSettings.GENERIC_EDGE_DEVICE_ID);
+                
+//                mettere qua l'upload
 
                 SimLogger.getInstance().taskEnded(task.getCloudletId(), CloudSim.clock());
                 break;
@@ -241,7 +244,7 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
                 getCloudletList().add(task);
                 bindCloudletToVm(task.getCloudletId(), selectedVM.getId());
 
-                SimLogger.getInstance().taskStarted(task.getCloudletId(), CloudSim.clock());
+                SimLogger.getInstance().taskStarted(task.getCloudletId(),task.getAssociatedHostId(),  CloudSim.clock());
 
                 if (nextHopId != SimSettings.MOBILE_DATACENTER_ID) {
                     networkModel.uploadStarted(task.getSubmittedLocation(), nextDeviceForNetworkModel);
@@ -324,12 +327,15 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
             Vm selectedVM = SimManager.getInstance().getEdgeOrchestrator().getVmToOffload(task, nextHopId);
 
             if (selectedVM != null) {
+            	
+            	
                 //set related host id
                 task.setAssociatedDatacenterId(nextHopId);
 
                 //set related host id
                 task.setAssociatedHostId(selectedVM.getHost().getId());
-
+                int idtomanage = task.getAssociatedHostId();
+                
                 //set related vm id
                 task.setAssociatedVmId(selectedVM.getId());
 
@@ -337,7 +343,7 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
                 getCloudletList().add(task);
                 bindCloudletToVm(task.getCloudletId(), selectedVM.getId());
 
-                SimLogger.getInstance().taskStarted(task.getCloudletId(), CloudSim.clock());
+                SimLogger.getInstance().taskStarted(task.getCloudletId(),task.getMobileDeviceId(), CloudSim.clock());
 
                 /**
                  *
@@ -350,10 +356,12 @@ public class SampleMobileDeviceManager extends MobileDeviceManager {
                 SimManager.getInstance().getMobileServerManager().getEnergyConsumed(CloudSim.clock());
                 
 //                System.err.println("submitTaskEnergy: task.getmobileID: "+task.getMobileDeviceId());
-                //TODO is this the only way?
-                //TODO is this the only way?
-                int idtomanage = task.getMobileDeviceId() + SimSettings.getInstance().getNumOfEdgeHosts() + 1 ;
-
+                //int idtomanage = task.getMobileDeviceId() + SimSettings.getInstance().getNumOfEdgeHosts() + 1 ;
+//        		MobileHostEnergy host = ((MobileHostEnergy)SimManager.getInstance().getMobileServerManager().getDatacenter().getHostList().get(task.getMobileDeviceId()));        	
+//        		double energyLevel= host.getEnergyModel().getBatteryLevelWattHour();
+//        		double energyLevelperc= host.getEnergyModel().getBatteryLevelPercentage();
+//        		double energyMax = host.getEnergyModel().getBatteryCapacity();
+                
                                 
                 if (deadHost.mobileHostIsDead(idtomanage)) {
                     SimLogger.getInstance().failedDueToDeviceDeath(task.getCloudletId(), CloudSim.clock());
