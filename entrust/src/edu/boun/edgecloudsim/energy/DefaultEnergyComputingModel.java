@@ -13,7 +13,7 @@ public class DefaultEnergyComputingModel extends EnergyComputingModel {
 
 	@Override
 	public void initialize() {
-		//setBattery(true); not called?
+		//setBattery(true); not called? // FIXME
 	}
 
 
@@ -24,7 +24,7 @@ public class DefaultEnergyComputingModel extends EnergyComputingModel {
 	}
 
 	@Override
-	public double getCpuEnergyConsumption() {
+	public double getCpuEnergyConsumption() {//FIXME UNUSED
 		return cpuEnergyConsumption;
 	}
 
@@ -88,7 +88,7 @@ public class DefaultEnergyComputingModel extends EnergyComputingModel {
 	}
 
 	@Override
-	public void setIntialBatteryPercentage(double batteryLevel) {
+	public void setIntialBatteryPercentage(double batteryLevel) { //FIXME unused
 			this.initialBatteryLevel = batteryLevel / 100.0;
 	}
 

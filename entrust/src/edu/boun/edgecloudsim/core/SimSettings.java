@@ -128,7 +128,7 @@ public class SimSettings {
 	private double MAX_BATT_PERC = 100;
 
 	private double BATTERYCAPACITY;
-	private double INITIALBATTERYLEVEL;
+	private double INITIALBATTERYLEVEL; //FIXME unused
 	
 	private double ENERGYCONSUMPTIONMAX_MOBILE;
 	private double ENERGYCONSUMPTIONIDLE_MOBILE;

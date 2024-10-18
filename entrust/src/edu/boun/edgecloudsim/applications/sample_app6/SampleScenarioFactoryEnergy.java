@@ -113,7 +113,7 @@ public class SampleScenarioFactoryEnergy implements ScenarioFactoryEnergy {
 	}
 
 	@Override
-	public String getEnergyModel() {
+	public String getEnergyModel() { //FIXME unused
 
 			Double result = getDefaultEnergyComputerModel().getTotalEnergyConsumption();
 

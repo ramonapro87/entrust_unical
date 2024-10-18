@@ -1213,6 +1213,8 @@ class LogItem {
 		double energyLevelperc= host.getEnergyModel().getBatteryLevelPercentage();
 		double energyMax = host.getEnergyModel().getBatteryCapacity();
 		
+		
+		
 		taskEndDeviceEnergy = energyLevelperc;
 	}
 	

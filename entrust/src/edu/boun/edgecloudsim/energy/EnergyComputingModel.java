@@ -9,9 +9,9 @@ public abstract class EnergyComputingModel {
 	protected double idleConsumption; // Consumed energy when idle (in Watt)
 	protected double cpuEnergyConsumption = 0;
 	protected double batteryCapacity;
-	protected double initialBatteryLevel = 1;
+	protected double initialBatteryLevel = 1; //FIXME useless
 	protected NETWORK_DELAY_TYPES connectivity; //FIXME check if it's ok use NETWORK_DELAY_TYPES
-	protected boolean isBatteryPowered = true;
+	protected boolean isBatteryPowered = false;
 //	public static final int TRANSMISSION = 0; // used to update edge devices batteries
 //	public static final int RECEPTION = 1;
 //	/**

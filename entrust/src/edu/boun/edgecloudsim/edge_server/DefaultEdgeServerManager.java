@@ -194,11 +194,11 @@ public class DefaultEdgeServerManager extends EdgeServerManager{
 		});
 		
 */		
-		System.out.println("------------------------------------------- \n EDGE_HOST , Moment Of Interest: " + momentOfInterest );
-		mapHostEnergyConsumed.forEach((k,v) -> System.out.println("  " + v));
-		mapHostDied.forEach((k,v) -> System.out.println("  " + v +" , Moment Of Interest: " + momentOfInterest));
-		System.out.println("_________________________________________________________");
-		System.out.println(" \n ");
+//		System.out.println("------------------------------------------- \n EDGE_HOST , Moment Of Interest: " + momentOfInterest );
+//		mapHostEnergyConsumed.forEach((k,v) -> System.out.println("  " + v));
+//		mapHostDied.forEach((k,v) -> System.out.println("  " + v +" , Moment Of Interest: " + momentOfInterest));
+//		System.out.println("_________________________________________________________");
+//		System.out.println(" \n ");
 		return energyEdgeConsumed.get();
 	}
 
