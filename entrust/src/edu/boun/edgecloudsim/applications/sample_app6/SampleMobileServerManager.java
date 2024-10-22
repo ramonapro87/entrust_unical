@@ -162,9 +162,10 @@ public class SampleMobileServerManager extends MobileServerManager {
         // Here are the steps needed to create a PowerDatacenter:
         // 1. We need to create a list to store one or more Machines
         List<MobileHostEnergy> hostList = new ArrayList<>();
-        DefaultEnergyComputingModel energyModel = new DefaultEnergyComputingModel(numOfMobileDevices, maxActiveConsumption, idleConsumption);
+        DefaultEnergyComputingModel energyModel;// = new DefaultEnergyComputingModel(numOfMobileDevices, maxActiveConsumption, idleConsumption);
 
         for (int i = 0; i < numOfMobileDevices; i++) {
+        	energyModel = new DefaultEnergyComputingModel(numOfMobileDevices, maxActiveConsumption, idleConsumption);
             int numOfCores = SimSettings.getInstance().getMp()[i].getCores();//SimSettings.getInstance().getCoreForMobileVM();
             double mips =SimSettings.getInstance().getMp()[i].getMips();// SimSettings.getInstance().getMipsForMobileVM();
             int ram =SimSettings.getInstance().getMp()[i].getRam();// SimSettings.getInstance().getRamForMobileVM();

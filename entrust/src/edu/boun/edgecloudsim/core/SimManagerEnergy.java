@@ -29,7 +29,7 @@ public class SimManagerEnergy extends SimManager {
     private static final int STOP_SIMULATION = 4;
 	List<Coordinates> coordinatesList= null;
 
-    private DefaultEnergyComputingModel defaultEnergyComputingModel;
+//    private DefaultEnergyComputingModel defaultEnergyComputingModel;
     private ScenarioFactoryEnergy scenarioFactoryEnergy;
     public boolean detailHostEenergy = false;
 
@@ -43,8 +43,8 @@ public class SimManagerEnergy extends SimManager {
     public SimManagerEnergy(ScenarioFactoryEnergy _scenarioFactory, int _numOfMobileDevice, String _simScenario, String _orchestratorPolicy) throws Exception {
         super(_scenarioFactory, _numOfMobileDevice, _simScenario, _orchestratorPolicy);
         scenarioFactoryEnergy = _scenarioFactory;
-        defaultEnergyComputingModel = scenarioFactoryEnergy.getDefaultEnergyComputerModel();
-        defaultEnergyComputingModel.initialize();
+//        defaultEnergyComputingModel = scenarioFactoryEnergy.getDefaultEnergyComputerModel();
+//        defaultEnergyComputingModel.initialize();//FIXME useless call
 		this.iDiagrams = new ChartGenerator();
     }
 

@@ -197,7 +197,9 @@ public class SimLogger {
 				+ "taskStartTime" + SimSettings.DELIMITER 
 				+ "taskEndTime"+ SimSettings.DELIMITER				
 				+ "taskStartDeviceEnergy" + SimSettings.DELIMITER 
-				+ "taskEndDeviceEnergy"+ SimSettings.DELIMITER;
+				+ "taskEndDeviceEnergy"+ SimSettings.DELIMITER
+				+ "taskStartDeviceEnergyPerc" + SimSettings.DELIMITER 
+				+ "taskEndDeviceEnergyPerc"+ SimSettings.DELIMITER;
 
 		if (success){
 			result += "getNetworkDelay" + SimSettings.DELIMITER;
@@ -1062,6 +1064,8 @@ class LogItem {
 	
 	private double taskStartDeviceEnergy;
 	private double taskEndDeviceEnergy=0;	
+	private double taskStartDeviceEnergyPerc;
+	private double taskEndDeviceEnergyPerc=0;	
 	
 	private double taskStartTime;
 	private double taskEndTime;
@@ -1098,7 +1102,8 @@ class LogItem {
 		double energyLevelperc= host.getEnergyModel().getBatteryLevelPercentage();
 		double energyMax = host.getEnergyModel().getBatteryCapacity();
 		
-		taskStartDeviceEnergy = energyLevelperc;
+		taskStartDeviceEnergy = energyLevel;
+		taskStartDeviceEnergyPerc = energyLevelperc;
 		status = SimLogger.TASK_STATUS.UPLOADING;
 		
 		if (time < SimSettings.getInstance().getWarmUpPeriod())
@@ -1215,7 +1220,8 @@ class LogItem {
 		
 		
 		
-		taskEndDeviceEnergy = energyLevelperc;
+		taskEndDeviceEnergy = energyLevel;
+		taskEndDeviceEnergyPerc = energyLevelperc;
 	}
 	
 	
@@ -1333,7 +1339,9 @@ class LogItem {
 				+ taskStartTime + SimSettings.DELIMITER 
 				+ taskEndTime+ SimSettings.DELIMITER				
 				+ taskStartDeviceEnergy + SimSettings.DELIMITER 
-				+ taskEndDeviceEnergy+ SimSettings.DELIMITER;
+				+ taskEndDeviceEnergy+ SimSettings.DELIMITER
+				+ taskStartDeviceEnergyPerc + SimSettings.DELIMITER 
+				+ taskEndDeviceEnergyPerc+ SimSettings.DELIMITER;
 
 		if (status == SimLogger.TASK_STATUS.COMLETED){
 			result += getNetworkDelay() + SimSettings.DELIMITER;
@@ -1356,6 +1364,7 @@ class LogItem {
 			result += "6"; // failure reason 6
 		else
 			result += "0"; // default failure reason
+//		return result.replace(".", ",");		
 		return result;		
 		
 	}

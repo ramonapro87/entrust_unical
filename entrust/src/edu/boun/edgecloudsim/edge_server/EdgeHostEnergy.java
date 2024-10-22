@@ -110,14 +110,14 @@ public class EdgeHostEnergy extends EdgeHost {
     }
 
 
-    public void updateStatus() { //FIXME UNUSED
-        if (isDead()) return;
-
-        getEnergyModel().updateStaticEnergyConsumption();
-        if (getEnergyModel().isBatteryPowered() && getEnergyModel().getBatteryLevelWattHour() <= 0) {
-            setDeath(true, CloudSim.clock());
-        }
-    }
+//    public void updateStatus() { //FIXME UNUSED
+//        if (isDead()) return;
+//
+//        getEnergyModel().updateStaticEnergyConsumption();
+//        if (getEnergyModel().isBatteryPowered() && getEnergyModel().getBatteryLevelWattHour() <= 0) {
+//            setDeath(true, CloudSim.clock());
+//        }
+//    }
 
     
     public void updateBatteryLevel() {

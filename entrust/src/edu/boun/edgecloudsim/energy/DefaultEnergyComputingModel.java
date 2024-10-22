@@ -13,7 +13,9 @@ public class DefaultEnergyComputingModel extends EnergyComputingModel {
 
 	@Override
 	public void initialize() {
-		//setBattery(true); not called? // FIXME
+		//FIXME not used
+		cpuEnergyConsumption = 0; //TEST purpose
+		networkEnergyConsumption = 0; //TEST purpose
 	}
 
 

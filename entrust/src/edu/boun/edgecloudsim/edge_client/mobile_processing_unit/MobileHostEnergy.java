@@ -74,7 +74,6 @@ public class MobileHostEnergy extends MobileHost {
 
 
     public boolean isDead() {
-//        return false;
         return isDead;
     }
 
@@ -139,14 +138,18 @@ public class MobileHostEnergy extends MobileHost {
             double mipsTotali = vm.getTotalUtilizationOfCpuMips(timePassed);
             if (mipsTotali > 0)
                 energyModel.updateDynamicEnergyConsumption(vm.getSize(), mipsTotali);
-            energyAllVM = energyModel.getTotalEnergyConsumption();
+//            if (this.getId()==10)
+//            	energyModel.initialize();
             
+            energyAllVM = energyModel.getTotalEnergyConsumption();
+//            double cpu = energyModel.getCpuEnergyConsumption();           
+//        	System.err.println("mobile host ["+this.getId()+"] battery"+batteryLevel+" energy NET: "+ (energyAllVM - cpu) + " energy cpu: " + cpu );
             
             this.updateBatteryLevel();
             
 //            if(batteryLevel.equals(0.0)){
             if(energyModel.getBatteryCapacity()<= energyAllVM){
-//            	System.err.println("mobile host ["+this.getId()+"] battery"+batteryLevel+" energy consumed: "+percentageConsumed);
+//            	System.err.println("mobile host ["+this.getId()+"] battery"+batteryLevel+" energy consumed: "+energyAllVM);
             	
                 setDeath(true, CloudSim.clock());
                 //aggiungo alla lista di dispositivi morti
